@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- This project builds an OWL API gwt module -->
+
+    <parent>
+        <artifactId>owlapi-gwt-parent</artifactId>
+        <groupId>net.sourceforge.owlapitools</groupId>
+        <version>1.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <module-directory>org/semanticweb/owlapi/gwt</module-directory>
+        <super-source-directory>emul</super-source-directory>
+    </properties>
+
+    <artifactId>owlapi-gwt</artifactId>
+
+    <!-- We depend on the server side custom field serializers and the client side emulation -->
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.owlapitools</groupId>
+            <artifactId>owlapi-gwt-serialization</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapitools</groupId>
+            <artifactId>owlapi-gwt-client-side-emul</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptor>src/main/assembly/gwtmodule.xml</descriptor>
+                            <finalName>owlapi-gwt-module-${project.version}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
