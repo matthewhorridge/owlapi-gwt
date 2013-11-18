@@ -28,7 +28,8 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         }
         for (int i = 0; i < colonIndex; i++) {
             char ch = prefix.charAt(i);
-            if (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '.' && ch != '+' && ch != '-') {
+            if (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '.'
+                    && ch != '+' && ch != '-') {
                 return false;
             }
         }
@@ -62,6 +63,7 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         return prefix;
     }
 
+
     /**
      * Determines if this IRI is in the reserved vocabulary. An IRI is in the
      * reserved vocabulary if it starts with
@@ -74,7 +76,9 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      *         otherwise <code>false</code>.
      */
     public boolean isReservedVocabulary() {
-        return prefix.startsWith(Namespaces.OWL.toString()) || prefix.startsWith(Namespaces.RDF.toString()) || prefix.startsWith(Namespaces.RDFS.toString()) || prefix.startsWith(Namespaces.XSD.toString());
+        return Namespaces.OWL.inNamespace(prefix) || Namespaces.RDF.inNamespace(prefix)
+                || Namespaces.RDFS.inNamespace(prefix)
+                || Namespaces.XSD.inNamespace(prefix);
     }
 
     /**
@@ -86,7 +90,8 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      *         <code>false</code>
      */
     public boolean isThing() {
-        return remainder != null && remainder.equals("Thing") && prefix.equals(Namespaces.OWL.toString());
+        return remainder != null && remainder.equals("Thing")
+                && Namespaces.OWL.inNamespace(prefix);
     }
 
     /**
@@ -110,7 +115,8 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      *         otherwise <code>false</code>
      */
     public boolean isPlainLiteral() {
-        return remainder != null && remainder.equals("PlainLiteral") && prefix.equals(Namespaces.RDF.toString());
+        return remainder != null && remainder.equals("PlainLiteral")
+                && Namespaces.RDF.inNamespace(prefix);
     }
 
     /**
@@ -149,7 +155,12 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         if (str == null) {
             throw new IllegalArgumentException("String must not be null");
         }
-        return new IRI(str);
+        int index = XMLUtils.getNCNameSuffixIndex(str);
+        if (index < 0) {
+            // no ncname
+            return new IRI(str, null);
+        }
+        return new IRI(str.substring(0, index), str.substring(index));
     }
 
     /**
@@ -163,7 +174,7 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      */
     public static IRI create(String prefix, String suffix) {
         if (prefix == null) {
-            return new IRI(suffix);
+            return create(suffix);
         }
         else if (suffix == null) {
             // suffix set deliberately to null is used only in blank node
@@ -171,7 +182,7 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
             // this is not great but blank nodes should be changed to not refer
             // to IRIs at all
             // XXX address blank node issues with iris
-            return new IRI(prefix);
+            return create(prefix);
         }
         else {
             int index = XMLUtils.getNCNameSuffixIndex(prefix);
@@ -185,7 +196,7 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
             // otherwise the split is wrong; we could obtain the right split by
             // using index and test, but it's just as easy to use the other
             // constructor
-            return new IRI(prefix + suffix);
+            return create(prefix + suffix);
         }
     }
 
@@ -207,6 +218,7 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
     // //
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private final String remainder;
 
     private final String prefix;
@@ -406,7 +418,8 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
             return otherRemainder == null && prefix.equals(other.prefix);
         }
         else {
-            return otherRemainder != null && remainder.equals(otherRemainder) && other.prefix.equals(prefix);
+            return otherRemainder != null && remainder.equals(otherRemainder)
+                    && other.prefix.equals(prefix);
         }
     }
 }
