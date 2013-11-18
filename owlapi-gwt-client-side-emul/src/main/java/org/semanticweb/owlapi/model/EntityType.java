@@ -61,8 +61,6 @@ import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.RDFS_DATATYPE;
 @SuppressWarnings("javadoc")
 public final class EntityType<E extends OWLEntity> implements Serializable {
 
-    private static final long serialVersionUID = 30402L;
-
     /**
      * class entity
      */
