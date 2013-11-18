@@ -40,13 +40,13 @@
 package org.semanticweb.owlapi.vocab;
 
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLRuntimeException;
 
 
@@ -126,7 +126,6 @@ public enum OWL2Datatype {
 
     XSD_DATE_TIME_STAMP(XSDVocabulary.DATE_TIME_STAMP, Category.TIME, false, "-?([1-9][0-9]{3,}|0[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\\\.[0-9]+)?|(24:00:00(\\\\.0+)?))(Z|(\\\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))");
 
-
     private static final Set<IRI> ALL_IRIS;
 
 
@@ -135,32 +134,24 @@ public enum OWL2Datatype {
         for (OWL2Datatype v : OWL2Datatype.values()) {
             uris.add(v.iri);
         }
-        ALL_IRIS = Collections.unmodifiableSet(uris);
+        ALL_IRIS = Collections.unmodifiableSet(new TreeSet<IRI>(uris));
     }
 
+    public static final String REG_EXP_FLAGS = "mi";
 
     /**
-     * Gets all of the built in datatype URIs
-     * @return A set of URIs corresponding to the built in datatype URIs
+     * Gets all of the built in datatype IRIs.
+     * @return A set of IRIs corresponding to the set of IRIs of all built in {@link OWL2Datatype}s.  Not {@code null}.
      */
     public static Set<IRI> getDatatypeIRIs() {
         return ALL_IRIS;
     }
-//
-//    /**
-//     * Gets the Pattern that specifies the regular expression for a datatype
-//     * @return The Pattern, or <code>null</code>
-//     */
-//    public Pattern getPattern() {
-//        return pattern;
-//    }
-
 
     /**
      * Determines if the specified IRI identifies a built in datatype.
      * @param datatypeIRI The datatype IRI
-     * @return <code>true</code> if the IRI identifies a built in datatype, or
-     *         <code>false</code> if the IRI does not identify a built in datatype.
+     * @return {@code true} if the IRI identifies a built in datatype, or
+     *         {@code false} if the IRI does not identify a built in datatype.
      */
     public static boolean isBuiltIn(IRI datatypeIRI) {
         return ALL_IRIS.contains(datatypeIRI);
@@ -168,11 +159,11 @@ public enum OWL2Datatype {
 
 
     /**
-     * Given a URI that identifies an OWLDatatype, this method obtains the
-     * corresponding OWLDatatypeVocabulary
-     * @param datatype The datatype URI
-     * @return The OWLDatatypeVocabulary
-     * @throws OWLRuntimeException if the specified URI is not a built in datatype URI
+     * Given an IRI that identifies an {@link org.semanticweb.owlapi.model.OWLDatatype}, this method obtains the
+     * corresponding {@link OWL2Datatype}.
+     * @param datatype The datatype IRI.  Not {@code null}.
+     * @return The {@link OWL2Datatype} that has the specified {@link IRI}.
+     * @throws OWLRuntimeException if the specified IRI is not a built in datatype IRI.
      */
     public static OWL2Datatype getDatatype(IRI datatype) {
         if (!isBuiltIn(datatype)) {
@@ -194,15 +185,15 @@ public enum OWL2Datatype {
 
     private final boolean finite;
 
-    private String pattern;
+    private RegExp pattern;
 
     OWL2Datatype(Namespaces namespace, String shortName, Category category, boolean finite, String regEx) {
-        iri = IRI.create(namespace + shortName);
+        iri = IRI.create(namespace.toString(), shortName);
         this.shortName = shortName;
         this.category = category;
         this.finite = finite;
         if (regEx != null) {
-//            pattern = Pattern.compile(regEx, Pattern.DOTALL);
+            pattern = RegExp.compile(regEx, REG_EXP_FLAGS);
         }
     }
 
@@ -211,7 +202,7 @@ public enum OWL2Datatype {
         shortName = xsd.getShortName();
         this.category = category;
         this.finite = finite;
-//        pattern = Pattern.compile(regEx, Pattern.DOTALL);
+        pattern = RegExp.compile(regEx, REG_EXP_FLAGS);
     }
 
 
@@ -241,7 +232,7 @@ public enum OWL2Datatype {
 
     /**
      * Determines if this datatype is a numeric datatype
-     * @return <code>true</code> if this datatype is a numeric datatype
+     * @return {@code true} if this datatype is a numeric datatype
      */
     public boolean isNumeric() {
         return category.equals(Category.NUMBER);
@@ -249,8 +240,8 @@ public enum OWL2Datatype {
 
     /**
      * Determines whether or not this datatype is finite.
-     * @return <code>true</code> if this datatype is finite, or
-     *         <code>false</code> if this datatype is infinite.
+     * @return {@code true} if this datatype is finite, or
+     *         {@code false} if this datatype is infinite.
      */
     public boolean isFinite() {
         return finite;
@@ -267,18 +258,32 @@ public enum OWL2Datatype {
     }
 
 
-//    /**
-//     * Determines if the specified string is the lexical space of this datatype
-//     * @param s The string to test
-//     * @return <code>true</code> if the string is in the lexical space, otherwise <code>false</code>
-//     */
-//    public boolean isInLexicalSpace(String s) {
-////        return pattern.matcher(s).matches();
-//    }
+    /**
+     * Gets the equivalent OWLDatatype from the given factory.
+     * @param factory the OWLDataFactory.  Not {@code null}.
+     * @return An {@link org.semanticweb.owlapi.model.OWLDatatype} that has the same IRI as this {@link OWL2Datatype}.  Not {@code null}.
+     */
+    public OWLDatatype getDatatype(OWLDataFactory factory){
+        return factory.getOWLDatatype( getIRI() );
+    }
+
+    /**
+     * Determines if the specified string is the lexical space of this datatype
+     * @param s The string to test
+     * @return {@code true} if the string is in the lexical space, otherwise {@code false}
+     */
+    public boolean isInLexicalSpace(String s) {
+        MatchResult result = pattern.exec(s);
+        if(result == null) {
+            return false;
+        }
+        String group = result.getGroup(0);
+        return group.length() == s.length();
+    }
 
     public enum Category {
 
-    	UNIVERSAL("Universal literal"),
+        UNIVERSAL("Universal literal"),
 
         NUMBER("Number", OWLFacet.MIN_INCLUSIVE, OWLFacet.MAX_INCLUSIVE, OWLFacet.MIN_EXCLUSIVE, OWLFacet.MAX_EXCLUSIVE),
 
