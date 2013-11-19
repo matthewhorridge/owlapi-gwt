@@ -36,11 +36,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
 
 /**
  * Author: Matthew Horridge<br>
@@ -51,18 +51,12 @@ import org.semanticweb.owlapi.model.*;
 @SuppressWarnings("javadoc")
 public class OWLDataHasValueImpl extends OWLValueRestrictionImpl<OWLDataRange, OWLDataPropertyExpression, OWLLiteral> implements OWLDataHasValue {
 
+    private static final long serialVersionUID = 30406L;
 
-	private static final long serialVersionUID = 30402L;
-
-
-	public OWLDataHasValueImpl(OWLDataPropertyExpression property, OWLLiteral value) {
+    public OWLDataHasValueImpl(OWLDataPropertyExpression property, OWLLiteral value) {
         super(property, value);
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.DATA_HAS_VALUE;
@@ -79,19 +73,17 @@ public class OWLDataHasValueImpl extends OWLValueRestrictionImpl<OWLDataRange, O
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLDataHasValue;
         }
         return false;
     }
 
-
     @Override
     public OWLClassExpression asSomeValuesFrom() {
-        return getOWLDataFactory().getOWLDataSomeValuesFrom(getProperty(), getOWLDataFactory().getOWLDataOneOf(getValue()));
+        return new OWLDataSomeValuesFromImpl(getProperty(), new OWLDataOneOfImpl(Collections.singleton(getValue())));
     }
-
 
     @Override
     public void accept(OWLClassExpressionVisitor visitor) {
@@ -103,12 +95,10 @@ public class OWLDataHasValueImpl extends OWLValueRestrictionImpl<OWLDataRange, O
         visitor.visit(this);
     }
 
-
     @Override
     public <O> O accept(OWLClassExpressionVisitorEx<O> visitor) {
         return visitor.visit(this);
     }
-
 
     @Override
     public <O> O accept(OWLObjectVisitorEx<O> visitor) {

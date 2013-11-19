@@ -57,13 +57,13 @@ import java.util.*;
 public abstract class OWLNaryClassAxiomImpl extends OWLClassAxiomImpl implements OWLNaryClassAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final Set<OWLClassExpression> classExpressions;
+    private static final long serialVersionUID = 30406L;
+    private final Set<OWLClassExpression> classExpressions;
 
     @SuppressWarnings("javadoc")
     public OWLNaryClassAxiomImpl(Set<? extends OWLClassExpression> classExpressions, Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
-        this.classExpressions = new HashSet<OWLClassExpression>(classExpressions);
+        this.classExpressions = new TreeSet<OWLClassExpression>(classExpressions);
     }
 
 
@@ -94,7 +94,7 @@ public abstract class OWLNaryClassAxiomImpl extends OWLClassAxiomImpl implements
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLNaryClassAxiom)) {
                 return false;
@@ -106,7 +106,7 @@ public abstract class OWLNaryClassAxiomImpl extends OWLClassAxiomImpl implements
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return compareSets(classExpressions, ((OWLNaryClassAxiom) object).getClassExpressions());
     }
 }

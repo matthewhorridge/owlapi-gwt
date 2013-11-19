@@ -53,10 +53,10 @@ import java.util.Set;
  */
 public class OWLSubDataPropertyOfAxiomImpl extends OWLSubPropertyAxiomImpl<OWLDataPropertyExpression> implements OWLSubDataPropertyOfAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLSubDataPropertyOfAxiomImpl(OWLDataPropertyExpression subProperty, OWLDataPropertyExpression superProperty, Collection<? extends OWLAnnotation> annotations) {
         super(subProperty, superProperty, annotations);
     }
@@ -67,16 +67,18 @@ public class OWLSubDataPropertyOfAxiomImpl extends OWLSubPropertyAxiomImpl<OWLDa
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSubDataPropertyOfAxiom(getSubProperty(), getSuperProperty());
+        return new OWLSubDataPropertyOfAxiomImpl(getSubProperty(), getSuperProperty(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLSubDataPropertyOfAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSubDataPropertyOfAxiom(getSubProperty(), getSuperProperty(), mergeAnnos(annotations));
+        return new OWLSubDataPropertyOfAxiomImpl(getSubProperty(), getSuperProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLSubDataPropertyOfAxiom;
     }
 

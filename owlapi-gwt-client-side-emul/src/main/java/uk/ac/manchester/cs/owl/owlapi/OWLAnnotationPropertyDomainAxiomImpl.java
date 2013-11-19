@@ -52,9 +52,9 @@ import java.util.Set;
 public class OWLAnnotationPropertyDomainAxiomImpl extends OWLAxiomImpl implements OWLAnnotationPropertyDomainAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLAnnotationProperty property;
+    private final OWLAnnotationProperty property;
 
     private final IRI domain;
 
@@ -69,12 +69,14 @@ public class OWLAnnotationPropertyDomainAxiomImpl extends OWLAxiomImpl implement
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLAnnotationPropertyDomainAxiom(getProperty(), getDomain());
+        return new OWLAnnotationPropertyDomainAxiomImpl(getProperty(), getDomain(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLAnnotationPropertyDomainAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLAnnotationPropertyDomainAxiom(getProperty(), getDomain(), mergeAnnos(annotations));
+        return new OWLAnnotationPropertyDomainAxiomImpl(getProperty(), getDomain(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -134,15 +136,15 @@ public class OWLAnnotationPropertyDomainAxiomImpl extends OWLAxiomImpl implement
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
-        if (!(obj instanceof OWLAnnotationPropertyDomainAxiom)) {
-            return false;
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
+            if (!(obj instanceof OWLAnnotationPropertyDomainAxiom)) {
+                return false;
+            }
+            OWLAnnotationPropertyDomainAxiom other = (OWLAnnotationPropertyDomainAxiom) obj;
+            return property.equals(other.getProperty()) && domain.equals(other.getDomain());
         }
-        OWLAnnotationPropertyDomainAxiom other = (OWLAnnotationPropertyDomainAxiom) obj;
-        return property.equals(other.getProperty()) && domain.equals(other.getDomain());
-    	}
-    	return false;
+        return false;
     }
 }

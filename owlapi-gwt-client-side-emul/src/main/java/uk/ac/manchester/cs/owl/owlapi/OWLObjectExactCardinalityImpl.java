@@ -41,6 +41,8 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -50,26 +52,21 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLObjectExactCardinalityImpl extends OWLObjectCardinalityRestrictionImpl implements OWLObjectExactCardinality {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectExactCardinalityImpl(OWLObjectPropertyExpression property, int cardinality, OWLClassExpression filler) {
         super(property, cardinality, filler);
     }
 
-
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_EXACT_CARDINALITY;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLObjectExactCardinality;
         }
@@ -79,8 +76,8 @@ public class OWLObjectExactCardinalityImpl extends OWLObjectCardinalityRestricti
 
     @Override
     public OWLClassExpression asIntersectionOfMinMax() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLObjectIntersectionOf(df.getOWLObjectMinCardinality(getCardinality(), getProperty(), getFiller()), df.getOWLObjectMaxCardinality(getCardinality(), getProperty(), getFiller()));
+        return new OWLObjectIntersectionOfImpl(new HashSet<OWLClassExpression>(
+                Arrays.asList(new OWLObjectMinCardinalityImpl(getProperty(), getCardinality(), getFiller()), new OWLObjectMaxCardinalityImpl(getProperty(), getCardinality(), getFiller()))));
     }
 
 

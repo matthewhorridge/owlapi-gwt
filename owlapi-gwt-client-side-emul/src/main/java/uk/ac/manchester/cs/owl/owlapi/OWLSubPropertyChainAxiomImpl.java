@@ -56,9 +56,10 @@ import java.util.Set;
 public class OWLSubPropertyChainAxiomImpl extends OWLPropertyAxiomImpl implements OWLSubPropertyChainOfAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
 
-	private final List<OWLObjectPropertyExpression> propertyChain;
+    private static final long serialVersionUID = 30406L;
+
+    private final List<OWLObjectPropertyExpression> propertyChain;
 
     private final OWLObjectPropertyExpression superProperty;
 
@@ -71,7 +72,8 @@ public class OWLSubPropertyChainAxiomImpl extends OWLPropertyAxiomImpl implement
 
     @Override
     public OWLSubPropertyChainOfAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSubPropertyChainOfAxiom(getPropertyChain(), getSuperProperty(), mergeAnnos(annotations));
+        return new OWLSubPropertyChainAxiomImpl(getPropertyChain(), getSuperProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -79,7 +81,8 @@ public class OWLSubPropertyChainAxiomImpl extends OWLPropertyAxiomImpl implement
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSubPropertyChainOfAxiom(getPropertyChain(), getSuperProperty());
+        return new OWLSubPropertyChainAxiomImpl(getPropertyChain(), getSuperProperty(),
+                NO_ANNOTATIONS);
     }
 
     @Override
@@ -128,7 +131,7 @@ public class OWLSubPropertyChainAxiomImpl extends OWLPropertyAxiomImpl implement
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (!super.equals(obj)) {
             return false;
         }
@@ -147,7 +150,7 @@ public class OWLSubPropertyChainAxiomImpl extends OWLPropertyAxiomImpl implement
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLSubPropertyChainOfAxiom other = (OWLSubPropertyChainOfAxiom) object;
 
         for (int i = 0; i < propertyChain.size() && i < other.getPropertyChain().size(); i++) {

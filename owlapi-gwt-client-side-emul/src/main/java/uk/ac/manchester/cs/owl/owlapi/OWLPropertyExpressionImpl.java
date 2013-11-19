@@ -39,13 +39,11 @@
 
 package uk.ac.manchester.cs.owl.owlapi;
 
-import org.semanticweb.owlapi.model.OWLNaryPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLPropertyExpression;
-import org.semanticweb.owlapi.model.OWLPropertyRange;
+import org.semanticweb.owlapi.model.*;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -57,18 +55,15 @@ import java.util.Set;
 public abstract class OWLPropertyExpressionImpl<R extends OWLPropertyRange, P extends OWLPropertyExpression<R, P>> extends OWLObjectImpl implements OWLPropertyExpression<R, P> {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	public OWLPropertyExpressionImpl() {
+    public OWLPropertyExpressionImpl() {
         super();
     }
 
-
-
-
     private <Prop extends OWLPropertyExpression<?,?>> Set<Prop> getProperties(Set<? extends OWLNaryPropertyAxiom<Prop>> axioms) {
-        Set<Prop> result = new HashSet<Prop>();
+        Set<Prop> result = new TreeSet<Prop>();
         for (OWLNaryPropertyAxiom<Prop> axiom : axioms) {
             result.addAll(axiom.getProperties());
         }
@@ -78,7 +73,7 @@ public abstract class OWLPropertyExpressionImpl<R extends OWLPropertyRange, P ex
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLPropertyExpression;
         }

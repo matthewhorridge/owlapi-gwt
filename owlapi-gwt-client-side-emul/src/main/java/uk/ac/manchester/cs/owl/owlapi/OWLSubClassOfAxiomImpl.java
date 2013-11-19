@@ -55,9 +55,9 @@ import java.util.Set;
 public class OWLSubClassOfAxiomImpl extends OWLClassAxiomImpl implements OWLSubClassOfAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLClassExpression subClass;
+    private final OWLClassExpression subClass;
 
     private final OWLClassExpression superClass;
 
@@ -90,7 +90,7 @@ public class OWLSubClassOfAxiomImpl extends OWLClassAxiomImpl implements OWLSubC
 
     @Override
     public OWLSubClassOfAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSubClassOfAxiom(subClass, superClass, mergeAnnos(annotations));
+        return new OWLSubClassOfAxiomImpl(subClass, superClass, mergeAnnos(annotations));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class OWLSubClassOfAxiomImpl extends OWLClassAxiomImpl implements OWLSubC
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSubClassOfAxiom(subClass, superClass);
+        return new OWLSubClassOfAxiomImpl(subClass, superClass, NO_ANNOTATIONS);
     }
     //XXX not in the interface
     @SuppressWarnings("javadoc")
@@ -126,17 +126,17 @@ public class OWLSubClassOfAxiomImpl extends OWLClassAxiomImpl implements OWLSubC
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if (!(obj instanceof OWLSubClassOfAxiom)) {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof OWLSubClassOfAxiom)) {
             return false;
         }
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
 
-        OWLSubClassOfAxiom other = (OWLSubClassOfAxiom) obj;
-        return other.getSubClass().equals(subClass) && other.getSuperClass().equals(superClass);
-    	}
-    	return false;
+            OWLSubClassOfAxiom other = (OWLSubClassOfAxiom) obj;
+            return other.getSubClass().equals(subClass) && other.getSuperClass().equals(superClass);
+        }
+        return false;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class OWLSubClassOfAxiomImpl extends OWLClassAxiomImpl implements OWLSubC
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLSubClassOfAxiom other = (OWLSubClassOfAxiom) object;
         int diff = subClass.compareTo(other.getSubClass());
         if (diff != 0) {

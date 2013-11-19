@@ -53,25 +53,21 @@ import java.util.Set;
  */
 public class OWLObjectIntersectionOfImpl extends OWLNaryBooleanClassExpressionImpl implements OWLObjectIntersectionOf {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectIntersectionOfImpl(Set<? extends OWLClassExpression> operands) {
         super(operands);
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_INTERSECTION_OF;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLObjectIntersectionOf;
         }
@@ -101,7 +97,7 @@ public class OWLObjectIntersectionOfImpl extends OWLNaryBooleanClassExpressionIm
 
 
     @Override
-	public Set<OWLClassExpression> asConjunctSet() {
+    public Set<OWLClassExpression> asConjunctSet() {
         Set<OWLClassExpression> conjuncts = new HashSet<OWLClassExpression>();
         for (OWLClassExpression op : getOperands()) {
             conjuncts.addAll(op.asConjunctSet());

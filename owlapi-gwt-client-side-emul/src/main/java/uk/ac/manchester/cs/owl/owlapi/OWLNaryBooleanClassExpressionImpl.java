@@ -44,11 +44,7 @@ import org.semanticweb.owlapi.model.OWLNaryBooleanClassExpression;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.util.CollectionFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 /**
  * Author: Matthew Horridge<br>
@@ -58,14 +54,13 @@ import java.util.Set;
  */
 public abstract class OWLNaryBooleanClassExpressionImpl extends OWLAnonymousClassExpressionImpl implements OWLNaryBooleanClassExpression {
 
-
-	private static final long serialVersionUID = 30402L;
-	private final Set<OWLClassExpression> operands;
+    private static final long serialVersionUID = 30406L;
+    private final Set<OWLClassExpression> operands;
 
     @SuppressWarnings("javadoc")
     public OWLNaryBooleanClassExpressionImpl(Set<? extends OWLClassExpression> operands) {
         super();
-        this.operands = new HashSet<OWLClassExpression>(operands);
+        this.operands = new TreeSet<OWLClassExpression>(operands);
     }
 
     @Override
@@ -86,7 +81,7 @@ public abstract class OWLNaryBooleanClassExpressionImpl extends OWLAnonymousClas
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLNaryBooleanClassExpression)) {
                 return false;
@@ -98,7 +93,7 @@ public abstract class OWLNaryBooleanClassExpressionImpl extends OWLAnonymousClas
 
 
     @Override
-	final protected int compareObjectOfSameType(OWLObject object) {
+    final protected int compareObjectOfSameType(OWLObject object) {
         return compareSets(operands, ((OWLNaryBooleanClassExpression) object).getOperands());
     }
 }

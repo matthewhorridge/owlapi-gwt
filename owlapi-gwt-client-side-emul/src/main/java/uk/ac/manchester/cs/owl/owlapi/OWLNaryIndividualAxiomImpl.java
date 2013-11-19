@@ -57,13 +57,13 @@ import java.util.*;
 public abstract class OWLNaryIndividualAxiomImpl extends OWLIndividualAxiomImpl implements OWLNaryIndividualAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final Set<OWLIndividual> individuals;
+    private static final long serialVersionUID = 30406L;
+    private final Set<OWLIndividual> individuals;
 
     @SuppressWarnings("javadoc")
     public OWLNaryIndividualAxiomImpl(Set<? extends OWLIndividual> individuals, Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
-        this.individuals = new HashSet<OWLIndividual>(individuals);
+        this.individuals = new TreeSet<OWLIndividual>(individuals);
     }
 
 
@@ -78,7 +78,7 @@ public abstract class OWLNaryIndividualAxiomImpl extends OWLIndividualAxiomImpl 
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLNaryIndividualAxiom)) {
                 return false;
@@ -90,7 +90,7 @@ public abstract class OWLNaryIndividualAxiomImpl extends OWLIndividualAxiomImpl 
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return compareSets(individuals, ((OWLNaryIndividualAxiom) object).getIndividuals());
     }
 }

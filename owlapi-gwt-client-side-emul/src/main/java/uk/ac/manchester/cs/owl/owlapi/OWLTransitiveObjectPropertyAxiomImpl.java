@@ -53,9 +53,9 @@ import java.util.Set;
  */
 public class OWLTransitiveObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLTransitiveObjectPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLTransitiveObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -65,16 +65,18 @@ public class OWLTransitiveObjectPropertyAxiomImpl extends OWLObjectPropertyChara
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLTransitiveObjectPropertyAxiom(getProperty());
+        return new OWLTransitiveObjectPropertyAxiomImpl(getProperty(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLTransitiveObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLTransitiveObjectPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLTransitiveObjectPropertyAxiom;
     }
 

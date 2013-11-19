@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -50,19 +51,20 @@ import java.util.Set;
  * Bio-Health Informatics Group<br>
  * Date: 26-Oct-2006<br><br>
  */
-public class OWLNegativeDataPropertyAssertionImplAxiom extends OWLIndividualRelationshipAxiomImpl<OWLDataPropertyExpression, OWLLiteral> implements OWLNegativeDataPropertyAssertionAxiom {
+public class OWLNegativeDataPropertyAssertionAxiomImpl extends OWLIndividualRelationshipAxiomImpl<OWLDataPropertyExpression, OWLLiteral> implements OWLNegativeDataPropertyAssertionAxiom {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
     @SuppressWarnings("javadoc")
-    public OWLNegativeDataPropertyAssertionImplAxiom(OWLIndividual subject, OWLDataPropertyExpression property, OWLLiteral object, Set<? extends OWLAnnotation> annotations) {
+    public OWLNegativeDataPropertyAssertionAxiomImpl(OWLIndividual subject, OWLDataPropertyExpression property, OWLLiteral object, Set<? extends OWLAnnotation> annotations) {
         super(subject, property, object, annotations);
     }
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLSubClassOfAxiom(df.getOWLObjectOneOf(getSubject()), df.getOWLObjectComplementOf(df.getOWLDataHasValue(getProperty(), getObject())));
+        return new OWLSubClassOfAxiomImpl(new OWLObjectOneOfImpl(
+                Collections.singleton(getSubject())), new OWLObjectComplementOfImpl(
+                new OWLDataHasValueImpl(getProperty(), getObject())), NO_ANNOTATIONS);
     }
 
     @Override
@@ -70,19 +72,16 @@ public class OWLNegativeDataPropertyAssertionImplAxiom extends OWLIndividualRela
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLNegativeDataPropertyAssertionAxiom(getProperty(), getSubject(), getObject());
+        return new OWLNegativeDataPropertyAssertionAxiomImpl(getSubject(), getProperty(),
+                getObject(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLNegativeDataPropertyAssertionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLNegativeDataPropertyAssertionAxiom(getProperty(), getSubject(), getObject(), mergeAnnos(annotations));
+        return new OWLNegativeDataPropertyAssertionAxiomImpl(getSubject(), getProperty(),
+                getObject(), mergeAnnos(annotations));
     }
 
-    /**
-     * Determines whether this axiom contains anonymous individuals.  Anonymous individuals are not allowed in
-     * negative data property assertion axioms.
-     * @return <code>true</code> if this axioms contains anonymous individual axioms
-     */
     @Override
     public boolean containsAnonymousIndividuals() {
         return getSubject().isAnonymous();

@@ -41,11 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 /**
  * Author: Matthew Horridge<br>
@@ -55,9 +51,9 @@ import java.util.Set;
  */
 public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl implements OWLSameIndividualAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLSameIndividualAxiomImpl(Set<? extends OWLIndividual> individuals, Set<? extends OWLAnnotation> annotations) {
         super(individuals, annotations);
     }
@@ -67,12 +63,12 @@ public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl imple
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSameIndividualAxiom(getIndividuals());
+        return new OWLSameIndividualAxiomImpl(getIndividuals(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLSameIndividualAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSameIndividualAxiom(getIndividuals(), mergeAnnos(annotations));
+        return new OWLSameIndividualAxiomImpl(getIndividuals(), mergeAnnos(annotations));
     }
 
     @Override
@@ -82,16 +78,12 @@ public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl imple
         for (int i = 0; i < inds.size() - 1; i++) {
             OWLIndividual indI = inds.get(i);
             OWLIndividual indJ = inds.get(i + 1);
-            result.add(getOWLDataFactory().getOWLSameIndividualAxiom(indI, indJ));
+            result.add(new OWLSameIndividualAxiomImpl(new HashSet<OWLIndividual>(Arrays
+                    .asList(indI, indJ)), NO_ANNOTATIONS));
         }
         return result;
     }
 
-    /**
-     * Determines whether this axiom contains anonymous individuals.  Anonymous individuals are not allowed in
-     * same individuals axioms.
-     * @return <code>true</code> if this axioms contains anonymous individual axioms
-     */
     @Override
     public boolean containsAnonymousIndividuals() {
         for (OWLIndividual ind : getIndividuals()) {
@@ -106,14 +98,14 @@ public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl imple
     public Set<OWLSubClassOfAxiom> asOWLSubClassOfAxioms() {
         List<OWLClassExpression> nominalsList = new ArrayList<OWLClassExpression>();
         for (OWLIndividual individual : getIndividuals()) {
-            nominalsList.add(getOWLDataFactory().getOWLObjectOneOf(individual));
+            nominalsList.add(new OWLObjectOneOfImpl(Collections.singleton(individual)));
         }
         Set<OWLSubClassOfAxiom> result = new HashSet<OWLSubClassOfAxiom>();
         for (int i = 0; i < nominalsList.size() - 1; i++) {
             OWLClassExpression ceI = nominalsList.get(i);
             OWLClassExpression ceJ = nominalsList.get(i + 1);
-            result.add(getOWLDataFactory().getOWLSubClassOfAxiom(ceI, ceJ));
-            result.add(getOWLDataFactory().getOWLSubClassOfAxiom(ceJ, ceI));
+            result.add(new OWLSubClassOfAxiomImpl(ceI, ceJ, NO_ANNOTATIONS));
+            result.add(new OWLSubClassOfAxiomImpl(ceJ, ceI, NO_ANNOTATIONS));
         }
         return result;
     }
@@ -125,7 +117,7 @@ public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl imple
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLSameIndividualAxiom;
     }
 

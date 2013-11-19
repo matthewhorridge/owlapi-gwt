@@ -53,10 +53,10 @@ import java.util.Set;
  */
 public class OWLFunctionalObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLFunctionalObjectPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLFunctionalObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -66,17 +66,18 @@ public class OWLFunctionalObjectPropertyAxiomImpl extends OWLObjectPropertyChara
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLFunctionalObjectPropertyAxiom(getProperty());
+        return new OWLFunctionalObjectPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLFunctionalObjectPropertyAxiom;
     }
 
     @Override
     public OWLFunctionalObjectPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLFunctionalObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLFunctionalObjectPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -108,7 +109,7 @@ public class OWLFunctionalObjectPropertyAxiomImpl extends OWLObjectPropertyChara
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLSubClassOfAxiom(df.getOWLThing(), df.getOWLObjectMaxCardinality(1, getProperty()));
+        return new OWLSubClassOfAxiomImpl(OWL_THING, new OWLObjectMaxCardinalityImpl(
+                getProperty(), 1, OWL_THING), NO_ANNOTATIONS);
     }
 }

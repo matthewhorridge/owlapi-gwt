@@ -43,13 +43,16 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
 
 /**
  * @author ignazio no cache used
  */
 public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
     private static final OWLDatatype RDF_PLAIN_LITERAL = OWL2DatatypeImpl.getDatatype(OWL2Datatype.RDF_PLAIN_LITERAL);
 
@@ -63,21 +66,26 @@ public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
 
     private static final OWLDatatype RDFS_LITERAL = OWL2DatatypeImpl.getDatatype(OWL2Datatype.RDFS_LITERAL);
 
-    private final OWLDataFactory factory;
-
     private final OWLLiteral trueLiteral;
 
     private final OWLLiteral falseLiteral;
 
+    private OWLLiteral negativeFloatZero;
+
+    private URL url;
 
     /**
-     * @param f the factory to refer to
      * @param useCompression true if compression of literals should be used
      */
-    public InternalsNoCache(OWLDataFactory f, boolean useCompression) {
-        factory = f;
+    public InternalsNoCache(boolean useCompression) {
         trueLiteral = new OWLLiteralImplBoolean(true);
         falseLiteral = new OWLLiteralImplBoolean(false);
+        try {
+            url = new URL("x");
+            System.out.println(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -131,8 +139,7 @@ public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
             normalisedLang = "";
         }
         else {
-            // TODO: NOT ALLOWED ON CLIENT
-            normalisedLang = lang.trim();//.toLowerCase(Locale.ENGLISH);
+            normalisedLang = lang.trim().toLowerCase(Locale.ENGLISH);
         }
         return new OWLLiteralImplNoCompression(literal, normalisedLang, null);
     }
@@ -160,58 +167,73 @@ public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
             if (sep != -1) {
                 String lex = lexicalValue.substring(0, sep);
                 String lang = lexicalValue.substring(sep + 1);
-                literal = new OWLLiteralImplNoCompression(lex, lang, getRDFPlainLiteral());
+                literal = getBasicLiteral(lex, lang, getRDFPlainLiteral());
             }
             else {
-                    literal = new OWLLiteralImplNoCompression(lexicalValue, "", datatype);
-
+                literal = getBasicLiteral(lexicalValue, datatype);
             }
         }
         else {
             // check the four special cases
             try {
                 if (datatype.isBoolean()) {
-                    lexicalValue = lexicalValue.trim();
-                    if (isBooleanTrueValue(lexicalValue)) {
-                        literal = getOWLLiteral(true);
-                    }
-                    else if (isBooleanFalseValue(lexicalValue)) {
-                        literal = getOWLLiteral(false);
-                    }
-                    else {
-                        literal = factory.getOWLLiteral(Boolean.parseBoolean(lexicalValue));
-                    }
+                    literal = getOWLLiteral(isBooleanTrueValue(lexicalValue.trim()));
                 }
                 else if (datatype.isFloat()) {
-                    float f;
-                    try {
-                        f = Float.parseFloat(lexicalValue);
-                        literal = getOWLLiteral(f);
+                    if (lexicalValue.trim().equals("-0.0")) {
+                        // according to some W3C test, this needs to be
+                        // different from 0.0; Java floats disagree
+                        if (negativeFloatZero == null) {
+                            negativeFloatZero = getBasicLiteral("-0.0", XSD_FLOAT);
+                        }
+                        literal = negativeFloatZero;
                     }
-                    catch (NumberFormatException e) {
-                            literal = new OWLLiteralImplNoCompression(lexicalValue, "", datatype);
+                    else {
+                        try {
+                            float f = Float.parseFloat(lexicalValue);
+                            literal = getOWLLiteral(f);
+                        } catch (NumberFormatException e) {
+                            literal = getBasicLiteral(lexicalValue, datatype);
+                        }
                     }
                 }
                 else if (datatype.isDouble()) {
                     literal = getOWLLiteral(Double.parseDouble(lexicalValue));
                 }
                 else if (datatype.isInteger()) {
-                    literal = getOWLLiteral(Integer.parseInt(lexicalValue));
+                    // again, some W3C tests require padding zeroes to make
+                    // literals different
+                    if (lexicalValue.trim().charAt(0) == '0') {
+                        literal = getBasicLiteral(lexicalValue, getIntegerOWLDatatype());
+                    }
+                    else {
+                        try {
+                            // this is fine for values that can be parsed as
+                            // ints - not all values are
+                            literal = getOWLLiteral(Integer.parseInt(lexicalValue));
+                        } catch (NumberFormatException ex) {
+                            // try as a big decimal
+                            literal = getBasicLiteral(lexicalValue, datatype);
+                        }
+                    }
                 }
                 else {
-                        literal = new OWLLiteralImplNoCompression(lexicalValue, "", datatype);
+                    literal = getBasicLiteral(lexicalValue, datatype);
                 }
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 // some literal is malformed, i.e., wrong format
-                    literal = new OWLLiteralImplNoCompression(lexicalValue, "", datatype);
+                literal = getBasicLiteral(lexicalValue, datatype);
             }
         }
         return literal;
     }
 
-    private boolean isBooleanFalseValue(String lexicalValue) {
-        return lexicalValue.equals("0") || lexicalValue.equals("false");
+    protected OWLLiteral getBasicLiteral(String lexicalValue, OWLDatatype datatype) {
+        return getBasicLiteral(lexicalValue, "", datatype);
+    }
+
+    protected OWLLiteral getBasicLiteral(String lexicalValue, String lang, OWLDatatype datatype) {
+        return new OWLLiteralImplNoCompression(lexicalValue, lang, datatype);
     }
 
     private boolean isBooleanTrueValue(String lexicalValue) {

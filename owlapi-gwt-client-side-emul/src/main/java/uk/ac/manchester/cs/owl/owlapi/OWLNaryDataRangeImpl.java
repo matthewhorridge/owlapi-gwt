@@ -47,6 +47,7 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br> The University of Manchester<br> Information Management Group<br>
@@ -55,12 +56,12 @@ import java.util.Set;
 public abstract class OWLNaryDataRangeImpl extends OWLObjectImpl implements OWLNaryDataRange {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final Set<OWLDataRange> operands;
+    private static final long serialVersionUID = 30406L;
+    private final Set<OWLDataRange> operands;
 
     protected OWLNaryDataRangeImpl(Set<? extends OWLDataRange> operands) {
         super();
-        this.operands = new HashSet<OWLDataRange>(operands);
+        this.operands = new TreeSet<OWLDataRange>(operands);
     }
 
     @Override

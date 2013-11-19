@@ -7,7 +7,7 @@
     <groupId>net.sourceforge.owlapitools</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2</version>
+    <version>3.4.8-SNAPSHOT</version>
     <modules>
         <module>owlapi-gwt-serialization</module>
         <module>owlapi-gwt-client-side-emul</module>
@@ -26,13 +26,15 @@
         <!--</plugins>-->
     <!--</build>-->
 
+
+
     <dependencies>
         <!-- We have a global dependency of the gwt-user library as this is needed for both server side and client
         side custom field serializers -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.4.0</version>
+            <version>2.5.1</version>
         </dependency>
     </dependencies>
 </project>

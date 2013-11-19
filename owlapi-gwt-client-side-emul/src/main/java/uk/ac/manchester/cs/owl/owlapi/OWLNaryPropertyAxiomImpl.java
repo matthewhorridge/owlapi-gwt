@@ -48,7 +48,7 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -60,13 +60,13 @@ import java.util.Set;
 public abstract class OWLNaryPropertyAxiomImpl<P extends OWLPropertyExpression<?,?>> extends OWLPropertyAxiomImpl implements OWLNaryPropertyAxiom<P> {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final Set<P> properties;
+    private static final long serialVersionUID = 30406L;
+    private final Set<P> properties;
 
     @SuppressWarnings("javadoc")
     public OWLNaryPropertyAxiomImpl(Set<? extends P> properties, Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
-        this.properties = new HashSet<P>(properties);
+        this.properties = new TreeSet<P>(properties);
     }
 
 
@@ -77,13 +77,13 @@ public abstract class OWLNaryPropertyAxiomImpl<P extends OWLPropertyExpression<?
 
     @Override
     public Set<P> getPropertiesMinus(P property) {
-        Set<P> props = new HashSet<P>(properties);
+        Set<P> props = new TreeSet<P>(properties);
         props.remove(property);
         return props;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLNaryPropertyAxiom)) {
                 return false;
@@ -95,7 +95,7 @@ public abstract class OWLNaryPropertyAxiomImpl<P extends OWLPropertyExpression<?
 
 
     @Override
-	final protected int compareObjectOfSameType(OWLObject object) {
+    final protected int compareObjectOfSameType(OWLObject object) {
         return compareSets(properties, ((OWLNaryPropertyAxiom<?>) object).getProperties());
     }
 }

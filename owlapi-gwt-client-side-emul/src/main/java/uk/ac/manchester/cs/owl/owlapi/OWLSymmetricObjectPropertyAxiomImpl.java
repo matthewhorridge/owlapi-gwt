@@ -54,9 +54,9 @@ import java.util.Set;
  */
 public class OWLSymmetricObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLSymmetricObjectPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLSymmetricObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -65,14 +65,17 @@ public class OWLSymmetricObjectPropertyAxiomImpl extends OWLObjectPropertyCharac
     @Override
     public Set<OWLSubObjectPropertyOfAxiom> asSubPropertyAxioms() {
         Set<OWLSubObjectPropertyOfAxiom> result = new HashSet<OWLSubObjectPropertyOfAxiom>(5);
-        result.add(getOWLDataFactory().getOWLSubObjectPropertyOfAxiom(getProperty(), getProperty().getInverseProperty().getSimplified()));
-        result.add(getOWLDataFactory().getOWLSubObjectPropertyOfAxiom(getProperty().getInverseProperty().getSimplified(), getProperty()));
+        result.add(new OWLSubObjectPropertyOfAxiomImpl(getProperty(), getProperty()
+                .getInverseProperty().getSimplified(), NO_ANNOTATIONS));
+        result.add(new OWLSubObjectPropertyOfAxiomImpl(getProperty().getInverseProperty()
+                .getSimplified(), getProperty(), NO_ANNOTATIONS));
         return result;
     }
 
     @Override
     public OWLSymmetricObjectPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSymmetricObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLSymmetricObjectPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -80,11 +83,11 @@ public class OWLSymmetricObjectPropertyAxiomImpl extends OWLObjectPropertyCharac
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSymmetricObjectPropertyAxiom(getProperty());
+        return new OWLSymmetricObjectPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLSymmetricObjectPropertyAxiom;
     }
 

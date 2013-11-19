@@ -56,9 +56,9 @@ import java.util.Collection;
 public abstract class OWLIndividualRelationshipAxiomImpl<P extends OWLPropertyExpression<?,?>, O extends OWLPropertyAssertionObject> extends OWLLogicalAxiomImpl implements OWLPropertyAssertionAxiom<P, O> {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLIndividual subject;
+    private final OWLIndividual subject;
 
     private final P property;
 
@@ -98,7 +98,7 @@ public abstract class OWLIndividualRelationshipAxiomImpl<P extends OWLPropertyEx
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLPropertyAssertionAxiom)) {
                 return false;
@@ -111,7 +111,7 @@ public abstract class OWLIndividualRelationshipAxiomImpl<P extends OWLPropertyEx
 
 
     @Override
-	final protected int compareObjectOfSameType(OWLObject o) {
+    final protected int compareObjectOfSameType(OWLObject o) {
         OWLPropertyAssertionAxiom<?,?> other = (OWLPropertyAssertionAxiom<?,?>) o;
         int diff = subject.compareTo(other.getSubject());
         if (diff != 0) {

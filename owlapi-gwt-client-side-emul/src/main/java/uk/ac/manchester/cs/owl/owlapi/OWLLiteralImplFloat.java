@@ -49,13 +49,13 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLLiteralImplFloat extends OWLObjectImpl implements OWLLiteral {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
     private final float literal;
     private final OWLDatatype datatype;
 
     @SuppressWarnings("javadoc")
     public OWLLiteralImplFloat(float literal,
-            OWLDatatype datatype) {
+                               OWLDatatype datatype) {
         super();
         this.literal = literal;
         this.datatype = datatype;

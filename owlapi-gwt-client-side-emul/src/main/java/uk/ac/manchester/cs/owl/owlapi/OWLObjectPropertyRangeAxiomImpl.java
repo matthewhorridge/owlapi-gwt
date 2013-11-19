@@ -52,17 +52,17 @@ import java.util.Set;
  */
 public class OWLObjectPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<OWLObjectPropertyExpression, OWLClassExpression> implements OWLObjectPropertyRangeAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectPropertyRangeAxiomImpl(OWLObjectPropertyExpression property, OWLClassExpression range, Set<? extends OWLAnnotation> annotations) {
         super(property, range, annotations);
     }
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLObjectPropertyRangeAxiom;
     }
 
@@ -71,12 +71,14 @@ public class OWLObjectPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<O
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLObjectPropertyRangeAxiom(getProperty(), getRange());
+        return new OWLObjectPropertyRangeAxiomImpl(getProperty(), getRange(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLObjectPropertyRangeAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLObjectPropertyRangeAxiom(getProperty(), getRange(), mergeAnnos(annotations));
+        return new OWLObjectPropertyRangeAxiomImpl(getProperty(), getRange(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -108,8 +110,7 @@ public class OWLObjectPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<O
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        OWLClassExpression sup = df.getOWLObjectAllValuesFrom(getProperty(), getRange());
-        return df.getOWLSubClassOfAxiom(df.getOWLThing(), sup);
+        OWLClassExpression sup = new OWLObjectAllValuesFromImpl(getProperty(), getRange());
+        return new OWLSubClassOfAxiomImpl(OWL_THING, sup, NO_ANNOTATIONS);
     }
 }

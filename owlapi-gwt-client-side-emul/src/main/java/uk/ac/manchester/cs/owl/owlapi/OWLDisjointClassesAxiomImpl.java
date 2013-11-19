@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,9 +55,9 @@ import java.util.Set;
  */
 public class OWLDisjointClassesAxiomImpl extends OWLNaryClassAxiomImpl implements OWLDisjointClassesAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLDisjointClassesAxiomImpl(Set<? extends OWLClassExpression> classExpressions, Set<? extends OWLAnnotation> annotations) {
         super(classExpressions, annotations);
     }
@@ -66,16 +67,17 @@ public class OWLDisjointClassesAxiomImpl extends OWLNaryClassAxiomImpl implement
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDisjointClassesAxiom(getClassExpressions());
+        return new OWLDisjointClassesAxiomImpl(getClassExpressions(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDisjointClassesAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDisjointClassesAxiom(getClassExpressions(), mergeAnnos(annotations));
+        return new OWLDisjointClassesAxiomImpl(getClassExpressions(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLDisjointClassesAxiom;
     }
 
@@ -111,7 +113,8 @@ public class OWLDisjointClassesAxiomImpl extends OWLNaryClassAxiomImpl implement
         List<OWLClassExpression> list = getClassExpressionsAsList();
         for (int i = 0; i < list.size() - 1; i++) {
             for (int j = i + 1; j < list.size(); j++) {
-                result.add(getOWLDataFactory().getOWLDisjointClassesAxiom(list.get(i), list.get(j)));
+                result.add(new OWLDisjointClassesAxiomImpl(
+                        new HashSet<OWLClassExpression>(Arrays.asList(list.get(i), list.get(j))), NO_ANNOTATIONS));
             }
         }
         return result;
@@ -123,7 +126,8 @@ public class OWLDisjointClassesAxiomImpl extends OWLNaryClassAxiomImpl implement
         List<OWLClassExpression> list = getClassExpressionsAsList();
         for (int i = 0; i < list.size() - 1; i++) {
             for (int j = i + 1; j < list.size(); j++) {
-                result.add(getOWLDataFactory().getOWLSubClassOfAxiom(list.get(i), list.get(j).getObjectComplementOf()));
+                result.add(new OWLSubClassOfAxiomImpl(list.get(i), list.get(j)
+                        .getObjectComplementOf(), NO_ANNOTATIONS));
             }
         }
         return result;

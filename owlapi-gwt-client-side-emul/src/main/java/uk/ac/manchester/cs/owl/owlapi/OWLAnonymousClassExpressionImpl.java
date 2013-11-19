@@ -59,9 +59,9 @@ import java.util.Set;
 public abstract class OWLAnonymousClassExpressionImpl extends OWLClassExpressionImpl implements OWLAnonymousClassExpression {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	public OWLAnonymousClassExpressionImpl() {
+    public OWLAnonymousClassExpressionImpl() {
         super();
     }
 
@@ -86,23 +86,19 @@ public abstract class OWLAnonymousClassExpressionImpl extends OWLClassExpression
 
     @Override
     public OWLClassExpression getNNF() {
-        NNF nnf = new NNF(getOWLDataFactory());
+        NNF nnf = new NNF(new OWLDataFactoryImpl());
         return accept(nnf);
     }
 
     @Override
     public OWLClassExpression getComplementNNF() {
-        NNF nnf = new NNF(getOWLDataFactory());
-        return getOWLDataFactory().getOWLObjectComplementOf(this).accept(nnf);
+        NNF nnf = new NNF(new OWLDataFactoryImpl());
+        return new OWLObjectComplementOfImpl(this).accept(nnf);
     }
 
-    /**
-     * Gets the object complement of this class expression.
-     * @return A class expression that is the complement of this class expression.
-     */
     @Override
     public OWLClassExpression getObjectComplementOf() {
-        return getOWLDataFactory().getOWLObjectComplementOf(this);
+        return new OWLObjectComplementOfImpl(this);
     }
 
     @Override

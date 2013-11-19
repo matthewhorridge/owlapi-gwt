@@ -50,17 +50,13 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLObjectHasSelfImpl extends OWLRestrictionImpl<OWLClassExpression, OWLObjectPropertyExpression, OWLObjectPropertyExpression> implements OWLObjectHasSelf {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
     @SuppressWarnings("javadoc")
     public OWLObjectHasSelfImpl(OWLObjectPropertyExpression property) {
         super(property);
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_HAS_SELF;

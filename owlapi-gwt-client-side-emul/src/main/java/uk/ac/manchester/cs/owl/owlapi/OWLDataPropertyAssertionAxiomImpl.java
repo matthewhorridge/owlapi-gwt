@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -52,16 +53,19 @@ import java.util.Set;
  */
 public class OWLDataPropertyAssertionAxiomImpl extends OWLIndividualRelationshipAxiomImpl<OWLDataPropertyExpression, OWLLiteral> implements OWLDataPropertyAssertionAxiom {
 
-	private static final long serialVersionUID = 30402L;
 
-	@SuppressWarnings("javadoc")
+    private static final long serialVersionUID = 30406L;
+
+    @SuppressWarnings("javadoc")
     public OWLDataPropertyAssertionAxiomImpl(OWLIndividual subject, OWLDataPropertyExpression property, OWLLiteral value, Set<? extends OWLAnnotation> annotations) {
         super(subject, property, value, annotations);
     }
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        return getOWLDataFactory().getOWLSubClassOfAxiom(getOWLDataFactory().getOWLObjectOneOf(getSubject()), getOWLDataFactory().getOWLDataHasValue(getProperty(), getObject()));
+        return new OWLSubClassOfAxiomImpl(new OWLObjectOneOfImpl(
+                Collections.singleton(getSubject())), new OWLDataHasValueImpl(
+                getProperty(), getObject()), NO_ANNOTATIONS);
     }
 
     @Override
@@ -69,16 +73,18 @@ public class OWLDataPropertyAssertionAxiomImpl extends OWLIndividualRelationship
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDataPropertyAssertionAxiom(getProperty(), getSubject(), getObject());
+        return new OWLDataPropertyAssertionAxiomImpl(getSubject(), getProperty(),
+                getObject(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDataPropertyAssertionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDataPropertyAssertionAxiom(getProperty(), getSubject(), getObject(), mergeAnnos(annotations));
+        return new OWLDataPropertyAssertionAxiomImpl(getSubject(), getProperty(),
+                getObject(), mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLDataPropertyAssertionAxiom;
     }
 

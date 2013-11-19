@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Set;
 
 /**
  * Author: Matthew Horridge<br>
@@ -51,8 +52,8 @@ import org.semanticweb.owlapi.model.*;
 public class OWLObjectInverseOfImpl extends OWLObjectPropertyExpressionImpl implements OWLObjectInverseOf {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLObjectPropertyExpression inverseProperty;
+    private static final long serialVersionUID = 30406L;
+    private final OWLObjectPropertyExpression inverseProperty;
 
     @SuppressWarnings("javadoc")
     public OWLObjectInverseOfImpl(OWLObjectPropertyExpression inverseProperty) {
@@ -60,15 +61,13 @@ public class OWLObjectInverseOfImpl extends OWLObjectPropertyExpressionImpl impl
         this.inverseProperty = inverseProperty;
     }
 
-
     @Override
     public OWLObjectPropertyExpression getInverse() {
         return inverseProperty;
     }
 
-
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLObjectInverseOf)) {
                 return false;
@@ -78,13 +77,10 @@ public class OWLObjectInverseOfImpl extends OWLObjectPropertyExpressionImpl impl
         return false;
     }
 
-
-
     @Override
     public void accept(OWLPropertyExpressionVisitor visitor) {
         visitor.visit(this);
     }
-
 
     @Override
     public void accept(OWLObjectVisitor visitor) {
@@ -96,7 +92,6 @@ public class OWLObjectInverseOfImpl extends OWLObjectPropertyExpressionImpl impl
         return visitor.visit(this);
     }
 
-
     @Override
     public <O> O accept(OWLObjectVisitorEx<O> visitor) {
         return visitor.visit(this);
@@ -107,49 +102,32 @@ public class OWLObjectInverseOfImpl extends OWLObjectPropertyExpressionImpl impl
         return true;
     }
 
-
     @Override
     public OWLObjectProperty asOWLObjectProperty() {
-        throw new OWLRuntimeException("Property is not a named property.  Check using the isAnonymous method before calling this method!");
+        throw new OWLRuntimeException(
+                "Property is not a named property.  Check using the isAnonymous method before calling this method!");
     }
 
-
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return inverseProperty.compareTo(((OWLObjectInverseOf) object).getInverse());
     }
 
-    /**
-     * Determines if this is the owl:topObjectProperty
-     * @return <code>true</code> if this property is the owl:topObjectProperty otherwise <code>false</code>
-     */
     @Override
     public boolean isOWLTopObjectProperty() {
         return false;
     }
 
-    /**
-     * Determines if this is the owl:bottomObjectProperty
-     * @return <code>true</code> if this property is the owl:bottomObjectProperty otherwise <code>false</code>
-     */
     @Override
     public boolean isOWLBottomObjectProperty() {
         return false;
     }
 
-    /**
-     * Determines if this is the owl:topDataProperty
-     * @return <code>true</code> if this property is the owl:topDataProperty otherwise <code>false</code>
-     */
     @Override
     public boolean isOWLTopDataProperty() {
         return false;
     }
 
-    /**
-     * Determines if this is the owl:bottomDataProperty
-     * @return <code>true</code> if this property is the owl:bottomDataProperty otherwise <code>false</code>
-     */
     @Override
     public boolean isOWLBottomDataProperty() {
         return false;

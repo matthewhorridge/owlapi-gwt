@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -52,9 +53,9 @@ import java.util.Set;
  */
 public class OWLNegativeObjectPropertyAssertionAxiomImpl extends OWLIndividualRelationshipAxiomImpl<OWLObjectPropertyExpression, OWLIndividual> implements OWLNegativeObjectPropertyAssertionAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLNegativeObjectPropertyAssertionAxiomImpl(OWLIndividual subject, OWLObjectPropertyExpression property, OWLIndividual object, Set<? extends OWLAnnotation> annotations) {
         super(subject, property, object, annotations);
     }
@@ -64,32 +65,30 @@ public class OWLNegativeObjectPropertyAssertionAxiomImpl extends OWLIndividualRe
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLNegativeObjectPropertyAssertionAxiom(getProperty(), getSubject(), getObject());
+        return new OWLNegativeObjectPropertyAssertionAxiomImpl(getSubject(),
+                getProperty(), getObject(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLNegativeObjectPropertyAssertionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLNegativeObjectPropertyAssertionAxiom(getProperty(), getSubject(), getObject(), mergeAnnos(annotations));
+        return new OWLNegativeObjectPropertyAssertionAxiomImpl(getSubject(),
+                getProperty(), getObject(), mergeAnnos(annotations));
     }
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLSubClassOfAxiom(df.getOWLObjectOneOf(getSubject()), df.getOWLObjectComplementOf(df.getOWLObjectHasValue(getProperty(), getObject())));
+        return new OWLSubClassOfAxiomImpl(new OWLObjectOneOfImpl(
+                Collections.singleton(getSubject())), new OWLObjectComplementOfImpl(
+                new OWLObjectHasValueImpl(getProperty(), getObject())), NO_ANNOTATIONS);
     }
 
-    /**
-     * Determines whether this axiom contains anonymous individuals.  Anonymous individuals are not allowed in
-     * negative object property assertions.
-     * @return <code>true</code> if this axioms contains anonymous individual axioms
-     */
     @Override
     public boolean containsAnonymousIndividuals() {
         return getSubject().isAnonymous() || getObject().isAnonymous();
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLNegativeObjectPropertyAssertionAxiom;
     }
 

@@ -42,9 +42,10 @@ package uk.ac.manchester.cs.owl.owlapi;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -55,19 +56,16 @@ import java.util.Set;
 public class OWLDisjointUnionAxiomImpl extends OWLClassAxiomImpl implements OWLDisjointUnionAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLClass owlClass;
+    private final OWLClass owlClass;
 
     private final Set<OWLClassExpression> classExpressions;
     @SuppressWarnings("javadoc")
     public OWLDisjointUnionAxiomImpl(OWLClass owlClass, Set<? extends OWLClassExpression> classExpressions, Set<? extends OWLAnnotation> annotations) {
         super(annotations);
         this.owlClass = owlClass;
-//        if(classExpressions==null || classExpressions.isEmpty()) {
-//        	throw new IllegalArgumentException("the classExpressions set must contain at least one value");
-//        }
-        this.classExpressions = new HashSet<OWLClassExpression>(classExpressions);
+        this.classExpressions = new TreeSet<OWLClassExpression>(classExpressions);
     }
 
     @Override
@@ -80,12 +78,14 @@ public class OWLDisjointUnionAxiomImpl extends OWLClassAxiomImpl implements OWLD
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDisjointUnionAxiom(getOWLClass(), getClassExpressions());
+        return new OWLDisjointUnionAxiomImpl(getOWLClass(), getClassExpressions(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDisjointUnionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDisjointUnionAxiom(getOWLClass(), getClassExpressions(), mergeAnnos(annotations));
+        return new OWLDisjointUnionAxiomImpl(getOWLClass(), getClassExpressions(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -95,9 +95,9 @@ public class OWLDisjointUnionAxiomImpl extends OWLClassAxiomImpl implements OWLD
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
             if (!(obj instanceof OWLDisjointUnionAxiom)) {
                 return false;
             }
@@ -136,16 +136,17 @@ public class OWLDisjointUnionAxiomImpl extends OWLClassAxiomImpl implements OWLD
 
     @Override
     public OWLEquivalentClassesAxiom getOWLEquivalentClassesAxiom() {
-        return getOWLDataFactory().getOWLEquivalentClassesAxiom(owlClass, getOWLDataFactory().getOWLObjectUnionOf(getClassExpressions()));
+        return new OWLEquivalentClassesAxiomImpl(
+                new HashSet<OWLClassExpression>(Arrays.asList(owlClass, new OWLObjectUnionOfImpl(getClassExpressions()))), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDisjointClassesAxiom getOWLDisjointClassesAxiom() {
-        return getOWLDataFactory().getOWLDisjointClassesAxiom(getClassExpressions());
+        return new OWLDisjointClassesAxiomImpl(getClassExpressions(), NO_ANNOTATIONS);
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLDisjointUnionAxiom other = (OWLDisjointUnionAxiom) object;
         int diff = owlClass.compareTo(other.getOWLClass());
         if (diff != 0) {

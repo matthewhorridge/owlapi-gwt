@@ -52,8 +52,8 @@ import org.semanticweb.owlapi.model.*;
 public class OWLDataComplementOfImpl extends OWLObjectImpl implements OWLDataComplementOf {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLDataRange dataRange;
+    private static final long serialVersionUID = 30406L;
+    private final OWLDataRange dataRange;
 
 
     public OWLDataComplementOfImpl(OWLDataRange dataRange) {
@@ -91,7 +91,7 @@ public class OWLDataComplementOfImpl extends OWLObjectImpl implements OWLDataCom
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLDataComplementOf)) {
                 return false;
@@ -135,7 +135,7 @@ public class OWLDataComplementOfImpl extends OWLObjectImpl implements OWLDataCom
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLDataComplementOf other = (OWLDataComplementOf) object;
         return getDataRange().compareTo(other.getDataRange());
     }

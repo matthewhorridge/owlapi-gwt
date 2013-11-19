@@ -57,7 +57,9 @@ import java.util.*;
 public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
 
 
-    private static final long serialVersionUID = 30402L;
+    private static final String ANNOTATIONS = "annotations";
+
+    private static final long serialVersionUID = 30406L;
 
     private static final String ABBREVIATED_IRI = "abbreviatedIRI";
 
@@ -130,12 +132,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
 
     @SuppressWarnings("javadoc")
     public OWLDataFactoryImpl(boolean cache, boolean useCompression) {
-//        if (cache) {
-//            data = new OWLDataFactoryInternalsImpl(this, useCompression);
-//        }
-//        else {
-            data = new InternalsNoCache(this, useCompression);
-//        }
+        data = new InternalsNoCache(useCompression);
     }
 
     /**
@@ -155,6 +152,12 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     }
 
     private void checkNull(Object o, String name) {
+        // to enable semantic check on sets, turn to false - input sets will be
+        // forbidden from being empty
+        checkNull(o, name, true);
+    }
+
+    private void checkNull(Object o, String name, boolean emptyAllowed) {
         if (o == null) {
             throw new IllegalArgumentException(name + " cannot be null");
         }
@@ -165,6 +168,9 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
                     throw new IllegalArgumentException(name + " element " + i + " cannot be null");
                 }
                 i++;
+            }
+            if (!emptyAllowed && i == 0) {
+                throw new IllegalArgumentException(name + " cannot be empty");
             }
         }
     }
@@ -772,7 +778,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLAsymmetricObjectPropertyAxiom getOWLAsymmetricObjectPropertyAxiom(OWLObjectPropertyExpression propertyExpression, Set<? extends OWLAnnotation> annotations) {
         checkNull(propertyExpression, "propertyExpression");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLAsymmetricObjectPropertyAxiomImpl(propertyExpression, annotations);
     }
 
@@ -785,7 +791,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLDataPropertyDomainAxiom getOWLDataPropertyDomainAxiom(OWLDataPropertyExpression property, OWLClassExpression domain, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
         checkNull(domain, "domain");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDataPropertyDomainAxiomImpl(property, domain, annotations);
     }
 
@@ -798,7 +804,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLDataPropertyRangeAxiom getOWLDataPropertyRangeAxiom(OWLDataPropertyExpression property, OWLDataRange owlDataRange, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
         checkNull(owlDataRange, "owlDataRange");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDataPropertyRangeAxiomImpl(property, owlDataRange, annotations);
     }
 
@@ -811,7 +817,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLSubDataPropertyOfAxiom getOWLSubDataPropertyOfAxiom(OWLDataPropertyExpression subProperty, OWLDataPropertyExpression superProperty, Set<? extends OWLAnnotation> annotations) {
         checkNull(subProperty, "subProperty");
         checkNull(superProperty, "superProperty");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSubDataPropertyOfAxiomImpl(subProperty, superProperty, annotations);
     }
 
@@ -828,14 +834,14 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLDeclarationAxiom getOWLDeclarationAxiom(OWLEntity owlEntity, Set<? extends OWLAnnotation> annotations) {
         checkNull(owlEntity, "owlEntity");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDeclarationAxiomImpl(owlEntity, annotations);
     }
 
     @Override
     public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<? extends OWLIndividual> individuals, Set<? extends OWLAnnotation> annotations) {
         checkNull(individuals, "individuals");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDifferentIndividualsAxiomImpl(individuals, annotations);
     }
 
@@ -853,7 +859,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLDisjointClassesAxiom getOWLDisjointClassesAxiom(Set<? extends OWLClassExpression> classExpressions, Set<? extends OWLAnnotation> annotations) {
         checkNull(classExpressions, "classExpressions");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDisjointClassesAxiomImpl(classExpressions, annotations);
     }
 
@@ -873,7 +879,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLDisjointDataPropertiesAxiom getOWLDisjointDataPropertiesAxiom(Set<? extends OWLDataPropertyExpression> properties, Set<? extends OWLAnnotation> annotations) {
         checkNull(properties, "properties");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDisjointDataPropertiesAxiomImpl(properties, annotations);
     }
 
@@ -902,14 +908,14 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLDisjointObjectPropertiesAxiom getOWLDisjointObjectPropertiesAxiom(Set<? extends OWLObjectPropertyExpression> properties, Set<? extends OWLAnnotation> annotations) {
         checkNull(properties, "properties");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDisjointObjectPropertiesAxiomImpl(properties, annotations);
     }
 
     @Override
     public OWLEquivalentClassesAxiom getOWLEquivalentClassesAxiom(Set<? extends OWLClassExpression> classExpressions, Set<? extends OWLAnnotation> annotations) {
         checkNull(classExpressions, "classExpressions");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLEquivalentClassesAxiomImpl(classExpressions, annotations);
     }
 
@@ -943,7 +949,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLEquivalentDataPropertiesAxiom getOWLEquivalentDataPropertiesAxiom(Set<? extends OWLDataPropertyExpression> properties, Set<? extends OWLAnnotation> annotations) {
         checkNull(properties, "properties");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLEquivalentDataPropertiesAxiomImpl(properties, annotations);
     }
 
@@ -998,7 +1004,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLFunctionalDataPropertyAxiom getOWLFunctionalDataPropertyAxiom(OWLDataPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLFunctionalDataPropertyAxiomImpl(property, annotations);
     }
 
@@ -1010,7 +1016,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLFunctionalObjectPropertyAxiom getOWLFunctionalObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLFunctionalObjectPropertyAxiomImpl(property, annotations);
     }
 
@@ -1030,7 +1036,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(property, "property");
         checkNull(object, "object");
         checkNull(subject, "subject");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDataPropertyAssertionAxiomImpl(subject, property, object, annotations);
     }
 
@@ -1074,8 +1080,8 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(property, "property");
         checkNull(object, "object");
         checkNull(subject, "subject");
-        checkNull(annotations, "annotations");
-        return new OWLNegativeDataPropertyAssertionImplAxiom(subject, property, object, annotations);
+        checkNull(annotations, ANNOTATIONS, true);
+        return new OWLNegativeDataPropertyAssertionAxiomImpl(subject, property, object, annotations);
     }
 
     @Override
@@ -1088,7 +1094,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(property, "property");
         checkNull(object, "object");
         checkNull(subject, "subject");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLNegativeObjectPropertyAssertionAxiomImpl(subject, property, object, annotations);
     }
 
@@ -1106,8 +1112,8 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLClassExpression classExpression, OWLIndividual individual, Set<? extends OWLAnnotation> annotations) {
         checkNull(classExpression, "classExpression");
         checkNull(individual, "individual");
-        checkNull(annotations, "annotations");
-        return new OWLClassAssertionImpl(individual, classExpression, annotations);
+        checkNull(annotations, ANNOTATIONS, true);
+        return new OWLClassAssertionAxiomImpl(individual, classExpression, annotations);
     }
 
     @Override
@@ -1118,14 +1124,14 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLInverseFunctionalObjectPropertyAxiom getOWLInverseFunctionalObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLInverseFunctionalObjectPropertyAxiomImpl(property, annotations);
     }
 
     @Override
     public OWLIrreflexiveObjectPropertyAxiom getOWLIrreflexiveObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLIrreflexiveObjectPropertyAxiomImpl(property, annotations);
     }
 
@@ -1143,7 +1149,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLObjectPropertyDomainAxiom getOWLObjectPropertyDomainAxiom(OWLObjectPropertyExpression property, OWLClassExpression classExpression, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
         checkNull(classExpression, "classExpression");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLObjectPropertyDomainAxiomImpl(property, classExpression, annotations);
     }
 
@@ -1156,7 +1162,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLObjectPropertyRangeAxiom getOWLObjectPropertyRangeAxiom(OWLObjectPropertyExpression property, OWLClassExpression range, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
         checkNull(range, "range");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLObjectPropertyRangeAxiomImpl(property, range, annotations);
     }
 
@@ -1169,7 +1175,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLSubObjectPropertyOfAxiom getOWLSubObjectPropertyOfAxiom(OWLObjectPropertyExpression subProperty, OWLObjectPropertyExpression superProperty, Set<? extends OWLAnnotation> annotations) {
         checkNull(subProperty, "subProperty");
         checkNull(superProperty, "superProperty");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSubObjectPropertyOfAxiomImpl(subProperty, superProperty, annotations);
     }
 
@@ -1181,14 +1187,14 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLReflexiveObjectPropertyAxiom getOWLReflexiveObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLReflexiveObjectPropertyAxiomImpl(property, annotations);
     }
 
     @Override
     public OWLSameIndividualAxiom getOWLSameIndividualAxiom(Set<? extends OWLIndividual> individuals, Set<? extends OWLAnnotation> annotations) {
         checkNull(individuals, "individuals");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSameIndividualAxiomImpl(individuals, annotations);
     }
 
@@ -1209,7 +1215,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLSubClassOfAxiom getOWLSubClassOfAxiom(OWLClassExpression subClass, OWLClassExpression superClass, Set<? extends OWLAnnotation> annotations) {
         checkNull(subClass, "subclass");
         checkNull(superClass, "superclass");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSubClassOfAxiomImpl(subClass, superClass, annotations);
     }
 
@@ -1221,7 +1227,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLSymmetricObjectPropertyAxiom getOWLSymmetricObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSymmetricObjectPropertyAxiomImpl(property, annotations);
     }
 
@@ -1233,7 +1239,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLTransitiveObjectPropertyAxiom getOWLTransitiveObjectPropertyAxiom(OWLObjectPropertyExpression property, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLTransitiveObjectPropertyAxiomImpl(property, annotations);
     }
 
@@ -1252,7 +1258,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLInverseObjectPropertiesAxiom getOWLInverseObjectPropertiesAxiom(OWLObjectPropertyExpression forwardProperty, OWLObjectPropertyExpression inverseProperty, Set<? extends OWLAnnotation> annotations) {
         checkNull(forwardProperty, "forwardProperty");
         checkNull(inverseProperty, "inverseProperty");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLInverseObjectPropertiesAxiomImpl(forwardProperty, inverseProperty, annotations);
     }
 
@@ -1265,7 +1271,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLSubPropertyChainOfAxiom getOWLSubPropertyChainOfAxiom(List<? extends OWLObjectPropertyExpression> chain, OWLObjectPropertyExpression superProperty, Set<? extends OWLAnnotation> annotations) {
         checkNull(superProperty, "superProperty");
         checkNull(chain, "chain");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSubPropertyChainAxiomImpl(chain, superProperty, annotations);
     }
 
@@ -1278,7 +1284,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLHasKeyAxiom getOWLHasKeyAxiom(OWLClassExpression ce, Set<? extends OWLPropertyExpression<?, ?>> properties, Set<? extends OWLAnnotation> annotations) {
         checkNull(ce, "ce");
         checkNull(properties, "properties");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLHasKeyAxiomImpl(ce, properties, annotations);
     }
 
@@ -1298,7 +1304,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLDisjointUnionAxiom getOWLDisjointUnionAxiom(OWLClass owlClass, Set<? extends OWLClassExpression> classExpressions, Set<? extends OWLAnnotation> annotations) {
         checkNull(owlClass, "owlClass");
         checkNull(classExpressions, "classExpressions");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDisjointUnionAxiomImpl(owlClass, classExpressions, annotations);
     }
 
@@ -1310,7 +1316,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     @Override
     public OWLEquivalentObjectPropertiesAxiom getOWLEquivalentObjectPropertiesAxiom(Set<? extends OWLObjectPropertyExpression> properties, Set<? extends OWLAnnotation> annotations) {
         checkNull(properties, "properties");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLEquivalentObjectPropertiesAxiomImpl(properties, annotations);
     }
 
@@ -1319,7 +1325,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(property, "property");
         checkNull(individual, "individual");
         checkNull(object, "object");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLObjectPropertyAssertionAxiomImpl(individual, property, object, annotations);
     }
 
@@ -1332,7 +1338,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLSubAnnotationPropertyOfAxiom getOWLSubAnnotationPropertyOfAxiom(OWLAnnotationProperty sub, OWLAnnotationProperty sup, Set<? extends OWLAnnotation> annotations) {
         checkNull(sub, "sub");
         checkNull(sup, "sup");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLSubAnnotationPropertyOfAxiomImpl(sub, sup, annotations);
     }
 
@@ -1353,7 +1359,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLAnnotation getOWLAnnotation(OWLAnnotationProperty property, OWLAnnotationValue value, Set<? extends OWLAnnotation> annotations) {
         checkNull(property, "property");
         checkNull(value, VALUE2);
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLAnnotationImpl(property, value, annotations);
     }
 
@@ -1382,7 +1388,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(subject, "subject");
         checkNull(property, "property");
         checkNull(value, VALUE2);
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLAnnotationAssertionAxiomImpl(subject, property, value, annotations);
     }
 
@@ -1396,7 +1402,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLAnnotationPropertyDomainAxiom getOWLAnnotationPropertyDomainAxiom(OWLAnnotationProperty prop, IRI domain, Set<? extends OWLAnnotation> annotations) {
         checkNull(prop, "prop");
         checkNull(domain, "domain");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLAnnotationPropertyDomainAxiomImpl(prop, domain, annotations);
     }
 
@@ -1409,7 +1415,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLAnnotationPropertyRangeAxiom getOWLAnnotationPropertyRangeAxiom(OWLAnnotationProperty prop, IRI range, Set<? extends OWLAnnotation> annotations) {
         checkNull(prop, "prop");
         checkNull(range, "range");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLAnnotationPropertyRangeAxiomImpl(prop, range, annotations);
     }
 
@@ -1425,10 +1431,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param iri The rule IRI - this parameter is IGNORED since OWL axioms do
-     * not have IRIs, and is here for backwards compatability.
-     * @param body The atoms that make up the body of the rule
-     * @param head The atoms that make up the head of the rule
      * @deprecated Use either
      *             {@link #getSWRLRule(java.util.Set, java.util.Set, java.util.Set)}
      *             or {@link #getSWRLRule(java.util.Set, java.util.Set)}
@@ -1441,14 +1443,11 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(body, "body");
         checkNull(head, "head");
         Set<OWLAnnotation> annos = new HashSet<OWLAnnotation>(2);
-        annos.add(getOWLAnnotation(getOWLAnnotationProperty(IRI.create("http://www.semanticweb.org/owlapi#iri")), getOWLLiteral(iri.toQuotedString())));
+        annos.add(getOWLAnnotation(getOWLAnnotationProperty(IRI.create("http://www.semanticweb.org/owlapi#", "iri")), getOWLLiteral(iri.toQuotedString())));
         return new SWRLRuleImpl(body, head, annos);
     }
 
     /**
-     * @param nodeID The node ID
-     * @param body The atoms that make up the body of the rule
-     * @param head The atoms that make up the head of the rule
      * @deprecated Use either
      *             {@link #getSWRLRule(java.util.Set, java.util.Set, java.util.Set)}
      *             or {@link #getSWRLRule(java.util.Set, java.util.Set)}
@@ -1461,43 +1460,26 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         checkNull(body, "body");
         checkNull(nodeID, "nodeID");
         Set<OWLAnnotation> annos = new HashSet<OWLAnnotation>(2);
-        annos.add(getOWLAnnotation(getOWLAnnotationProperty(IRI.create("http://www.semanticweb.org/owlapi#nodeID")), getOWLLiteral(nodeID.toString())));
+        annos.add(getOWLAnnotation(getOWLAnnotationProperty(IRI.create("http://www.semanticweb.org/owlapi#", "nodeID")), getOWLLiteral(nodeID.toString())));
         return new SWRLRuleImpl(body, head, annos);
     }
 
-    /**
-     * Gets an anonymous SWRL Rule
-     * @param body The atoms that make up the body
-     * @param head The atoms that make up the head
-     * @param annotations The annotations for the rule (may be an empty set)
-     * @return An anonymous rule with the specified body and head
-     */
     @Override
     public SWRLRule getSWRLRule(Set<? extends SWRLAtom> body, Set<? extends SWRLAtom> head, Set<OWLAnnotation> annotations) {
         checkNull(body, "body");
         checkNull(head, "head");
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new SWRLRuleImpl(body, head, annotations);
     }
 
-    /**
-     * Gets a SWRL rule which is anonymous - i.e. isn't named with a URI
-     * @param antecedent The atoms that make up the antecedent
-     * @param consequent The atoms that make up the consequent
-     */
     @Override
     public SWRLRule getSWRLRule(Set<? extends SWRLAtom> antecedent, Set<? extends SWRLAtom> consequent) {
         checkNull(antecedent, "antecedent");
         checkNull(consequent, "consequent");
-        return new SWRLRuleImpl(antecedent, consequent);
+        return new SWRLRuleImpl(antecedent, consequent,
+                EMPTY_ANNOTATIONS_SET);
     }
 
-    /**
-     * Gets a SWRL class atom, i.e. C(x) where C is a class expression and x is
-     * either an individual id or an i-variable
-     * @param predicate The class expression that corresponds to the predicate
-     * @param arg The argument (x)
-     */
     @Override
     public SWRLClassAtom getSWRLClassAtom(OWLClassExpression predicate, SWRLIArgument arg) {
         checkNull(predicate, "predicate");
@@ -1505,12 +1487,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         return new SWRLClassAtomImpl(predicate, arg);
     }
 
-    /**
-     * Gets a SWRL data range atom, i.e. D(x) where D is an OWL data range and x
-     * is either a constant or a d-variable
-     * @param predicate The data range that corresponds to the predicate
-     * @param arg The argument (x)
-     */
     @Override
     public SWRLDataRangeAtom getSWRLDataRangeAtom(OWLDataRange predicate, SWRLDArgument arg) {
         checkNull(predicate, "predicate");
@@ -1518,14 +1494,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         return new SWRLDataRangeAtomImpl(predicate, arg);
     }
 
-    /**
-     * Gets a SWRL object property atom, i.e. P(x, y) where P is an OWL object
-     * property (expression) and x and y are are either an individual id or an
-     * i-variable.
-     * @param property The property (P)
-     * @param arg0 The first argument (x)
-     * @param arg1 The second argument (y)
-     */
     @Override
     public SWRLObjectPropertyAtom getSWRLObjectPropertyAtom(OWLObjectPropertyExpression property, SWRLIArgument arg0, SWRLIArgument arg1) {
         checkNull(property, "property");
@@ -1534,14 +1502,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         return new SWRLObjectPropertyAtomImpl(property, arg0, arg1);
     }
 
-    /**
-     * Gets a SWRL data property atom, i.e. R(x, y) where R is an OWL data
-     * property (expression) and x and y are are either a constant or a
-     * d-variable.
-     * @param property The property (P)
-     * @param arg0 The first argument (x)
-     * @param arg1 The second argument (y)
-     */
     @Override
     public SWRLDataPropertyAtom getSWRLDataPropertyAtom(OWLDataPropertyExpression property, SWRLIArgument arg0, SWRLDArgument arg1) {
         checkNull(property, "property");
@@ -1550,11 +1510,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         return new SWRLDataPropertyAtomImpl(property, arg0, arg1);
     }
 
-    /**
-     * Creates a SWRL Built-In atom.
-     * @param builtInIRI The SWRL builtIn (see SWRL W3 member submission)
-     * @param args A non-empty set of SWRL D-Objects
-     */
     @Override
     public SWRLBuiltInAtom getSWRLBuiltInAtom(IRI builtInIRI, List<SWRLDArgument> args) {
         checkNull(builtInIRI, "builtInIRI");
@@ -1562,31 +1517,18 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
         return new SWRLBuiltInAtomImpl(builtInIRI, args);
     }
 
-    /**
-     * Gets a SWRLVariable.
-     * @param var The id (IRI) of the variable
-     * @return A SWRLVariable that has the name specified by the IRI
-     */
     @Override
     public SWRLVariable getSWRLVariable(IRI var) {
         checkNull(var, "var");
         return new SWRLVariableImpl(var);
     }
 
-    /**
-     * Gets a SWRL individual object.
-     * @param individual The individual that is the object argument
-     */
     @Override
     public SWRLIndividualArgument getSWRLIndividualArgument(OWLIndividual individual) {
         checkNull(individual, "individual");
         return new SWRLIndividualArgumentImpl(individual);
     }
 
-    /**
-     * Gets a SWRL constant object.
-     * @param literal The constant that is the object argument
-     */
     @Override
     public SWRLLiteralArgument getSWRLLiteralArgument(OWLLiteral literal) {
         checkNull(literal, "literal");
@@ -1620,7 +1562,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable {
     public OWLDatatypeDefinitionAxiom getOWLDatatypeDefinitionAxiom(OWLDatatype datatype, OWLDataRange dataRange, Set<? extends OWLAnnotation> annotations) {
         checkNull(datatype, DATATYPE2);
         checkNull(dataRange, DATA_RANGE);
-        checkNull(annotations, "annotations");
+        checkNull(annotations, ANNOTATIONS, true);
         return new OWLDatatypeDefinitionAxiomImpl(datatype, dataRange, annotations);
     }
 

@@ -54,8 +54,8 @@ import java.util.Set;
 public abstract class OWLPropertyDomainAxiomImpl<P extends OWLPropertyExpression<?,?>> extends OWLUnaryPropertyAxiomImpl<P> implements OWLPropertyDomainAxiom<P> {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLClassExpression domain;
+    private static final long serialVersionUID = 30406L;
+    private final OWLClassExpression domain;
 
 
     public OWLPropertyDomainAxiomImpl(P property, OWLClassExpression domain, Set<? extends OWLAnnotation> annotations) {
@@ -71,7 +71,7 @@ public abstract class OWLPropertyDomainAxiomImpl<P extends OWLPropertyExpression
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLPropertyDomainAxiom)) {
                 return false;
@@ -83,7 +83,7 @@ public abstract class OWLPropertyDomainAxiomImpl<P extends OWLPropertyExpression
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLPropertyDomainAxiom<?> other = (OWLPropertyDomainAxiom<?>) object;
         int diff = getProperty().compareTo(other.getProperty());
         if (diff != 0) {

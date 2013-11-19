@@ -44,7 +44,7 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -56,9 +56,10 @@ import java.util.Set;
 public class OWLAnnotationImpl extends OWLObjectImpl implements OWLAnnotation {
 
 
-	private static final long serialVersionUID = 30402L;
 
-	private final OWLAnnotationProperty property;
+    private static final long serialVersionUID = 30406L;
+
+    private final OWLAnnotationProperty property;
 
     private final OWLAnnotationValue value;
 
@@ -68,7 +69,7 @@ public class OWLAnnotationImpl extends OWLObjectImpl implements OWLAnnotation {
         super();
         this.property = property;
         this.value = value;
-        this.annotations = CollectionFactory.getCopyOnRequestSetFromMutableCollection(new HashSet<OWLAnnotation>(annotations));
+        this.annotations = CollectionFactory.getCopyOnRequestSetFromMutableCollection(new TreeSet<OWLAnnotation>(annotations));
     }
 
     @Override
@@ -120,17 +121,17 @@ public class OWLAnnotationImpl extends OWLObjectImpl implements OWLAnnotation {
     }
 
     @Override
-	public boolean equals(Object obj) {
-		if (super.equals(obj) && obj instanceof OWLAnnotation) {
-			OWLAnnotation other = (OWLAnnotation) obj;
-			return other.getProperty().equals(property) && other.getValue().equals(value)
-					&& other.getAnnotations().equals(annotations);
-		}
+    public boolean equals(Object obj) {
+        if (super.equals(obj) && obj instanceof OWLAnnotation) {
+            OWLAnnotation other = (OWLAnnotation) obj;
+            return other.getProperty().equals(property) && other.getValue().equals(value)
+                    && other.getAnnotations().equals(annotations);
+        }
         return false;
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLAnnotation other = (OWLAnnotation) object;
         int diff = getProperty().compareTo(other.getProperty());
         if (diff != 0) {

@@ -44,57 +44,88 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.util.HashCode;
 import org.semanticweb.owlapi.util.OWLClassExpressionCollector;
 import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.*;
 
-/** Author: Matthew Horridge<br>
+/**
+ * Author: Matthew Horridge<br>
  * The University Of Manchester<br>
  * Bio-Health Informatics Group<br>
  * Date: 25-Oct-2006<br>
- * <br> */
+ * <br>
+ */
 public abstract class OWLObjectImpl implements OWLObject, Serializable {
 
-    private static final long serialVersionUID = 30402L;
-    // private final OWLDataFactory dataFactory;
+    /**
+     * a convenience reference for an empty annotation set, saves on typing
+     */
+    protected static final Set<OWLAnnotation> NO_ANNOTATIONS = Collections.<OWLAnnotation>emptySet();
+
     private int hashCode = 0;
-    private Set<OWLEntity> signature;
-    private Set<OWLAnonymousIndividual> anons;
+
+    private transient WeakReference<Set<OWLEntity>> signature = null;
+
+    private transient WeakReference<Set<OWLAnonymousIndividual>> anons;
 
     /** */
-    public OWLObjectImpl() {}
-
-    private static OWLDataFactory f = new OWLDataFactoryImpl(false, false);
-
-    /** @return this object's data factory */
-    public static OWLDataFactory getOWLDataFactory() {
-        return f;
+    public OWLObjectImpl() {
     }
 
-    @SuppressWarnings("javadoc")
-    public static void setOWLDataFactory(OWLDataFactory factory) {
-        f = factory;
+    // XXX there should be no datafactory here at all
+    @Deprecated
+    private static OWLDataFactory f = new OWLDataFactoryImpl(false, false);
+
+    protected static final OWLClass OWL_THING = new OWLClassImpl(OWLRDFVocabulary.OWL_THING.getIRI());
+
+
+    static <E extends OWLEntity> E getOWLEntity(EntityType<E> entityType, IRI iri) {
+        if (entityType.equals(EntityType.CLASS)) {
+            return (E) new OWLClassImpl(iri);
+        }
+        else if (entityType.equals(EntityType.OBJECT_PROPERTY)) {
+            return (E) new OWLObjectPropertyImpl(iri);
+        }
+        else if (entityType.equals(EntityType.DATA_PROPERTY)) {
+            return (E) new OWLDataPropertyImpl(iri);
+        }
+        else if (entityType.equals(EntityType.ANNOTATION_PROPERTY)) {
+            return (E) new OWLAnnotationPropertyImpl(iri);
+        }
+        else if (entityType.equals(EntityType.NAMED_INDIVIDUAL)) {
+            return (E) new OWLNamedIndividualImpl(iri);
+        }
+        else if (entityType.equals(EntityType.DATATYPE)) {
+            return (E) new OWLDatatypeImpl(iri);
+        }
+        return null;
     }
 
     @Override
     public Set<OWLEntity> getSignature() {
-        if (signature == null) {
-            Set<OWLEntity> sig = new HashSet<OWLEntity>();
-            anons = new HashSet<OWLAnonymousIndividual>();
-            OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(
-                    sig, anons);
-            accept(collector);
-            signature = sig;
+        Set<OWLEntity> set = null;
+        if (signature != null) {
+            set = signature.get();
         }
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(signature);
+        if (set == null) {
+            set = new HashSet<OWLEntity>();
+            Set<OWLAnonymousIndividual> anon = new HashSet<OWLAnonymousIndividual>();
+            OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
+            accept(collector);
+            signature = new WeakReference<Set<OWLEntity>>(set);
+            anons = new WeakReference<Set<OWLAnonymousIndividual>>(anon);
+        }
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(set);
     }
 
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        if (signature == null) {
+        if (signature == null || signature.get() == null) {
             getSignature();
         }
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anons);
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anons.get());
     }
 
     @Override
@@ -141,11 +172,6 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
         return result;
     }
 
-    /** A convenience method that obtains the datatypes that are in the signature
-     * of this object
-     * 
-     * @return A set containing the datatypes that are in the signature of this
-     *         object. */
     @Override
     public Set<OWLDatatype> getDatatypesInSignature() {
         Set<OWLDatatype> result = new HashSet<OWLDatatype>();
@@ -178,14 +204,6 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
 
     @Override
     final public int compareTo(OWLObject o) {
-        // if (o instanceof OWLAxiom && this instanceof OWLAxiom) {
-        // OWLObject thisSubj = subjectProvider.getSubject((OWLAxiom) this);
-        // OWLObject otherSubj = subjectProvider.getSubject((OWLAxiom) o);
-        // int axDiff = thisSubj.compareTo(otherSubj);
-        // if (axDiff != 0) {
-        // return axDiff;
-        // }
-        // }
         OWLObjectTypeIndexProvider typeIndexProvider = new OWLObjectTypeIndexProvider();
         int thisTypeIndex = typeIndexProvider.getTypeIndex(this);
         int otherTypeIndex = typeIndexProvider.getTypeIndex(o);
@@ -193,7 +211,8 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
         if (diff == 0) {
             // Objects are the same type
             return compareObjectOfSameType(o);
-        } else {
+        }
+        else {
             return diff;
         }
     }
@@ -215,18 +234,19 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
         return false;
     }
 
-    protected static int compareSets(Set<? extends OWLObject> set1,
-            Set<? extends OWLObject> set2) {
+    protected static int compareSets(Set<? extends OWLObject> set1, Set<? extends OWLObject> set2) {
         SortedSet<? extends OWLObject> ss1;
         if (set1 instanceof SortedSet) {
             ss1 = (SortedSet<? extends OWLObject>) set1;
-        } else {
-            ss1 = new TreeSet<OWLObject>();
+        }
+        else {
+            ss1 = new TreeSet<OWLObject>(set1);
         }
         SortedSet<? extends OWLObject> ss2;
         if (set2 instanceof SortedSet) {
             ss2 = (SortedSet<? extends OWLObject>) set2;
-        } else {
+        }
+        else {
             ss2 = new TreeSet<OWLObject>(set2);
         }
         int i = 0;
@@ -242,5 +262,20 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
             i++;
         }
         return ss1.size() - ss2.size();
+    }
+
+    protected static int compareLists(List<? extends OWLObject> list1, List<? extends OWLObject> list2) {
+        int i = 0;
+        int size = list1.size() < list2.size() ? list1.size() : list2.size();
+        while (i < size) {
+            OWLObject o1 = list1.get(i);
+            OWLObject o2 = list2.get(i);
+            int diff = o1.compareTo(o2);
+            if (diff != 0) {
+                return diff;
+            }
+            i++;
+        }
+        return list1.size() - list2.size();
     }
 }

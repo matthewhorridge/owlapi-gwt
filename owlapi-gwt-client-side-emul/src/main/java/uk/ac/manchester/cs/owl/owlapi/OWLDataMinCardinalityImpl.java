@@ -40,7 +40,7 @@
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
-
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * Author: Matthew Horridge<br>
@@ -50,25 +50,26 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLDataMinCardinalityImpl extends OWLDataCardinalityRestrictionImpl implements OWLDataMinCardinality {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLDataMinCardinalityImpl(OWLDataPropertyExpression property, int cardinality, OWLDataRange filler) {
         super(property, cardinality, filler);
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
+    @SuppressWarnings("javadoc")
+    public OWLDataMinCardinalityImpl(OWLDataPropertyExpression property, int cardinality) {
+        this(property, cardinality, OWL2DatatypeImpl
+                .getDatatype(OWL2Datatype.RDFS_LITERAL));
+    }
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.DATA_MIN_CARDINALITY;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLDataMinCardinality;
         }

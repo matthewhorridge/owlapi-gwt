@@ -55,8 +55,8 @@ import java.util.Collection;
 public abstract class OWLDataPropertyCharacteristicAxiomImpl extends OWLPropertyAxiomImpl implements OWLDataPropertyCharacteristicAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLDataPropertyExpression property;
+    private static final long serialVersionUID = 30406L;
+    private final OWLDataPropertyExpression property;
 
     @SuppressWarnings("javadoc")
     public OWLDataPropertyCharacteristicAxiomImpl(OWLDataPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
@@ -72,7 +72,7 @@ public abstract class OWLDataPropertyCharacteristicAxiomImpl extends OWLProperty
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLDataPropertyCharacteristicAxiom)) {
                 return false;

@@ -52,10 +52,10 @@ import java.util.Set;
  */
 public class OWLObjectPropertyDomainAxiomImpl extends OWLPropertyDomainAxiomImpl<OWLObjectPropertyExpression> implements OWLObjectPropertyDomainAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectPropertyDomainAxiomImpl(OWLObjectPropertyExpression property, OWLClassExpression domain, Set<? extends OWLAnnotation> annotations) {
         super(property, domain, annotations);
     }
@@ -65,16 +65,18 @@ public class OWLObjectPropertyDomainAxiomImpl extends OWLPropertyDomainAxiomImpl
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLObjectPropertyDomainAxiom(getProperty(), getDomain());
+        return new OWLObjectPropertyDomainAxiomImpl(getProperty(), getDomain(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLObjectPropertyDomainAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLObjectPropertyDomainAxiom(getProperty(), getDomain(), mergeAnnos(annotations));
+        return new OWLObjectPropertyDomainAxiomImpl(getProperty(), getDomain(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLObjectPropertyDomainAxiom;
     }
 
@@ -107,8 +109,7 @@ public class OWLObjectPropertyDomainAxiomImpl extends OWLPropertyDomainAxiomImpl
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        OWLClassExpression sub = df.getOWLObjectSomeValuesFrom(getProperty(), df.getOWLThing());
-        return df.getOWLSubClassOfAxiom(sub, getDomain());
+        OWLClassExpression sub = new OWLObjectSomeValuesFromImpl(getProperty(), OWL_THING);
+        return new OWLSubClassOfAxiomImpl(sub, getDomain(), NO_ANNOTATIONS);
     }
 }

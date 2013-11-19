@@ -42,7 +42,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 import org.semanticweb.owlapi.model.OWLDataCardinalityRestriction;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLDataRange;
-
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * Author: Matthew Horridge<br>
@@ -53,16 +53,17 @@ import org.semanticweb.owlapi.model.OWLDataRange;
 public abstract class OWLDataCardinalityRestrictionImpl extends OWLCardinalityRestrictionImpl<OWLDataRange, OWLDataPropertyExpression, OWLDataRange> implements OWLDataCardinalityRestriction {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	protected OWLDataCardinalityRestrictionImpl(OWLDataPropertyExpression property, int cardinality, OWLDataRange filler) {
+    protected OWLDataCardinalityRestrictionImpl(OWLDataPropertyExpression property, int cardinality, OWLDataRange filler) {
         super(property, cardinality, filler);
     }
 
 
     @Override
     public boolean isQualified() {
-        return !getFiller().equals(getOWLDataFactory().getTopDatatype());
+        return !getFiller().equals(
+                OWL2DatatypeImpl.getDatatype(OWL2Datatype.RDFS_LITERAL));
     }
 
     @Override
@@ -76,7 +77,7 @@ public abstract class OWLDataCardinalityRestrictionImpl extends OWLCardinalityRe
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLDataCardinalityRestriction;
         }

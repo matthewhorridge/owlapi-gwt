@@ -42,6 +42,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,55 +56,43 @@ import java.util.Set;
 public class OWLObjectOneOfImpl extends OWLAnonymousClassExpressionImpl implements OWLObjectOneOf {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final Set<OWLIndividual> values;
+    private static final long serialVersionUID = 30406L;
+    private final Set<OWLIndividual> values;
 
     @SuppressWarnings("javadoc")
     public OWLObjectOneOfImpl(Set<? extends OWLIndividual> values) {
-        super();
         this.values = new HashSet<OWLIndividual>(values);
     }
 
-
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_ONE_OF;
     }
-
 
     @Override
     public Set<OWLIndividual> getIndividuals() {
         return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(values);
     }
 
-
     @Override
     public boolean isClassExpressionLiteral() {
         return false;
     }
-
 
     @Override
     public OWLClassExpression asObjectUnionOf() {
         if (values.size() == 1) {
             return this;
         }
-        else {
-            Set<OWLClassExpression> ops = new HashSet<OWLClassExpression>();
-            for (OWLIndividual ind : values) {
-                ops.add(getOWLDataFactory().getOWLObjectOneOf(ind));
-            }
-            return getOWLDataFactory().getOWLObjectUnionOf(ops);
+        Set<OWLClassExpression> ops = new HashSet<OWLClassExpression>();
+        for (OWLIndividual ind : values) {
+            ops.add(new OWLObjectOneOfImpl(Collections.singleton(ind)));
         }
+        return new OWLObjectUnionOfImpl(ops);
     }
 
-
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLObjectOneOf)) {
                 return false;
@@ -113,12 +102,10 @@ public class OWLObjectOneOfImpl extends OWLAnonymousClassExpressionImpl implemen
         return false;
     }
 
-
     @Override
     public void accept(OWLClassExpressionVisitor visitor) {
         visitor.visit(this);
     }
-
 
     @Override
     public void accept(OWLObjectVisitor visitor) {
@@ -130,15 +117,13 @@ public class OWLObjectOneOfImpl extends OWLAnonymousClassExpressionImpl implemen
         return visitor.visit(this);
     }
 
-
     @Override
     public <O> O accept(OWLObjectVisitorEx<O> visitor) {
         return visitor.visit(this);
     }
 
-
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return compareSets(values, ((OWLObjectOneOf) object).getIndividuals());
     }
 }

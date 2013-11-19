@@ -53,9 +53,9 @@ import java.util.Set;
 public class OWLDatatypeDefinitionAxiomImpl extends OWLAxiomImpl implements OWLDatatypeDefinitionAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLDatatype datatype;
+    private final OWLDatatype datatype;
 
     private final OWLDataRange dataRange;
 
@@ -71,12 +71,14 @@ public class OWLDatatypeDefinitionAxiomImpl extends OWLAxiomImpl implements OWLD
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDatatypeDefinitionAxiom(getDatatype(), getDataRange());
+        return new OWLDatatypeDefinitionAxiomImpl(getDatatype(), getDataRange(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDatatypeDefinitionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDatatypeDefinitionAxiom(getDatatype(), getDataRange(), mergeAnnos(annotations));
+        return new OWLDatatypeDefinitionAxiomImpl(getDatatype(), getDataRange(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -132,7 +134,7 @@ public class OWLDatatypeDefinitionAxiomImpl extends OWLAxiomImpl implements OWLD
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLDatatypeDefinitionAxiom other = (OWLDatatypeDefinitionAxiom) object;
         int diff = getDatatype().compareTo(other.getDatatype());
         if (diff != 0) {
@@ -143,15 +145,15 @@ public class OWLDatatypeDefinitionAxiomImpl extends OWLAxiomImpl implements OWLD
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
-        if (!(obj instanceof OWLDatatypeDefinitionAxiom)) {
-            return false;
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
+            if (!(obj instanceof OWLDatatypeDefinitionAxiom)) {
+                return false;
+            }
+            OWLDatatypeDefinitionAxiom other = (OWLDatatypeDefinitionAxiom) obj;
+            return datatype.equals(other.getDatatype()) && dataRange.equals(other.getDataRange());
         }
-        OWLDatatypeDefinitionAxiom other = (OWLDatatypeDefinitionAxiom) obj;
-        return datatype.equals(other.getDatatype()) && dataRange.equals(other.getDataRange());
-    	}
-    	return false;
+        return false;
     }
 }

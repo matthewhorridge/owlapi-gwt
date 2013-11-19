@@ -55,20 +55,21 @@ import java.util.*;
  * <br>
  */
 @SuppressWarnings("javadoc")
-public abstract class OWLAxiomImpl extends OWLObjectImpl implements OWLAxiom,
-CollectionContainer<OWLAnnotation> {
+public abstract class OWLAxiomImpl extends OWLObjectImpl implements OWLAxiom, CollectionContainer<OWLAnnotation> {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
+
     private OWLAxiom nnf;
+
     private final List<OWLAnnotation> annotations;
 
-    public OWLAxiomImpl(
-            Collection<? extends OWLAnnotation> annotations) {
+    public OWLAxiomImpl(Collection<? extends OWLAnnotation> annotations) {
         super();
         if (!annotations.isEmpty()) {
             this.annotations = new ArrayList<OWLAnnotation>(annotations);
             Collections.sort(this.annotations);
-        } else {
+        }
+        else {
             this.annotations = Collections.emptyList();
         }
     }
@@ -89,19 +90,18 @@ CollectionContainer<OWLAnnotation> {
 
     @Override
     public void accept(CollectionContainerVisitor<OWLAnnotation> t) {
-        final int size=annotations.size();
-        for(int i=0;i<size;i++) {
-
+        final int size = annotations.size();
+        for (int i = 0; i < size; i++) {
             t.visitItem(annotations.get(i));
         }
     }
-
 
     @Override
     public Set<OWLAnnotation> getAnnotations(OWLAnnotationProperty annotationProperty) {
         if (annotations.isEmpty()) {
             return Collections.emptySet();
-        } else {
+        }
+        else {
             Set<OWLAnnotation> result = new HashSet<OWLAnnotation>();
             for (OWLAnnotation anno : annotations) {
                 if (anno.getProperty().equals(annotationProperty)) {
@@ -112,31 +112,11 @@ CollectionContainer<OWLAnnotation> {
         }
     }
 
-    /**
-     * Determines if another axiom is equal to this axiom not taking into
-     * consideration the annotations on the axiom
-     *
-     * @param axiom
-     *            The axiom to test if equal
-     * @return <code>true</code> if <code>axiom</code> without annotations is
-     *         equal to this axiom without annotations otherwise
-     *         <code>false</code>.
-     */
     @Override
     public boolean equalsIgnoreAnnotations(OWLAxiom axiom) {
-        return getAxiomWithoutAnnotations().equals(
-                axiom.getAxiomWithoutAnnotations());
+        return getAxiomWithoutAnnotations().equals(axiom.getAxiomWithoutAnnotations());
     }
 
-    /**
-     * Determines if this axiom is one of the specified types
-     *
-     * @param axiomTypes
-     *            The axiom types to check for
-     * @return <code>true</code> if this axiom is one of the specified types,
-     *         otherwise <code>false</code>
-     * @since 3.0
-     */
     @Override
     public boolean isOfType(AxiomType<?>... axiomTypes) {
         for (AxiomType<?> type : axiomTypes) {
@@ -147,15 +127,6 @@ CollectionContainer<OWLAnnotation> {
         return false;
     }
 
-    /**
-     * Determines if this axiom is one of the specified types
-     *
-     * @param types
-     *            The axiom types to check for
-     * @return <code>true</code> if this axioms is one of the specified types,
-     *         otherwise <code>false</code>
-     * @since 3.0
-     */
     @Override
     public boolean isOfType(Set<AxiomType<?>> types) {
         return types.contains(getAxiomType());
@@ -165,8 +136,7 @@ CollectionContainer<OWLAnnotation> {
      * A convenience method for implementation that returns a set containing the
      * annotations on this axiom plus the annotations in the specified set.
      *
-     * @param annos
-     *            The annotations to add to the annotations on this axiom
+     * @param annos The annotations to add to the annotations on this axiom
      * @return The annotations
      */
     protected Set<OWLAnnotation> mergeAnnos(Set<OWLAnnotation> annos) {
@@ -190,7 +160,7 @@ CollectionContainer<OWLAnnotation> {
     @Override
     public OWLAxiom getNNF() {
         if (nnf == null) {
-            NNF con = new NNF(getOWLDataFactory());
+            NNF con = new NNF(new OWLDataFactoryImpl());
             nnf = accept(con);
         }
         return nnf;

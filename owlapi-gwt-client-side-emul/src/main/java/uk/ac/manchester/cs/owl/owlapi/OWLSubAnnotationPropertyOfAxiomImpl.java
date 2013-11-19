@@ -53,9 +53,10 @@ import java.util.Set;
 public class OWLSubAnnotationPropertyOfAxiomImpl extends OWLAxiomImpl implements OWLSubAnnotationPropertyOfAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
 
-	private final OWLAnnotationProperty subProperty;
+    private static final long serialVersionUID = 30406L;
+
+    private final OWLAnnotationProperty subProperty;
 
     private final OWLAnnotationProperty superProperty;
 
@@ -68,7 +69,9 @@ public class OWLSubAnnotationPropertyOfAxiomImpl extends OWLAxiomImpl implements
 
     @Override
     public OWLSubAnnotationPropertyOfAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLSubAnnotationPropertyOfAxiom(getSubProperty(), getSuperProperty(), mergeAnnos(annotations));
+        return new OWLSubAnnotationPropertyOfAxiomImpl(getSubProperty(),
+                getSuperProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -76,7 +79,8 @@ public class OWLSubAnnotationPropertyOfAxiomImpl extends OWLAxiomImpl implements
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLSubAnnotationPropertyOfAxiom(getSubProperty(), getSuperProperty());
+        return new OWLSubAnnotationPropertyOfAxiomImpl(getSubProperty(),
+                getSuperProperty(), NO_ANNOTATIONS);
     }
 
     @Override
@@ -132,7 +136,7 @@ public class OWLSubAnnotationPropertyOfAxiomImpl extends OWLAxiomImpl implements
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLSubAnnotationPropertyOfAxiom other = (OWLSubAnnotationPropertyOfAxiom) object;
         int diff = subProperty.compareTo(other.getSubProperty());
         if (diff != 0) {
@@ -143,15 +147,15 @@ public class OWLSubAnnotationPropertyOfAxiomImpl extends OWLAxiomImpl implements
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
-    		if (!(obj instanceof OWLSubAnnotationPropertyOfAxiom)) {
-            return false;
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
+            if (!(obj instanceof OWLSubAnnotationPropertyOfAxiom)) {
+                return false;
+            }
+            OWLSubAnnotationPropertyOfAxiom other = (OWLSubAnnotationPropertyOfAxiom) obj;
+            return subProperty.equals(other.getSubProperty()) && superProperty.equals(other.getSuperProperty());
         }
-        OWLSubAnnotationPropertyOfAxiom other = (OWLSubAnnotationPropertyOfAxiom) obj;
-        return subProperty.equals(other.getSubProperty()) && superProperty.equals(other.getSuperProperty());
-    	}
-    	return false;
+        return false;
     }
 }

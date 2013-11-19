@@ -36,14 +36,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
 import java.util.Collection;
 import java.util.Set;
-
 
 /**
  * Author: Matthew Horridge<br>
@@ -53,10 +51,9 @@ import java.util.Set;
  */
 public class OWLInverseFunctionalObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLInverseFunctionalObjectPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLInverseFunctionalObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -66,16 +63,16 @@ public class OWLInverseFunctionalObjectPropertyAxiomImpl extends OWLObjectProper
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLInverseFunctionalObjectPropertyAxiom(getProperty());
+        return new OWLInverseFunctionalObjectPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLInverseFunctionalObjectPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLInverseFunctionalObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLInverseFunctionalObjectPropertyAxiomImpl(getProperty(), mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLInverseFunctionalObjectPropertyAxiom;
     }
 
@@ -94,7 +91,6 @@ public class OWLInverseFunctionalObjectPropertyAxiomImpl extends OWLObjectProper
         return visitor.visit(this);
     }
 
-
     @Override
     public <O> O accept(OWLObjectVisitorEx<O> visitor) {
         return visitor.visit(this);
@@ -105,10 +101,8 @@ public class OWLInverseFunctionalObjectPropertyAxiomImpl extends OWLObjectProper
         return AxiomType.INVERSE_FUNCTIONAL_OBJECT_PROPERTY;
     }
 
-
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLSubClassOfAxiom(df.getOWLThing(), df.getOWLObjectMaxCardinality(1, getProperty().getInverseProperty().getSimplified()));
+        return new OWLSubClassOfAxiomImpl(OWL_THING, new OWLObjectMaxCardinalityImpl(getProperty().getInverseProperty().getSimplified(), 1), NO_ANNOTATIONS);
     }
 }

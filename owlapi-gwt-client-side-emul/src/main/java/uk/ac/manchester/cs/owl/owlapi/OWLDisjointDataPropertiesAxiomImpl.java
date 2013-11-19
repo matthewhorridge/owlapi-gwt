@@ -53,9 +53,9 @@ import java.util.Set;
  */
 public class OWLDisjointDataPropertiesAxiomImpl extends OWLNaryPropertyAxiomImpl<OWLDataPropertyExpression> implements OWLDisjointDataPropertiesAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLDisjointDataPropertiesAxiomImpl(Set<? extends OWLDataPropertyExpression> properties, Collection<? extends OWLAnnotation> annotations) {
         super(properties, annotations);
     }
@@ -65,16 +65,17 @@ public class OWLDisjointDataPropertiesAxiomImpl extends OWLNaryPropertyAxiomImpl
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDisjointDataPropertiesAxiom(getProperties());
+        return new OWLDisjointDataPropertiesAxiomImpl(getProperties(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDisjointDataPropertiesAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDisjointDataPropertiesAxiom(getProperties(), mergeAnnos(annotations));
+        return new OWLDisjointDataPropertiesAxiomImpl(getProperties(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLDisjointDataPropertiesAxiom;
     }
 

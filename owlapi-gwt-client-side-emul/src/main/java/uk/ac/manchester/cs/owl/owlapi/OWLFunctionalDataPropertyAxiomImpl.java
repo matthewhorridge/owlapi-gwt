@@ -53,10 +53,10 @@ import java.util.Set;
  */
 public class OWLFunctionalDataPropertyAxiomImpl extends OWLDataPropertyCharacteristicAxiomImpl implements OWLFunctionalDataPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLFunctionalDataPropertyAxiomImpl(OWLDataPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -66,16 +66,17 @@ public class OWLFunctionalDataPropertyAxiomImpl extends OWLDataPropertyCharacter
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLFunctionalDataPropertyAxiom(getProperty());
+        return new OWLFunctionalDataPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLFunctionalDataPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLFunctionalDataPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLFunctionalDataPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLFunctionalDataPropertyAxiom;
     }
 
@@ -107,14 +108,14 @@ public class OWLFunctionalDataPropertyAxiomImpl extends OWLDataPropertyCharacter
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return getProperty().compareTo(((OWLFunctionalDataPropertyAxiom) object).getProperty());
     }
 
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        return df.getOWLSubClassOfAxiom(df.getOWLThing(), df.getOWLDataMaxCardinality(1, getProperty()));
+        return new OWLSubClassOfAxiomImpl(OWL_THING, new OWLDataMaxCardinalityImpl(
+                getProperty(), 1), NO_ANNOTATIONS);
     }
 }

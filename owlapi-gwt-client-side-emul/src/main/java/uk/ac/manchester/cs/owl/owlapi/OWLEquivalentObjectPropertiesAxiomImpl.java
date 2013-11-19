@@ -52,10 +52,10 @@ import java.util.*;
  */
 public class OWLEquivalentObjectPropertiesAxiomImpl extends OWLNaryPropertyAxiomImpl<OWLObjectPropertyExpression> implements OWLEquivalentObjectPropertiesAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLEquivalentObjectPropertiesAxiomImpl(Set<? extends OWLObjectPropertyExpression> properties, Collection<? extends OWLAnnotation> annotations) {
         super(properties, annotations);
     }
@@ -65,16 +65,17 @@ public class OWLEquivalentObjectPropertiesAxiomImpl extends OWLNaryPropertyAxiom
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLEquivalentObjectPropertiesAxiom(getProperties());
+        return new OWLEquivalentObjectPropertiesAxiomImpl(getProperties(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLEquivalentObjectPropertiesAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLEquivalentObjectPropertiesAxiom(getProperties(), mergeAnnos(annotations));
+        return new OWLEquivalentObjectPropertiesAxiomImpl(getProperties(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLEquivalentObjectPropertiesAxiom;
     }
 
@@ -112,8 +113,8 @@ public class OWLEquivalentObjectPropertiesAxiomImpl extends OWLNaryPropertyAxiom
         for (int i = 0; i < props.size(); i++) {
             for (int j = 0; j < props.size(); j++) {
                 if (i != j) {
-                    result.add(getOWLDataFactory().getOWLSubObjectPropertyOfAxiom(
-                            props.get(i), props.get(j)));
+                    result.add(new OWLSubObjectPropertyOfAxiomImpl(props.get(i), props
+                            .get(j), NO_ANNOTATIONS));
                 }
             }
         }

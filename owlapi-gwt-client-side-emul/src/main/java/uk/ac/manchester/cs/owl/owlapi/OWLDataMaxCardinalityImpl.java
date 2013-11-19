@@ -40,7 +40,7 @@
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
-
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * Author: Matthew Horridge<br>
@@ -53,23 +53,25 @@ public class OWLDataMaxCardinalityImpl extends OWLDataCardinalityRestrictionImpl
 	private static final long serialVersionUID = 30402L;
 
 
-	@SuppressWarnings("javadoc")
-    public OWLDataMaxCardinalityImpl(OWLDataPropertyExpression property, int cardinality, OWLDataRange filler) {
+    @SuppressWarnings("javadoc")
+    public OWLDataMaxCardinalityImpl(OWLDataPropertyExpression property, int cardinality,
+                                     OWLDataRange filler) {
         super(property, cardinality, filler);
     }
 
+    @SuppressWarnings("javadoc")
+    public OWLDataMaxCardinalityImpl(OWLDataPropertyExpression property, int cardinality) {
+        this(property, cardinality, OWL2DatatypeImpl
+                .getDatatype(OWL2Datatype.RDFS_LITERAL));
+    }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.DATA_MAX_CARDINALITY;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLDataMaxCardinality;
         }
@@ -90,7 +92,6 @@ public class OWLDataMaxCardinalityImpl extends OWLDataCardinalityRestrictionImpl
     public <O> O accept(OWLClassExpressionVisitorEx<O> visitor) {
         return visitor.visit(this);
     }
-
 
     @Override
     public <O> O accept(OWLObjectVisitorEx<O> visitor) {

@@ -51,10 +51,9 @@ import java.util.Set;
 @SuppressWarnings("javadoc")
 public class OWLAnnotationPropertyRangeAxiomImpl extends OWLAxiomImpl implements OWLAnnotationPropertyRangeAxiom {
 
+    private static final long serialVersionUID = 30406L;
 
-	private static final long serialVersionUID = 30402L;
-
-	private final OWLAnnotationProperty property;
+    private final OWLAnnotationProperty property;
 
     protected final IRI range;
 
@@ -69,12 +68,14 @@ public class OWLAnnotationPropertyRangeAxiomImpl extends OWLAxiomImpl implements
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLAnnotationPropertyRangeAxiom(getProperty(), getRange());
+        return new OWLAnnotationPropertyRangeAxiomImpl(getProperty(), getRange(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLAnnotationPropertyRangeAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLAnnotationPropertyRangeAxiom(getProperty(), getRange(), mergeAnnos(annotations));
+        return new OWLAnnotationPropertyRangeAxiomImpl(getProperty(), getRange(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -134,15 +135,15 @@ public class OWLAnnotationPropertyRangeAxiomImpl extends OWLAxiomImpl implements
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
-        if (!(obj instanceof OWLAnnotationPropertyRangeAxiom)) {
-            return false;
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
+            if (!(obj instanceof OWLAnnotationPropertyRangeAxiom)) {
+                return false;
+            }
+            OWLAnnotationPropertyRangeAxiom other = (OWLAnnotationPropertyRangeAxiom) obj;
+            return property.equals(other.getProperty()) && range.equals(other.getRange());
         }
-        OWLAnnotationPropertyRangeAxiom other = (OWLAnnotationPropertyRangeAxiom) obj;
-        return property.equals(other.getProperty()) && range.equals(other.getRange());
-    	}
-    	return false;
+        return false;
     }
 }

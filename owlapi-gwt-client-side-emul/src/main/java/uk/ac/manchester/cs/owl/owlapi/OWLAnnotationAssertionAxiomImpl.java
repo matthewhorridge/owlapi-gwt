@@ -55,16 +55,16 @@ import java.util.Set;
 public class OWLAnnotationAssertionAxiomImpl extends OWLAxiomImpl implements OWLAnnotationAssertionAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLAnnotationSubject subject;
+    private final OWLAnnotationSubject subject;
 
     private final OWLAnnotationProperty property;
 
     private final OWLAnnotationValue value;
 
 
-	public OWLAnnotationAssertionAxiomImpl(OWLAnnotationSubject subject, OWLAnnotationProperty property, OWLAnnotationValue value, Collection<? extends OWLAnnotation> annotations) {
+    public OWLAnnotationAssertionAxiomImpl(OWLAnnotationSubject subject, OWLAnnotationProperty property, OWLAnnotationValue value, Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
         this.subject = subject;
         this.property = property;
@@ -76,15 +76,16 @@ public class OWLAnnotationAssertionAxiomImpl extends OWLAxiomImpl implements OWL
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLAnnotationAssertionAxiom(getProperty(), getSubject(), getValue());
+        return new OWLAnnotationAssertionAxiomImpl(getSubject(), getProperty(),
+                getValue(), NO_ANNOTATIONS);
     }
 
-    /**
-     * Determines if this annotation assertion deprecates the IRI that is the subject of the annotation.
-     * @return <code>true</code> if this annotation assertion deprecates the subject IRI of the assertion, otherwise
-     *         <code>false</code>.
-     * @see{@link org.semanticweb.owlapi.model.OWLAnnotation#isDeprecatedIRIAnnotation()}
-     */
+    /** Determines if this annotation assertion deprecates the IRI that is the
+     * subject of the annotation.
+     *
+     * @return <code>true</code> if this annotation assertion deprecates the
+     *         subject IRI of the assertion, otherwise <code>false</code>.
+     * @see org.semanticweb.owlapi.model.OWLAnnotation#isDeprecatedIRIAnnotation() */
     @Override
     public boolean isDeprecatedIRIAssertion() {
         return property.isDeprecated() && getAnnotation().isDeprecatedIRIAnnotation();
@@ -92,7 +93,8 @@ public class OWLAnnotationAssertionAxiomImpl extends OWLAxiomImpl implements OWL
 
     @Override
     public OWLAnnotationAssertionAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLAnnotationAssertionAxiom(getProperty(), getSubject(), getValue(), mergeAnnos(annotations));
+        return new OWLAnnotationAssertionAxiomImpl(getSubject(), getProperty(),
+                getValue(), mergeAnnos(annotations));
     }
 
     @Override
@@ -112,7 +114,7 @@ public class OWLAnnotationAssertionAxiomImpl extends OWLAxiomImpl implements OWL
 
     @Override
     public OWLAnnotation getAnnotation() {
-        return getOWLDataFactory().getOWLAnnotation(property, value);
+        return new OWLAnnotationImpl(property, value, NO_ANNOTATIONS);
     }
 
     @Override
@@ -169,16 +171,16 @@ public class OWLAnnotationAssertionAxiomImpl extends OWLAxiomImpl implements OWL
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
             if (!(obj instanceof OWLAnnotationAssertionAxiom)) {
                 return false;
             }
             OWLAnnotationAssertionAxiom other = (OWLAnnotationAssertionAxiom) obj;
             return subject.equals(other.getSubject()) && property.equals(other.getProperty()) && value.equals(other.getValue());
-    	}
-    	return false;
+        }
+        return false;
     }
 
 

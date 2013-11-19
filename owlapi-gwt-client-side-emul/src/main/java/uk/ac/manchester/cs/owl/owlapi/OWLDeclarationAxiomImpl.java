@@ -54,8 +54,8 @@ import java.util.Set;
 public class OWLDeclarationAxiomImpl extends OWLAxiomImpl implements OWLDeclarationAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLEntity entity;
+    private static final long serialVersionUID = 30406L;
+    private final OWLEntity entity;
 
     @SuppressWarnings("javadoc")
     public OWLDeclarationAxiomImpl(OWLEntity entity, Collection<? extends OWLAnnotation> annotations) {
@@ -79,12 +79,12 @@ public class OWLDeclarationAxiomImpl extends OWLAxiomImpl implements OWLDeclarat
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDeclarationAxiom(getEntity());
+        return new OWLDeclarationAxiomImpl(getEntity(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLDeclarationAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDeclarationAxiom(getEntity(), mergeAnnos(annotations));
+        return new OWLDeclarationAxiomImpl(getEntity(), mergeAnnos(annotations));
     }
 
     @Override
@@ -93,9 +93,9 @@ public class OWLDeclarationAxiomImpl extends OWLAxiomImpl implements OWLDeclarat
     }
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
             if (obj instanceof OWLDeclarationAxiom) {
                 return ((OWLDeclarationAxiom) obj).getEntity().equals(entity);
             }
@@ -133,7 +133,7 @@ public class OWLDeclarationAxiomImpl extends OWLAxiomImpl implements OWLDeclarat
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         return entity.compareTo(((OWLDeclarationAxiom) object).getEntity());
     }
 }

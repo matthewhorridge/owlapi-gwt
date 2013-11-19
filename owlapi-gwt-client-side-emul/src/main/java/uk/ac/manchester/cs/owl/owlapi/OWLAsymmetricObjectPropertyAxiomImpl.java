@@ -55,9 +55,9 @@ import java.util.Set;
 public class OWLAsymmetricObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLAsymmetricObjectPropertyAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	public OWLAsymmetricObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
+    public OWLAsymmetricObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
 
@@ -66,16 +66,17 @@ public class OWLAsymmetricObjectPropertyAxiomImpl extends OWLObjectPropertyChara
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLAsymmetricObjectPropertyAxiom(getProperty());
+        return new OWLAsymmetricObjectPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLAsymmetricObjectPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLAsymmetricObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLAsymmetricObjectPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLAsymmetricObjectPropertyAxiom;
     }
 

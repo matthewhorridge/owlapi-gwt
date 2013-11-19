@@ -50,19 +50,14 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLObjectAllValuesFromImpl extends OWLQuantifiedObjectRestrictionImpl implements OWLObjectAllValuesFrom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectAllValuesFromImpl(OWLObjectPropertyExpression property, OWLClassExpression filler) {
         super(property, filler);
     }
 
-
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_ALL_VALUES_FROM;
@@ -79,7 +74,7 @@ public class OWLObjectAllValuesFromImpl extends OWLQuantifiedObjectRestrictionIm
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLObjectAllValuesFrom;
         }

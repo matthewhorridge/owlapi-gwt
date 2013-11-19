@@ -41,6 +41,9 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * Author: Matthew Horridge<br> The University of Manchester<br> Information Management Group<br>
  * Date: 15-Jan-2009
@@ -48,8 +51,9 @@ import org.semanticweb.owlapi.model.*;
 public class OWLNamedIndividualImpl extends OWLIndividualImpl implements OWLNamedIndividual {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final IRI iri;
+
+    private static final long serialVersionUID = 30406L;
+    private final IRI iri;
 
     /**
      * @param iri the iri
@@ -65,40 +69,21 @@ public class OWLNamedIndividualImpl extends OWLIndividualImpl implements OWLName
         return true;
     }
 
-    /**
-     * Gets the entity type for this entity
-     * @return The entity type
-     */
     @Override
     public EntityType<?> getEntityType() {
         return EntityType.NAMED_INDIVIDUAL;
     }
 
-    /**
-     * Gets an entity that has the same IRI as this entity but is of the specified type.
-     * @param entityType The type of the entity to obtain.  This entity is not affected in any way.
-     * @return An entity that has the same IRI as this entity and is of the specified type
-     */
     @Override
     public <E extends OWLEntity> E getOWLEntity(EntityType<E> entityType) {
-        return getOWLDataFactory().getOWLEntity(entityType, getIRI());
+        return getOWLEntity(entityType, getIRI());
     }
 
-    /**
-     * Tests to see if this entity is of the specified type
-     * @param entityType The entity type
-     * @return <code>true</code> if this entity is of the specified type, otherwise <code>false</code>.
-     */
     @Override
     public boolean isType(EntityType<?> entityType) {
         return getEntityType().equals(entityType);
     }
 
-    /**
-     * Returns a string representation that can be used as the ID of this entity.  This is the toString
-     * representation of the IRI
-     * @return A string representing the toString of the IRI of this entity.
-     */
     @Override
     public String toStringID() {
         return iri.toString();
@@ -140,7 +125,7 @@ public class OWLNamedIndividualImpl extends OWLIndividualImpl implements OWLName
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLNamedIndividual)) {
                 return false;
@@ -151,9 +136,8 @@ public class OWLNamedIndividualImpl extends OWLIndividualImpl implements OWLName
         return false;
     }
 
-
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLNamedIndividual other = (OWLNamedIndividual) object;
         return iri.compareTo(other.getIRI());
     }
@@ -194,6 +178,7 @@ public class OWLNamedIndividualImpl extends OWLIndividualImpl implements OWLName
     public <O> O accept(OWLIndividualVisitorEx<O> visitor) {
         return visitor.visit(this);
     }
+
 
 
 }

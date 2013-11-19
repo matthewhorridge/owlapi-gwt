@@ -36,11 +36,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.*;
 
 /**
  * Author: Matthew Horridge<br>
@@ -50,72 +50,72 @@ import org.semanticweb.owlapi.model.*;
  */
 public abstract class OWLIndividualImpl extends OWLObjectImpl implements OWLIndividual {
 
-
-
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public boolean isBuiltIn() {
         return false;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return obj instanceof OWLIndividual;
     }
 
-
-
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
+    // XXX not in the interface
     @Deprecated
-    	public OWLClass asOWLClass() {
+    public OWLClass asOWLClass() {
         throw new OWLRuntimeException("Not an OWLClass!");
     }
+
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
-        public OWLDataProperty asOWLDataProperty() {
+    // XXX not in the interface
+    @Deprecated
+    public OWLDataProperty asOWLDataProperty() {
         throw new OWLRuntimeException("Not a data property!");
     }
+
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public OWLDatatype asOWLDatatype() {
         throw new OWLRuntimeException("Not a data type!");
     }
 
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public OWLObjectProperty asOWLObjectProperty() {
         throw new OWLRuntimeException("Not an object property");
     }
+
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public boolean isOWLClass() {
         return false;
     }
+
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public boolean isOWLDataProperty() {
         return false;
     }
 
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public boolean isOWLDatatype() {
         return false;
     }
 
     @SuppressWarnings("javadoc")
-    //XXX not in the interface
-        @Deprecated
+    // XXX not in the interface
+    @Deprecated
     public boolean isOWLObjectProperty() {
         return false;
     }

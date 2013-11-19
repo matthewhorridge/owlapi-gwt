@@ -57,9 +57,10 @@ import java.util.Collection;
 public abstract class OWLSubPropertyAxiomImpl<P extends OWLPropertyExpression<?,?>> extends OWLPropertyAxiomImpl implements OWLSubPropertyAxiom<P> {
 
 
-	private static final long serialVersionUID = 30402L;
 
-	private final P subProperty;
+    private static final long serialVersionUID = 30406L;
+
+    private final P subProperty;
 
     private final P superProperty;
 
@@ -84,7 +85,7 @@ public abstract class OWLSubPropertyAxiomImpl<P extends OWLPropertyExpression<?,
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLSubPropertyAxiom)) {
                 return false;
@@ -97,7 +98,7 @@ public abstract class OWLSubPropertyAxiomImpl<P extends OWLPropertyExpression<?,
 
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLSubPropertyAxiom<?> other = (OWLSubPropertyAxiom<?>) object;
         int diff = subProperty.compareTo(other.getSubProperty());
         if (diff != 0) {

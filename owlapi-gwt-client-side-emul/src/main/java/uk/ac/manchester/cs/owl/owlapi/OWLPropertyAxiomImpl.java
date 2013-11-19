@@ -54,9 +54,9 @@ import java.util.Collection;
 public abstract class OWLPropertyAxiomImpl extends OWLLogicalAxiomImpl implements OWLPropertyAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	protected OWLPropertyAxiomImpl(Collection<? extends OWLAnnotation> annotations) {
+    protected OWLPropertyAxiomImpl(Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
     }
 

@@ -53,9 +53,9 @@ import java.util.Set;
  */
 public class OWLReflexiveObjectPropertyAxiomImpl extends OWLObjectPropertyCharacteristicAxiomImpl implements OWLReflexiveObjectPropertyAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLReflexiveObjectPropertyAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
         super(property, annotations);
     }
@@ -65,21 +65,23 @@ public class OWLReflexiveObjectPropertyAxiomImpl extends OWLObjectPropertyCharac
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLReflexiveObjectPropertyAxiom(getProperty());
+        return new OWLReflexiveObjectPropertyAxiomImpl(getProperty(), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        return getOWLDataFactory().getOWLSubClassOfAxiom(getOWLDataFactory().getOWLThing(), getOWLDataFactory().getOWLObjectHasSelf(getProperty()));
+        return new OWLSubClassOfAxiomImpl(OWL_THING, new OWLObjectHasSelfImpl(
+                getProperty()), NO_ANNOTATIONS);
     }
 
     @Override
     public OWLReflexiveObjectPropertyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLReflexiveObjectPropertyAxiom(getProperty(), mergeAnnos(annotations));
+        return new OWLReflexiveObjectPropertyAxiomImpl(getProperty(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLReflexiveObjectPropertyAxiom;
     }
 

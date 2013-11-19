@@ -39,12 +39,11 @@
 
 package uk.ac.manchester.cs.owl.owlapi;
 
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLObjectInverseOf;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.ObjectPropertySimplifier;
 
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br>
@@ -54,10 +53,9 @@ import org.semanticweb.owlapi.util.ObjectPropertySimplifier;
  */
 public abstract class OWLObjectPropertyExpressionImpl extends OWLPropertyExpressionImpl<OWLClassExpression, OWLObjectPropertyExpression> implements OWLObjectPropertyExpression {
 
+    private static final long serialVersionUID = 30406L;
 
-	private static final long serialVersionUID = 30402L;
-
-	private OWLObjectPropertyExpression simplestForm;
+    private OWLObjectPropertyExpression simplestForm;
 
     private OWLObjectPropertyExpression inverse;
 
@@ -71,10 +69,8 @@ public abstract class OWLObjectPropertyExpressionImpl extends OWLPropertyExpress
         return false;
     }
 
-
-
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLObjectPropertyExpression;
     }
 
@@ -82,7 +78,8 @@ public abstract class OWLObjectPropertyExpressionImpl extends OWLPropertyExpress
     @Override
     public OWLObjectPropertyExpression getSimplified() {
         if (simplestForm == null) {
-            ObjectPropertySimplifier simplifier = new ObjectPropertySimplifier(getOWLDataFactory());
+            ObjectPropertySimplifier simplifier = new ObjectPropertySimplifier(
+                    new OWLDataFactoryImpl());
             simplestForm = simplifier.getSimplified(this);
         }
         return simplestForm;
@@ -92,7 +89,7 @@ public abstract class OWLObjectPropertyExpressionImpl extends OWLPropertyExpress
     @Override
     public OWLObjectPropertyExpression getInverseProperty() {
         if (inverse == null) {
-            inverse = getOWLDataFactory().getOWLObjectInverseOf(this);
+            inverse = new OWLObjectInverseOfImpl(this);
         }
         return inverse;
     }

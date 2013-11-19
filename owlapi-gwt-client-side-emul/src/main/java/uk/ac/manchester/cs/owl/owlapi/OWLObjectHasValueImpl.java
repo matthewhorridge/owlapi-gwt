@@ -41,6 +41,7 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
 
+import java.util.Collections;
 
 /**
  * Author: Matthew Horridge<br>
@@ -50,25 +51,21 @@ import org.semanticweb.owlapi.model.*;
  */
 public class OWLObjectHasValueImpl extends OWLValueRestrictionImpl<OWLClassExpression, OWLObjectPropertyExpression, OWLIndividual> implements OWLObjectHasValue {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLObjectHasValueImpl(OWLObjectPropertyExpression property, OWLIndividual value) {
         super(property, value);
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_HAS_VALUE;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLObjectHasValue;
         }
@@ -87,7 +84,8 @@ public class OWLObjectHasValueImpl extends OWLValueRestrictionImpl<OWLClassExpre
 
     @Override
     public OWLClassExpression asSomeValuesFrom() {
-        return getOWLDataFactory().getOWLObjectSomeValuesFrom(getProperty(), getOWLDataFactory().getOWLObjectOneOf(getValue()));
+        return new OWLObjectSomeValuesFromImpl(getProperty(), new OWLObjectOneOfImpl(
+                Collections.singleton(getValue())));
     }
 
 

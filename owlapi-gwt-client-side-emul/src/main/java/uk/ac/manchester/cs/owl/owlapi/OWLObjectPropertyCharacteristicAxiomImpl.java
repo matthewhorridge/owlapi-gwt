@@ -56,8 +56,8 @@ import java.util.Collection;
 public abstract class OWLObjectPropertyCharacteristicAxiomImpl extends OWLPropertyAxiomImpl implements OWLObjectPropertyCharacteristicAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLObjectPropertyExpression property;
+    private static final long serialVersionUID = 30406L;
+    private final OWLObjectPropertyExpression property;
 
     @SuppressWarnings("javadoc")
     public OWLObjectPropertyCharacteristicAxiomImpl(OWLObjectPropertyExpression property, Collection<? extends OWLAnnotation> annotations) {
@@ -73,7 +73,7 @@ public abstract class OWLObjectPropertyCharacteristicAxiomImpl extends OWLProper
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLObjectPropertyCharacteristicAxiom)) {
                 return false;
@@ -85,7 +85,7 @@ public abstract class OWLObjectPropertyCharacteristicAxiomImpl extends OWLProper
 
 
     @Override
-	final protected int compareObjectOfSameType(OWLObject object) {
+    final protected int compareObjectOfSameType(OWLObject object) {
         return property.compareTo(((OWLObjectPropertyCharacteristicAxiom) object).getProperty());
     }
 }

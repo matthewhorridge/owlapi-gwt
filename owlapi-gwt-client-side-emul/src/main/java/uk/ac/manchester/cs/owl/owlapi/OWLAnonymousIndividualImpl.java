@@ -48,13 +48,12 @@ import org.semanticweb.owlapi.model.*;
 @SuppressWarnings("javadoc")
 public class OWLAnonymousIndividualImpl extends OWLIndividualImpl implements OWLAnonymousIndividual {
 
-
-	private static final long serialVersionUID = 30402L;
-	private final NodeID nodeId;
+    private static final long serialVersionUID = 30406L;
+    private final NodeID nodeId;
 
     public OWLAnonymousIndividualImpl(NodeID nodeID) {
         super();
-        this.nodeId = nodeID;
+        nodeId = nodeID;
     }
 
     @Override
@@ -62,11 +61,6 @@ public class OWLAnonymousIndividualImpl extends OWLIndividualImpl implements OWL
         return nodeId;
     }
 
-    /**
-     * Returns a string representation that can be used as the ID of this individual.  This is the toString
-     * representation of the node ID of this individual
-     * @return A string representing the toString of the node ID of this entity.
-     */
     @Override
     public String toStringID() {
         return nodeId.getID();
@@ -93,7 +87,7 @@ public class OWLAnonymousIndividualImpl extends OWLIndividualImpl implements OWL
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLAnonymousIndividual other = (OWLAnonymousIndividual) object;
         return nodeId.compareTo(other.getID());
     }
@@ -141,7 +135,7 @@ public class OWLAnonymousIndividualImpl extends OWLIndividualImpl implements OWL
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -152,6 +146,6 @@ public class OWLAnonymousIndividualImpl extends OWLIndividualImpl implements OWL
     }
     @Override
     public int hashCode() {
-    	return nodeId.hashCode();
+        return nodeId.hashCode();
     }
 }

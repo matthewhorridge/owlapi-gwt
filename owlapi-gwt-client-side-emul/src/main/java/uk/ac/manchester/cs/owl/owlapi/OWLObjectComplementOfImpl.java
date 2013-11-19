@@ -50,8 +50,8 @@ import org.semanticweb.owlapi.model.*;
 public class OWLObjectComplementOfImpl extends OWLAnonymousClassExpressionImpl implements OWLObjectComplementOf {
 
 
-	private static final long serialVersionUID = 30402L;
-	private final OWLClassExpression operand;
+    private static final long serialVersionUID = 30406L;
+    private final OWLClassExpression operand;
 
     @SuppressWarnings("javadoc")
     public OWLObjectComplementOfImpl(OWLClassExpression operand) {
@@ -59,10 +59,6 @@ public class OWLObjectComplementOfImpl extends OWLAnonymousClassExpressionImpl i
         this.operand = operand;
     }
 
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.OBJECT_COMPLEMENT_OF;
@@ -81,7 +77,7 @@ public class OWLObjectComplementOfImpl extends OWLAnonymousClassExpressionImpl i
 
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             if (!(obj instanceof OWLObjectComplementOf)) {
                 return false;
@@ -115,7 +111,7 @@ public class OWLObjectComplementOfImpl extends OWLAnonymousClassExpressionImpl i
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLObjectComplementOf other = (OWLObjectComplementOf) object;
         return operand.compareTo(other.getOperand());
     }

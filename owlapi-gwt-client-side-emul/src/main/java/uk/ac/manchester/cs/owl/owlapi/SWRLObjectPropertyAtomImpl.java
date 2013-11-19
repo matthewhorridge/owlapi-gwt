@@ -51,24 +51,18 @@ import org.semanticweb.owlapi.model.*;
 public class SWRLObjectPropertyAtomImpl extends SWRLBinaryAtomImpl<SWRLIArgument, SWRLIArgument> implements SWRLObjectPropertyAtom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
     @SuppressWarnings("javadoc")
-	public SWRLObjectPropertyAtomImpl(OWLObjectPropertyExpression predicate, SWRLIArgument arg0, SWRLIArgument arg1) {
+    public SWRLObjectPropertyAtomImpl(OWLObjectPropertyExpression predicate, SWRLIArgument arg0, SWRLIArgument arg1) {
         super(predicate, arg0, arg1);
     }
 
     @Override
-	public OWLObjectPropertyExpression getPredicate() {
+    public OWLObjectPropertyExpression getPredicate() {
         return (OWLObjectPropertyExpression) super.getPredicate();
     }
 
-    /**
-     * Gets a simplified form of this atom.  This basically creates and returns a new atom where the predicate is not
-     * an inverse object property.  If the atom is of the form P(x, y) then P(x, y) is returned.  If the atom is of the
-     * form inverseOf(P)(x, y) then P(y, x) is returned.
-     * @return This atom in a simplified form
-     */
     @Override
     public SWRLObjectPropertyAtom getSimplified() {
         OWLObjectPropertyExpression prop = getPredicate().getSimplified();
@@ -77,11 +71,13 @@ public class SWRLObjectPropertyAtomImpl extends SWRLBinaryAtomImpl<SWRLIArgument
         }
         else if (prop.isAnonymous()) {
             // Flip
-            return getOWLDataFactory().getSWRLObjectPropertyAtom(prop.getInverseProperty().getSimplified(), getSecondArgument(), getFirstArgument());
+            return new SWRLObjectPropertyAtomImpl(prop.getInverseProperty()
+                    .getSimplified(), getSecondArgument(), getFirstArgument());
         }
         else {
             // No need to flip
-            return getOWLDataFactory().getSWRLObjectPropertyAtom(prop, getFirstArgument(), getSecondArgument());
+            return new SWRLObjectPropertyAtomImpl(prop, getFirstArgument(),
+                    getSecondArgument());
         }
     }
 
@@ -108,7 +104,7 @@ public class SWRLObjectPropertyAtomImpl extends SWRLBinaryAtomImpl<SWRLIArgument
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }

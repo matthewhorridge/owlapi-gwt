@@ -52,25 +52,20 @@ import org.semanticweb.owlapi.model.*;
 public class OWLDataAllValuesFromImpl extends OWLQuantifiedDataRestrictionImpl implements OWLDataAllValuesFrom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	public OWLDataAllValuesFromImpl(OWLDataPropertyExpression property, OWLDataRange filler) {
+    public OWLDataAllValuesFromImpl(OWLDataPropertyExpression property, OWLDataRange filler) {
         super(property, filler);
     }
 
-
-    /**
-     * Gets the class expression type for this class expression
-     * @return The class expression type
-     */
     @Override
     public ClassExpressionType getClassExpressionType() {
         return ClassExpressionType.DATA_ALL_VALUES_FROM;
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (super.equals(obj)) {
             return obj instanceof OWLDataAllValuesFrom;
         }

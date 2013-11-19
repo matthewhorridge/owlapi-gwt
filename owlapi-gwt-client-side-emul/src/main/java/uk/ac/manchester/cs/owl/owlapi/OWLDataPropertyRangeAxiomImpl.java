@@ -52,10 +52,10 @@ import java.util.Set;
  */
 public class OWLDataPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<OWLDataPropertyExpression, OWLDataRange> implements OWLDataPropertyRangeAxiom {
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
 
-	@SuppressWarnings("javadoc")
+    @SuppressWarnings("javadoc")
     public OWLDataPropertyRangeAxiomImpl(OWLDataPropertyExpression property, OWLDataRange range, Set<? extends OWLAnnotation> annotations) {
         super(property, range, annotations);
     }
@@ -65,16 +65,18 @@ public class OWLDataPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<OWL
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLDataPropertyRangeAxiom(getProperty(), getRange());
+        return new OWLDataPropertyRangeAxiomImpl(getProperty(), getRange(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLDataPropertyRangeAxiom(getProperty(), getRange(), mergeAnnos(annotations));
+        return new OWLDataPropertyRangeAxiomImpl(getProperty(), getRange(),
+                mergeAnnos(annotations));
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return super.equals(obj) && obj instanceof OWLDataPropertyRangeAxiom;
     }
 
@@ -107,8 +109,8 @@ public class OWLDataPropertyRangeAxiomImpl extends OWLPropertyRangeAxiomImpl<OWL
 
     @Override
     public OWLSubClassOfAxiom asOWLSubClassOfAxiom() {
-        OWLDataFactory df = getOWLDataFactory();
-        OWLClassExpression sup = df.getOWLDataAllValuesFrom(getProperty(), getRange());
-        return df.getOWLSubClassOfAxiom(df.getOWLThing(), sup);
+        OWLClassExpression sup = new OWLDataAllValuesFromImpl(getProperty(), getRange());
+        return new OWLSubClassOfAxiomImpl(OWL_THING, sup, NO_ANNOTATIONS);
     }
+
 }

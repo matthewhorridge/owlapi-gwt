@@ -5,7 +5,7 @@
     <parent>
         <artifactId>owlapi-gwt-parent</artifactId>
         <groupId>net.sourceforge.owlapitools</groupId>
-        <version>1.2</version>
+        <version>3.4.8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -27,20 +26,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-            <!--<plugin>-->
-                <!--<artifactId>maven-source-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>client-side-emul-src</id>-->
-                        <!--<goals>-->
-                            <!--<goal>jar</goal>-->
-                        <!--</goals>-->
-                        <!--<phase>package</phase>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 

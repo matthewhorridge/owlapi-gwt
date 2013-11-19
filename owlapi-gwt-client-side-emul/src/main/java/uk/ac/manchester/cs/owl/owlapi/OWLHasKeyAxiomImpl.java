@@ -45,6 +45,7 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Author: Matthew Horridge<br> The University of Manchester<br> Information Management Group<br>
@@ -53,16 +54,16 @@ import java.util.Set;
 public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKeyAxiom {
 
 
-	private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 30406L;
 
-	private final OWLClassExpression expression;
+    private final OWLClassExpression expression;
 
     private final Set<OWLPropertyExpression<?,?>> propertyExpressions;
     @SuppressWarnings("javadoc")
     public OWLHasKeyAxiomImpl(OWLClassExpression expression, Set<? extends OWLPropertyExpression<?,?>> propertyExpressions, Collection<? extends OWLAnnotation> annotations) {
         super(annotations);
         this.expression = expression;
-        this.propertyExpressions = new HashSet<OWLPropertyExpression<?,?>>(propertyExpressions);
+        this.propertyExpressions = new TreeSet<OWLPropertyExpression<?,?>>(propertyExpressions);
     }
 
     @Override
@@ -70,12 +71,14 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
         if (!isAnnotated()) {
             return this;
         }
-        return getOWLDataFactory().getOWLHasKeyAxiom(getClassExpression(), getPropertyExpressions());
+        return new OWLHasKeyAxiomImpl(getClassExpression(), getPropertyExpressions(),
+                NO_ANNOTATIONS);
     }
 
     @Override
     public OWLHasKeyAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return getOWLDataFactory().getOWLHasKeyAxiom(getClassExpression(), getPropertyExpressions(), mergeAnnos(annotations));
+        return new OWLHasKeyAxiomImpl(getClassExpression(), getPropertyExpressions(),
+                mergeAnnos(annotations));
     }
 
     @Override
@@ -84,7 +87,7 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
     }
 
     @Override
-	public boolean isLogicalAxiom() {
+    public boolean isLogicalAxiom() {
         return true;
     }
 
@@ -102,7 +105,7 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
     @SuppressWarnings("rawtypes")
     // this is necessary to avoid java 6 issues
     public Set<OWLDataPropertyExpression> getDataPropertyExpressions() {
-        Set<OWLDataPropertyExpression> props = new HashSet<OWLDataPropertyExpression>();
+        Set<OWLDataPropertyExpression> props = new TreeSet<OWLDataPropertyExpression>();
         for (OWLPropertyExpression prop : propertyExpressions) {
             if (prop.isDataPropertyExpression()) {
                 props.add((OWLDataPropertyExpression) prop);
@@ -115,7 +118,7 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
     @SuppressWarnings("rawtypes")
     // this is necessary to avoid java 6 issues
     public Set<OWLObjectPropertyExpression> getObjectPropertyExpressions() {
-        Set<OWLObjectPropertyExpression> props = new HashSet<OWLObjectPropertyExpression>();
+        Set<OWLObjectPropertyExpression> props = new TreeSet<OWLObjectPropertyExpression>();
         for (OWLPropertyExpression prop : propertyExpressions) {
             if (prop.isObjectPropertyExpression()) {
                 props.add((OWLObjectPropertyExpression) prop);
@@ -125,7 +128,7 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
     }
 
     @Override
-	protected int compareObjectOfSameType(OWLObject object) {
+    protected int compareObjectOfSameType(OWLObject object) {
         OWLHasKeyAxiom other = (OWLHasKeyAxiom) object;
         int diff = expression.compareTo(other.getClassExpression());
         if (diff != 0) {
@@ -156,15 +159,15 @@ public class OWLHasKeyAxiomImpl extends OWLLogicalAxiomImpl implements OWLHasKey
 
 
     @Override
-	public boolean equals(Object obj) {
-    	if(super.equals(obj)) {
-    		// superclass is responsible for null, identity, owlaxiom type and annotations
-        if (!(obj instanceof OWLHasKeyAxiom)) {
-            return false;
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) {
+            // superclass is responsible for null, identity, owlaxiom type and annotations
+            if (!(obj instanceof OWLHasKeyAxiom)) {
+                return false;
+            }
+            OWLHasKeyAxiom other = (OWLHasKeyAxiom) obj;
+            return expression.equals(other.getClassExpression()) && propertyExpressions.equals(other.getPropertyExpressions());
         }
-        OWLHasKeyAxiom other = (OWLHasKeyAxiom) obj;
-        return expression.equals(other.getClassExpression()) && propertyExpressions.equals(other.getPropertyExpressions());
-    	}
-    	return false;
+        return false;
     }
 }
