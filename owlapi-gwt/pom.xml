@@ -15,6 +15,7 @@
     <properties>
         <module-directory>org/semanticweb/owlapi/gwt</module-directory>
         <super-source-directory>emul</super-source-directory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <artifactId>owlapi-gwt</artifactId>
