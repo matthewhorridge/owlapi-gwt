@@ -12,8 +12,16 @@
 
     <groupId>net.sourceforge.owlapi</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
-    <packaging>pom</packaging>
     <version>3.4.8-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>owlapi-gwt-parent</name>
+    <description>
+        A project that builds a GWT module of a subset of the OWL API.  This allows most OWL API model classes
+        to be used in a GWT app on the client, and allows a subset of these to be serialized and sent over the
+        wire.
+    </description>
+    <url>https://github.com/matthewhorridge/gwt-owlapi</url>
+
 
     <licenses>
         <license>
@@ -24,25 +32,10 @@
     </licenses>
 
     <scm>
+        <url>https://github.com/matthewhorridge/gwt-owlapi</url>
         <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
         <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
-        <url>https://github.com/matthewhorridge/gwt-owlapi</url>
     </scm>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.5.1</gwtVersion>
-    </properties>
-
-
-
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/matthewhorridge/gwt-owlapi/issues</url>
-    </issueManagement>
-
-
 
     <developers>
         <developer>
@@ -51,6 +44,12 @@
             <email>matthew.horridge@stanford.edu</email>
         </developer>
     </developers>
+
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/matthewhorridge/gwt-owlapi/issues</url>
+    </issueManagement>
 
     <modules>
         <module>owlapi-gwt-serialization</module>
@@ -77,6 +76,41 @@
     </dependencies>
 
 
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+    </properties>
 
     <distributionManagement>
         <repository>
@@ -87,6 +121,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -97,7 +132,35 @@
                     <releaseVersion>${project.version}</releaseVersion>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+
     </build>
 
 </project>

@@ -11,17 +11,14 @@
         <version>3.4.8-SNAPSHOT</version>
     </parent>
 
-    <licenses>
-        <license>
-            <name>GNU LGPL Version 3.0</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-
+    <!-- groupId and version are inherited from the parent pom -->
     <artifactId>owlapi-gwt-serialization</artifactId>
-    <version>3.4.8-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>owlapi-gwt-serialization</name>
+    <description>
+        A component of the OWL API GWT module that is used for object serialization.  This code is compiled by javac
+        and used on the server, and is compiled by the GWT compiler for use on the client.
+    </description>
 
     <build>
         <plugins>

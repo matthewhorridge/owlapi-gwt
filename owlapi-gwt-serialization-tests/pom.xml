@@ -8,16 +8,21 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>owlapi-gwt-serialization-tests</artifactId>
-    <packaging>war</packaging>
-    <version>3.4.8-SNAPSHOT</version>
-
     <parent>
         <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
         <version>3.4.8-SNAPSHOT</version>
     </parent>
 
+    <!-- groupId and version are inherited from the parent pom -->
+    <artifactId>owlapi-gwt-serialization-tests</artifactId>
+    <packaging>war</packaging>
+    <name>owlapi-gwt-serialization-tests</name>
+    <description>
+        A set of tests that serialize OWL API objects that should be serializable and sends them over the wire.
+        The objects are round tripped from client to server and back to check that they serialize and deserialize
+        correctly, and that the GWT compiler can actually compile the source code used for client side emulation.
+    </description>
 
 
     <properties>

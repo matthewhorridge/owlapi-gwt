@@ -11,17 +11,16 @@
         <version>3.4.8-SNAPSHOT</version>
     </parent>
 
+    <!-- groupId and version are inherited from the parent pom -->
     <artifactId>owlapi-gwt-client-side-emul</artifactId>
-    <version>3.4.8-SNAPSHOT</version>
-
-    <licenses>
-        <license>
-            <name>GNU LGPL Version 3.0</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
+    <packaging>jar</packaging>
+    <name>owlapi-gwt-client-side-emul</name>
+    <description>
+        A component of the OWL API GWT module.  This maven module contains source code that is used for client
+        side emulation.  The code in this module is not compiled by the Java compiler, but is placed in the
+        super-source directory for use by the GWT compiler when this module is built and packaged by the parent
+        module.
+    </description>
 
     <build>
         <plugins>

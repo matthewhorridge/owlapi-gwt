@@ -13,17 +13,11 @@
         <version>3.4.8-SNAPSHOT</version>
     </parent>
 
+    <!-- groupId and version are inherited from the parent pom -->
     <artifactId>owlapi-gwt</artifactId>
-    <version>3.4.8-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-    <licenses>
-        <license>
-            <name>GNU LGPL Version 3.0</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <name>owlapi-gwt</name>
+    <description>An OWL API GWT Module (The name of the module is org.semanticweb.owlapi.gwt.owlapi)</description>
 
 
     <properties>
