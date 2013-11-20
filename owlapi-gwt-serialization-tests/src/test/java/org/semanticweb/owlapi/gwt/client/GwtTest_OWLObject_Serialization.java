@@ -5,7 +5,11 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
+import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Matthew Horridge<br>
@@ -319,4 +323,332 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
     }
 
 
+    public void testShouldSerializeOWLObjectInverseOfImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLObjectInverseOfImpl in = new OWLObjectInverseOfImpl(property);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectInverseOfImpl(in, new AsyncCallback<OWLObjectInverseOfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectInverseOfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectSomeValuesFromImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLObjectSomeValuesFromImpl in = new OWLObjectSomeValuesFromImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectSomeValuesFromImpl(in, new AsyncCallback<OWLObjectSomeValuesFromImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectSomeValuesFromImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectAllValuesFromImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLObjectAllValuesFromImpl in = new OWLObjectAllValuesFromImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectAllValuesFromImpl(in, new AsyncCallback<OWLObjectAllValuesFromImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectAllValuesFromImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectHasValueImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLIndividual filler = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/ind"));
+        final OWLObjectHasValueImpl in = new OWLObjectHasValueImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectHasValueImpl(in, new AsyncCallback<OWLObjectHasValueImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectHasValueImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectMinCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLObjectMinCardinalityImpl in = new OWLObjectMinCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectMinCardinalityImpl(in, new AsyncCallback<OWLObjectMinCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectMinCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectMaxCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLObjectMaxCardinalityImpl in = new OWLObjectMaxCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectMaxCardinalityImpl(in, new AsyncCallback<OWLObjectMaxCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectMaxCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectExactCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLObjectExactCardinalityImpl in = new OWLObjectExactCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectExactCardinalityImpl(in, new AsyncCallback<OWLObjectExactCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectExactCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectHasSeltImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        final OWLObjectHasSelfImpl in = new OWLObjectHasSelfImpl(property);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectHasSelfImpl(in, new AsyncCallback<OWLObjectHasSelfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectHasSelfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataSomeValuesFromImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLDataSomeValuesFromImpl in = new OWLDataSomeValuesFromImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataSomeValuesFromImpl(in, new AsyncCallback<OWLDataSomeValuesFromImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataSomeValuesFromImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataAllValuesFromImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLDataAllValuesFromImpl in = new OWLDataAllValuesFromImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataAllValuesFromImpl(in, new AsyncCallback<OWLDataAllValuesFromImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataAllValuesFromImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataHasValueImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLLiteral filler = dataFactory.getOWLLiteral("Test");
+        final OWLDataHasValueImpl in = new OWLDataHasValueImpl(property, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataHasValueImpl(in, new AsyncCallback<OWLDataHasValueImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataHasValueImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataMinCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLDataMinCardinalityImpl in = new OWLDataMinCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataMinCardinalityImpl(in, new AsyncCallback<OWLDataMinCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataMinCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataMaxCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLDataMaxCardinalityImpl in = new OWLDataMaxCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataMaxCardinalityImpl(in, new AsyncCallback<OWLDataMaxCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataMaxCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataExactCardinalityImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
+        final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
+        final OWLDataExactCardinalityImpl in = new OWLDataExactCardinalityImpl(property, 3, filler);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataExactCardinalityImpl(in, new AsyncCallback<OWLDataExactCardinalityImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataExactCardinalityImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDatatypeRestrictionImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDatatype datatype = df.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi.gwt#A"));
+        Set<OWLFacetRestriction> facetRestrictions = new HashSet<OWLFacetRestriction>();
+        facetRestrictions.add(df.getOWLFacetRestriction(OWLFacet.MIN_LENGTH, df.getOWLLiteral("3")));
+        facetRestrictions.add(df.getOWLFacetRestriction(OWLFacet.MAX_LENGTH, df.getOWLLiteral("4")));
+        final OWLDatatypeRestrictionImpl in = new OWLDatatypeRestrictionImpl(datatype, facetRestrictions);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDatatypeRestrictionImpl(in, new AsyncCallback<OWLDatatypeRestrictionImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDatatypeRestrictionImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
 }

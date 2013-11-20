@@ -107,4 +107,124 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWL2DatatypeImpl testOWL2DatatypeImpl(OWL2DatatypeImpl datatype) {
         return datatype;
     }
+
+    @Override
+    public OWLObjectInverseOfImpl testOWLObjectInverseOfImpl(OWLObjectInverseOfImpl property) {
+        return property;
+    }
+
+    @Override
+    public OWLObjectSomeValuesFromImpl testOWLObjectSomeValuesFromImpl(OWLObjectSomeValuesFromImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectAllValuesFromImpl testOWLObjectAllValuesFromImpl(OWLObjectAllValuesFromImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectHasValueImpl testOWLObjectHasValueImpl(OWLObjectHasValueImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectMinCardinalityImpl testOWLObjectMinCardinalityImpl(OWLObjectMinCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectMaxCardinalityImpl testOWLObjectMaxCardinalityImpl(OWLObjectMaxCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectExactCardinalityImpl testOWLObjectExactCardinalityImpl(OWLObjectExactCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectHasSelfImpl testOWLObjectHasSelfImpl(OWLObjectHasSelfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectIntersectionOfImpl testOWLObjectIntersectionOfImpl(OWLObjectIntersectionOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectUnionOfImpl testOWLObjectUnionOfImpl(OWLObjectUnionOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectComplementOfImpl testOWLObjectComplementOfImpl(OWLObjectComplementOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLObjectOneOfImpl testOWLObjectOneOfImpl(OWLObjectOneOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataSomeValuesFromImpl testOWLDataSomeValuesFromImpl(OWLDataSomeValuesFromImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataAllValuesFromImpl testOWLDataAllValuesFromImpl(OWLDataAllValuesFromImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataHasValueImpl testOWLDataHasValueImpl(OWLDataHasValueImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataMinCardinalityImpl testOWLDataMinCardinalityImpl(OWLDataMinCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataMaxCardinalityImpl testOWLDataMaxCardinalityImpl(OWLDataMaxCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataExactCardinalityImpl testOWLDataExactCardinalityImpl(OWLDataExactCardinalityImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataIntersectionOfImpl testOWLDataIntersectionOfImpl(OWLDataIntersectionOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataUnionOfImpl testOWLDataUnionOfImpl(OWLDataUnionOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataComplementOfImpl testOWLDataComplementOfImpl(OWLDataComplementOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDataOneOfImpl testOWLDataOneOfImpl(OWLDataOneOfImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLDatatypeRestrictionImpl testOWLDatatypeRestrictionImpl(OWLDatatypeRestrictionImpl classExpression) {
+        return classExpression;
+    }
+
+    @Override
+    public OWLFacetRestrictionImpl testOWLFacetRestrictionImpl(OWLFacetRestrictionImpl facetRestriction) {
+        return facetRestriction;
+    }
 }

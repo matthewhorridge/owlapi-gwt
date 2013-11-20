@@ -57,5 +57,60 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLLiteralImplNoCompression testOWLLiteralImplNoCompression(OWLLiteralImplNoCompression literal);
 
     OWL2DatatypeImpl testOWL2DatatypeImpl(OWL2DatatypeImpl datatype);
+
+    OWLObjectInverseOfImpl testOWLObjectInverseOfImpl(OWLObjectInverseOfImpl property);
+
+
+    // Complex class expressions
+
+    OWLObjectSomeValuesFromImpl testOWLObjectSomeValuesFromImpl(OWLObjectSomeValuesFromImpl classExpression);
     
+    OWLObjectAllValuesFromImpl testOWLObjectAllValuesFromImpl(OWLObjectAllValuesFromImpl classExpression);
+
+    OWLObjectHasValueImpl testOWLObjectHasValueImpl(OWLObjectHasValueImpl classExpression);
+
+    OWLObjectMinCardinalityImpl testOWLObjectMinCardinalityImpl(OWLObjectMinCardinalityImpl classExpression);
+
+    OWLObjectMaxCardinalityImpl testOWLObjectMaxCardinalityImpl(OWLObjectMaxCardinalityImpl classExpression);
+
+    OWLObjectExactCardinalityImpl testOWLObjectExactCardinalityImpl(OWLObjectExactCardinalityImpl classExpression);
+
+    OWLObjectHasSelfImpl testOWLObjectHasSelfImpl(OWLObjectHasSelfImpl classExpression);
+
+    OWLObjectIntersectionOfImpl testOWLObjectIntersectionOfImpl(OWLObjectIntersectionOfImpl classExpression);
+
+    OWLObjectUnionOfImpl testOWLObjectUnionOfImpl(OWLObjectUnionOfImpl classExpression);
+
+    OWLObjectComplementOfImpl testOWLObjectComplementOfImpl(OWLObjectComplementOfImpl classExpression);
+
+    OWLObjectOneOfImpl testOWLObjectOneOfImpl(OWLObjectOneOfImpl classExpression);
+
+
+
+    OWLDataSomeValuesFromImpl testOWLDataSomeValuesFromImpl(OWLDataSomeValuesFromImpl classExpression);
+
+    OWLDataAllValuesFromImpl testOWLDataAllValuesFromImpl(OWLDataAllValuesFromImpl classExpression);
+
+    OWLDataHasValueImpl testOWLDataHasValueImpl(OWLDataHasValueImpl classExpression);
+
+    OWLDataMinCardinalityImpl testOWLDataMinCardinalityImpl(OWLDataMinCardinalityImpl classExpression);
+
+    OWLDataMaxCardinalityImpl testOWLDataMaxCardinalityImpl(OWLDataMaxCardinalityImpl classExpression);
+
+    OWLDataExactCardinalityImpl testOWLDataExactCardinalityImpl(OWLDataExactCardinalityImpl classExpression);
+
+    OWLDataIntersectionOfImpl testOWLDataIntersectionOfImpl(OWLDataIntersectionOfImpl classExpression);
+
+    OWLDataUnionOfImpl testOWLDataUnionOfImpl(OWLDataUnionOfImpl classExpression);
+
+    OWLDataComplementOfImpl testOWLDataComplementOfImpl(OWLDataComplementOfImpl classExpression);
+
+    OWLDataOneOfImpl testOWLDataOneOfImpl(OWLDataOneOfImpl classExpression);
+
+
+    OWLDatatypeRestrictionImpl testOWLDatatypeRestrictionImpl(OWLDatatypeRestrictionImpl classExpression);
+
+    OWLFacetRestrictionImpl testOWLFacetRestrictionImpl(OWLFacetRestrictionImpl facetRestriction);
+
+
 }

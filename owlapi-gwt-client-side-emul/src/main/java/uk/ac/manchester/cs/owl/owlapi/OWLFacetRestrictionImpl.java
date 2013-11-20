@@ -51,9 +51,6 @@ import org.semanticweb.owlapi.vocab.OWLFacet;
  */
 public class OWLFacetRestrictionImpl extends OWLObjectImpl implements OWLFacetRestriction {
 
-
-	private static final long serialVersionUID = 30402L;
-
 	private final OWLFacet facet;
 
     private final OWLLiteral facetValue;
