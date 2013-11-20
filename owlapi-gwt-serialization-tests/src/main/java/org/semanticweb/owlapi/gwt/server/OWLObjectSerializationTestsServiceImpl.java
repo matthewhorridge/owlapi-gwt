@@ -24,6 +24,11 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     }
 
     @Override
+    public ClassExpressionType testClassExpressionType(ClassExpressionType type) {
+        return type;
+    }
+
+    @Override
     public IRI testIRI(IRI iri) {
         return iri;
     }

@@ -24,6 +24,8 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
 
     EntityType<?> testEntityType(EntityType<?> entityType);
 
+    ClassExpressionType testClassExpressionType(ClassExpressionType type);
+
     IRI testIRI(IRI iri);
 
     OWLOntologyID testOWLOntologyId(OWLOntologyID id);

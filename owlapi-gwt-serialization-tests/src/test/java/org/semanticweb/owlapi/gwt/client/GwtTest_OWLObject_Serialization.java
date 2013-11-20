@@ -63,6 +63,24 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    public void testShouldSerializeClassExpressionType() {
+        delayTestFinish(TEST_DELAY_MS);
+        final ClassExpressionType in = ClassExpressionType.OWL_CLASS;
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testClassExpressionType(in, new AsyncCallback<ClassExpressionType>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ClassExpressionType out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+    
     public void testShouldSerializeIRI() {
         delayTestFinish(TEST_DELAY_MS);
         final IRI in = IRI.create("http://stuff.com/A");
