@@ -27,7 +27,7 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>net.sourceforge.owlapitools:owlapi-gwt-serialization</include>
+                <include>net.sourceforge.owlapi:owlapi-gwt-serialization</include>
             </includes>
             <binaries>
                 <outputDirectory>/</outputDirectory>
@@ -43,7 +43,7 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>net.sourceforge.owlapitools:owlapi-gwt-serialization</include>
+                <include>net.sourceforge.owlapi:owlapi-gwt-serialization</include>
             </includes>
             <binaries>
                 <outputDirectory>${module-directory}/${super-source-directory}</outputDirectory>
@@ -60,7 +60,7 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>net.sourceforge.owlapitools:owlapi-gwt-client-side-emul</include>
+                <include>net.sourceforge.owlapi:owlapi-gwt-client-side-emul</include>
             </includes>
             <binaries>
                 <outputDirectory>${module-directory}/${super-source-directory}</outputDirectory>

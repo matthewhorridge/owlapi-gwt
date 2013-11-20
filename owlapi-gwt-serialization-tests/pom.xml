@@ -12,8 +12,8 @@
     <version>3.4.8-SNAPSHOT</version>
 
     <parent>
+        <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
-        <groupId>net.sourceforge.owlapitools</groupId>
         <version>3.4.8-SNAPSHOT</version>
     </parent>
 
@@ -52,7 +52,7 @@
 
 
         <dependency>
-            <groupId>net.sourceforge.owlapitools</groupId>
+            <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
