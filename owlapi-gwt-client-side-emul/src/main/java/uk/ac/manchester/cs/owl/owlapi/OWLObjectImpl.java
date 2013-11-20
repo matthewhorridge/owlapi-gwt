@@ -66,11 +66,6 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
 
     private int hashCode = 0;
 
-    private transient WeakReference<Set<OWLEntity>> signature = null;
-
-    private transient WeakReference<Set<OWLAnonymousIndividual>> anons;
-
-    /** */
     public OWLObjectImpl() {
     }
 
@@ -79,7 +74,6 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
     private static OWLDataFactory f = new OWLDataFactoryImpl(false, false);
 
     protected static final OWLClass OWL_THING = new OWLClassImpl(OWLRDFVocabulary.OWL_THING.getIRI());
-
 
     static <E extends OWLEntity> E getOWLEntity(EntityType<E> entityType, IRI iri) {
         if (entityType.equals(EntityType.CLASS)) {
@@ -105,27 +99,20 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
 
     @Override
     public Set<OWLEntity> getSignature() {
-        Set<OWLEntity> set = null;
-        if (signature != null) {
-            set = signature.get();
-        }
-        if (set == null) {
-            set = new HashSet<OWLEntity>();
-            Set<OWLAnonymousIndividual> anon = new HashSet<OWLAnonymousIndividual>();
-            OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
-            accept(collector);
-            signature = new WeakReference<Set<OWLEntity>>(set);
-            anons = new WeakReference<Set<OWLAnonymousIndividual>>(anon);
-        }
+        Set<OWLEntity> set = new HashSet<OWLEntity>();
+        Set<OWLAnonymousIndividual> anon = new HashSet<OWLAnonymousIndividual>();
+        OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
+        accept(collector);
         return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(set);
     }
 
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        if (signature == null || signature.get() == null) {
-            getSignature();
-        }
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anons.get());
+        Set<OWLEntity> set = new HashSet<OWLEntity>();
+        Set<OWLAnonymousIndividual> anons = new HashSet<OWLAnonymousIndividual>();
+        OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anons);
+        accept(collector);
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anons);
     }
 
     @Override

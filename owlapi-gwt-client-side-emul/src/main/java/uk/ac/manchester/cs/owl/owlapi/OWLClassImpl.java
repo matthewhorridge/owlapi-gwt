@@ -42,6 +42,7 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;

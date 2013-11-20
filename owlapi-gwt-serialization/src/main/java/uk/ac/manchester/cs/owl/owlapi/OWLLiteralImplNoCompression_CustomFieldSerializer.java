@@ -4,7 +4,9 @@ import com.google.gwt.user.client.rpc.CustomFieldSerializer;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamReader;
 import com.google.gwt.user.client.rpc.SerializationStreamWriter;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * An implementation of CustomFieldSerilizer for serializing {@link OWLLiteralImplNoCompression}
@@ -46,7 +48,10 @@ public class OWLLiteralImplNoCompression_CustomFieldSerializer extends CustomFie
     }
 
     public static OWLLiteralImplNoCompression instantiate(SerializationStreamReader streamReader) throws SerializationException {
-        return new OWLLiteralImplNoCompression(streamReader.readString(), streamReader.readString(), (OWLDatatype) streamReader.readObject());
+        String literal = streamReader.readString();
+        String lang = streamReader.readString();
+        OWLDatatype datatype = (OWLDatatype) streamReader.readObject();
+        return new OWLLiteralImplNoCompression(literal, lang, datatype);
     }
 
 

@@ -56,7 +56,7 @@ public final class OWLOntologyID implements Comparable<OWLOntologyID>, Serializa
 
 	private static final long serialVersionUID = 30402L;
 
-	private static final AtomicInteger counter = new AtomicInteger();
+	private static int counter = 0;
 
     private static final String ANON_PREFIX = "Anonymous-";
 
@@ -101,7 +101,7 @@ public final class OWLOntologyID implements Comparable<OWLOntologyID>, Serializa
             this.versionIRI = null;
         }
         if (ontologyIRI == null) {
-            internalID = ANON_PREFIX + counter.getAndIncrement();
+            internalID = ANON_PREFIX + counter++;
             hashCode += 37 * internalID.hashCode();
         }
     }

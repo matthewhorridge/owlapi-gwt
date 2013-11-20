@@ -200,16 +200,6 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         }
     }
 
-    /**
-     * Gets an auto-generated ontology document IRI.
-     *
-     * @return An auto-generated ontology document IRI. The IRI has the form
-     *         <code>owlapi:ontologyTIMESTAMP</code>
-     */
-    public static IRI generateDocumentIRI() {
-        return create("owlapi:ontology" + System.nanoTime());
-    }
-
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // //

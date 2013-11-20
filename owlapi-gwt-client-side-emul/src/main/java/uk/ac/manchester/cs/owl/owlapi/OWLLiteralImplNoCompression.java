@@ -41,8 +41,6 @@ package uk.ac.manchester.cs.owl.owlapi;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 /**
  * Author: Matthew Horridge<br>
@@ -53,13 +51,9 @@ import java.util.Arrays;
  */
 public class OWLLiteralImplNoCompression extends OWLObjectImpl implements OWLLiteral {
 
-    private static final long serialVersionUID = 30406L;
-
-    static final String utf_8 = "UTF-8";
-
     private static final OWLDatatype RDF_PLAIN_LITERAL = OWL2DatatypeImpl.getDatatype(OWL2Datatype.RDF_PLAIN_LITERAL);
 
-    private final byte[] literal;
+    private final String literal;
 
     private final OWLDatatype datatype;
 
@@ -75,18 +69,7 @@ public class OWLLiteralImplNoCompression extends OWLObjectImpl implements OWLLit
      *                 null or it MUST be RDFPlainLiteral
      */
     public OWLLiteralImplNoCompression(String literal, String lang, OWLDatatype datatype) {
-        this(getBytes(literal), lang, datatype);
-    }
-
-    /**
-     * @param bytes
-     * @param lang
-     * @param datatype
-     */
-    public OWLLiteralImplNoCompression(byte[] bytes, String lang, OWLDatatype datatype) {
-        super();
-        literal = new byte[bytes.length];
-        System.arraycopy(bytes, 0, literal, 0, bytes.length);
+        this.literal =  literal;
         OWLDatatype rdfplainlit = RDF_PLAIN_LITERAL;
         if (lang == null || lang.length() == 0) {
             this.lang = "";
@@ -109,21 +92,11 @@ public class OWLLiteralImplNoCompression extends OWLObjectImpl implements OWLLit
         hashcode = getHashCode();
     }
 
-    private static byte[] getBytes(String literal) {
-        try {
-            return literal.getBytes(utf_8);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unsupported UTF 8 encoding: broken JVM", e);
-        }
-    }
+
 
     @Override
     public String getLiteral() {
-        try {
-            return new String(literal, utf_8);
-        } catch (UnsupportedEncodingException e) {
-            throw new OWLRuntimeException("Unsupported UTF 8 encoding: broken JVM", e);
-        }
+        return literal;
     }
 
     @Override
@@ -262,7 +235,7 @@ public class OWLLiteralImplNoCompression extends OWLObjectImpl implements OWLLit
             }
             OWLLiteral other = (OWLLiteral) obj;
             if (other instanceof OWLLiteralImplNoCompression) {
-                return Arrays.equals(literal, ((OWLLiteralImplNoCompression) other).literal) && datatype.equals(other.getDatatype()) && lang.equals(other.getLang());
+                return literal.equals(((OWLLiteralImplNoCompression) other).literal) && datatype.equals(other.getDatatype()) && lang.equals(other.getLang());
             }
             return getLiteral().equals(other.getLiteral()) && datatype.equals(other.getDatatype()) && lang.equals(other.getLang());
         }

@@ -8,29 +8,20 @@
     <artifactId>owlapi-gwt-parent</artifactId>
     <packaging>pom</packaging>
     <version>3.4.8-SNAPSHOT</version>
+
     <modules>
         <module>owlapi-gwt-serialization</module>
         <module>owlapi-gwt-client-side-emul</module>
         <module>owlapi-gwt</module>
+        <module>owlapi-gwt-serialization-tests</module>
     </modules>
 
     <properties>
+        <gwtVersion>2.5.1</gwtVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
     </properties>
-
-
-    <!--<build>-->
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<source>1.6</source>-->
-                    <!--<target>1.6</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-    <!--</build>-->
-
 
 
     <dependencies>
@@ -39,7 +30,7 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.5.1</version>
+            <version>${gwtVersion}</version>
         </dependency>
 
         <dependency>
@@ -47,6 +38,20 @@
             <artifactId>owlapi-distribution</artifactId>
             <version>3.4.8</version>
         </dependency>
-        
+
     </dependencies>
+
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<artifactId>maven-surefire-plugin</artifactId>-->
+                <!--<version>2.6</version>-->
+                <!--<configuration>-->
+                    <!--<excludes>-->
+                        <!--<exclude>**/*GwtTest.java</exclude>-->
+                    <!--</excludes>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 </project>

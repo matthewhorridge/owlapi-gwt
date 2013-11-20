@@ -1,0 +1,12 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module>
+
+    <inherits name="org.semanticweb.owlapi.gwt.OWLObjectSerializationTests"/>
+
+    <!-- It's REALLY IMPORTANT that this is declared in here. (Or perhaps in the web.xml for the test sources) -->
+    <!-- Note, the path is not prefixes with the module name which the service comes from through...
+     -->
+    <servlet path="/owlobjects" class="org.semanticweb.owlapi.gwt.server.OWLObjectSerializationTestsServiceImpl"/>
+
+</module>

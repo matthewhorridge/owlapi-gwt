@@ -43,8 +43,6 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Locale;
 
 /**
@@ -72,20 +70,12 @@ public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
 
     private OWLLiteral negativeFloatZero;
 
-    private URL url;
-
     /**
      * @param useCompression true if compression of literals should be used
      */
     public InternalsNoCache(boolean useCompression) {
         trueLiteral = new OWLLiteralImplBoolean(true);
         falseLiteral = new OWLLiteralImplBoolean(false);
-        try {
-            url = new URL("x");
-            System.out.println(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -139,7 +129,9 @@ public class InternalsNoCache implements OWLDataFactoryInternals, Serializable {
             normalisedLang = "";
         }
         else {
-            normalisedLang = lang.trim().toLowerCase(Locale.ENGLISH);
+            normalisedLang = lang.trim().toLowerCase();
+            // Was this, but Locale is not emulated
+//            normalisedLang = lang.trim().toLowerCase(Locale.ENGLISH);
         }
         return new OWLLiteralImplNoCompression(literal, normalisedLang, null);
     }
