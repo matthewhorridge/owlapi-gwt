@@ -5,7 +5,7 @@
     <groupId>net.sourceforge.owlapitools</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.4.8</version>
+    <version>3.4.9-SNAPSHOT</version>
 
     <modules>
         <module>owlapi-gwt-serialization</module>
@@ -44,7 +44,7 @@
         <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
         <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
         <url>https://github.com/matthewhorridge/gwt-owlapi</url>
-      <tag>owlapi-gwt-parent-3.4.8</tag>
+      <tag>HEAD</tag>
   </scm>
 
 </project>
