@@ -9,20 +9,41 @@
     <packaging>pom</packaging>
     <version>3.4.8-SNAPSHOT</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+    </properties>
+
+
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/matthewhorridge/gwt-owlapi/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>GNU LGPL Version 3.0</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>matthewhorridge</id>
+            <name>Matthew Horridge</name>
+            <email>matthew.horridge@stanford.edu</email>
+        </developer>
+    </developers>
+
     <modules>
         <module>owlapi-gwt-serialization</module>
         <module>owlapi-gwt-client-side-emul</module>
         <module>owlapi-gwt</module>
         <module>owlapi-gwt-serialization-tests</module>
     </modules>
-
-    <properties>
-        <gwtVersion>2.5.1</gwtVersion>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.5.1</gwtVersion>
-    </properties>
-
 
     <dependencies>
         <!-- We have a global dependency of the gwt-user library as this is needed for both server side and client
@@ -41,11 +62,30 @@
 
     </dependencies>
 
-
     <scm>
         <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
         <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
         <url>https://github.com/matthewhorridge/gwt-owlapi</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>gwt-owlapi-github</id>
+            <url>https://github.com/matthewhorridge/gwt-owlapi</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
