@@ -247,4 +247,39 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLDisjointUnionAxiomImpl testOWLDisjointUnionAxiomImpl(OWLDisjointUnionAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public OWLClassAssertionAxiomImpl testOWLClassAssertionAxiomImpl(OWLClassAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLObjectPropertyAssertionAxiomImpl testOWLObjectPropertyAssertionAxiomImpl(OWLObjectPropertyAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDataPropertyAssertionAxiomImpl testOWLDataPropertyAssertionAxiomImpl(OWLDataPropertyAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLNegativeObjectPropertyAssertionAxiomImpl testOWLNegativeObjectPropertyAssertionAxiomImpl(OWLNegativeObjectPropertyAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLNegativeDataPropertyAssertionAxiomImpl testOWLNegativeDataPropertyAssertionAxiomImpl(OWLNegativeDataPropertyAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLSameIndividualAxiomImpl testOWLSameIndividualAxiomImpl(OWLSameIndividualAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDifferentIndividualsAxiomImpl testOWLDifferentIndividualsAxiomImpl(OWLDifferentIndividualsAxiomImpl axiom) {
+        return axiom;
+    }
 }

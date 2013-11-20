@@ -753,4 +753,173 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
             }
         });
     }
+
+    public void testShouldSerializeOWLClassAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClassExpression clsX = df.getOWLClass(IRI.create("http://stuff.com/X"));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        final OWLClassAssertionAxiomImpl ax = new OWLClassAssertionAxiomImpl(indA, clsX, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLClassAssertionAxiomImpl(ax, new AsyncCallback<OWLClassAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLClassAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLObjectPropertyAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLObjectPropertyExpression property = df.getOWLObjectProperty(IRI.create("http://stuff.com/prop"));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        final OWLObjectPropertyAssertionAxiomImpl ax = new OWLObjectPropertyAssertionAxiomImpl(indA, property, indB, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectPropertyAssertionAxiomImpl(ax, new AsyncCallback<OWLObjectPropertyAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectPropertyAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLNegativeObjectPropertyAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLObjectProperty property = df.getOWLObjectProperty(IRI.create("http://stuff.com/prop"));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        final OWLNegativeObjectPropertyAssertionAxiomImpl ax = new OWLNegativeObjectPropertyAssertionAxiomImpl(indA, property, indB, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLNegativeObjectPropertyAssertionAxiomImpl(ax, new AsyncCallback<OWLNegativeObjectPropertyAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLNegativeObjectPropertyAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataPropertyAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLDataPropertyExpression property = df.getOWLDataProperty(IRI.create("http://stuff.com/prop"));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLLiteral lit = df.getOWLLiteral("x");
+        final OWLDataPropertyAssertionAxiomImpl ax = new OWLDataPropertyAssertionAxiomImpl(indA, property, lit, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataPropertyAssertionAxiomImpl(ax, new AsyncCallback<OWLDataPropertyAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataPropertyAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLNegativeDataPropertyAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLDataProperty property = df.getOWLDataProperty(IRI.create("http://stuff.com/prop"));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLLiteral lit = df.getOWLLiteral("x");
+        final OWLNegativeDataPropertyAssertionAxiomImpl ax = new OWLNegativeDataPropertyAssertionAxiomImpl(indA, property, lit, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLNegativeDataPropertyAssertionAxiomImpl(ax, new AsyncCallback<OWLNegativeDataPropertyAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLNegativeDataPropertyAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLSameIndividualAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/b"));
+        OWLIndividual indC = df.getOWLNamedIndividual(IRI.create("http://stuff.com/c"));
+        Set<OWLIndividual> inds = CollectionFactory.createSet(indA, indB, indC);
+        final OWLSameIndividualAxiomImpl ax = new OWLSameIndividualAxiomImpl(inds, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLSameIndividualAxiomImpl(ax, new AsyncCallback<OWLSameIndividualAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLSameIndividualAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDifferentIndividualsAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
+        OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/b"));
+        OWLIndividual indC = df.getOWLNamedIndividual(IRI.create("http://stuff.com/c"));
+        Set<OWLIndividual> inds = CollectionFactory.createSet(indA, indB, indC);
+        final OWLDifferentIndividualsAxiomImpl ax = new OWLDifferentIndividualsAxiomImpl(inds, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDifferentIndividualsAxiomImpl(ax, new AsyncCallback<OWLDifferentIndividualsAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDifferentIndividualsAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
 }

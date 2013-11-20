@@ -123,4 +123,17 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLDisjointUnionAxiomImpl testOWLDisjointUnionAxiomImpl(OWLDisjointUnionAxiomImpl axiom);
 
 
+    OWLClassAssertionAxiomImpl testOWLClassAssertionAxiomImpl(OWLClassAssertionAxiomImpl axiom);
+    
+    OWLObjectPropertyAssertionAxiomImpl testOWLObjectPropertyAssertionAxiomImpl(OWLObjectPropertyAssertionAxiomImpl axiom);
+    
+    OWLDataPropertyAssertionAxiomImpl testOWLDataPropertyAssertionAxiomImpl(OWLDataPropertyAssertionAxiomImpl axiom);
+
+    OWLNegativeObjectPropertyAssertionAxiomImpl testOWLNegativeObjectPropertyAssertionAxiomImpl(OWLNegativeObjectPropertyAssertionAxiomImpl axiom);
+
+    OWLNegativeDataPropertyAssertionAxiomImpl testOWLNegativeDataPropertyAssertionAxiomImpl(OWLNegativeDataPropertyAssertionAxiomImpl axiom);
+
+    OWLSameIndividualAxiomImpl testOWLSameIndividualAxiomImpl(OWLSameIndividualAxiomImpl axiom);
+
+    OWLDifferentIndividualsAxiomImpl testOWLDifferentIndividualsAxiomImpl(OWLDifferentIndividualsAxiomImpl axiom);
 }
