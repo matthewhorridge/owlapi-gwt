@@ -23,6 +23,12 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
+        <url>https://github.com/matthewhorridge/gwt-owlapi</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Convenience property to set the GWT version -->
@@ -70,11 +76,7 @@
 
     </dependencies>
 
-    <scm>
-        <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
-        <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
-        <url>https://github.com/matthewhorridge/gwt-owlapi</url>
-    </scm>
+
 
     <distributionManagement>
         <repository>
