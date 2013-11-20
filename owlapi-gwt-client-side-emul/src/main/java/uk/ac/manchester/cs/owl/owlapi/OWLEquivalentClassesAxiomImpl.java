@@ -36,7 +36,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.manchester.cs.owl.owlapi;
 
 import org.semanticweb.owlapi.model.*;
@@ -45,7 +44,6 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-
 /**
  * Author: Matthew Horridge<br> The University Of Manchester<br> Bio-Health Informatics Group<br> Date:
  * 26-Oct-2006<br><br>
@@ -53,14 +51,10 @@ import java.util.*;
 public class OWLEquivalentClassesAxiomImpl extends OWLNaryClassAxiomImpl implements OWLEquivalentClassesAxiom {
 
     private static final long serialVersionUID = 30406L;
-    private transient WeakReference<Set<OWLClass>> namedClasses = null;
 
     @SuppressWarnings("javadoc")
-    public OWLEquivalentClassesAxiomImpl(
-            Set<? extends OWLClassExpression> classExpressions,
-            Collection<? extends OWLAnnotation> annotations) {
+    public OWLEquivalentClassesAxiomImpl(Set<? extends OWLClassExpression> classExpressions, Collection<? extends OWLAnnotation> annotations) {
         super(classExpressions, annotations);
-        namedClasses = null;
     }
 
     @Override
@@ -73,20 +67,17 @@ public class OWLEquivalentClassesAxiomImpl extends OWLNaryClassAxiomImpl impleme
 
     @Override
     public OWLEquivalentClassesAxiom getAnnotatedAxiom(Set<OWLAnnotation> annotations) {
-        return new OWLEquivalentClassesAxiomImpl(getClassExpressions(),
-                mergeAnnos(annotations));
+        return new OWLEquivalentClassesAxiomImpl(getClassExpressions(), mergeAnnos(annotations));
     }
 
     @Override
     public Set<OWLEquivalentClassesAxiom> asPairwiseAxioms() {
-        List<OWLClassExpression> classExpressions = new ArrayList<OWLClassExpression>(
-                getClassExpressions());
+        List<OWLClassExpression> classExpressions = new ArrayList<OWLClassExpression>(getClassExpressions());
         Set<OWLEquivalentClassesAxiom> result = new HashSet<OWLEquivalentClassesAxiom>();
         for (int i = 0; i < classExpressions.size() - 1; i++) {
             OWLClassExpression ceI = classExpressions.get(i);
             OWLClassExpression ceJ = classExpressions.get(i + 1);
-            result.add(new OWLEquivalentClassesAxiomImpl(new HashSet<OWLClassExpression>(
-                    Arrays.asList(ceI, ceJ)), NO_ANNOTATIONS));
+            result.add(new OWLEquivalentClassesAxiomImpl(new HashSet<OWLClassExpression>(Arrays.asList(ceI, ceJ)), NO_ANNOTATIONS));
         }
         return result;
     }
@@ -118,34 +109,23 @@ public class OWLEquivalentClassesAxiomImpl extends OWLNaryClassAxiomImpl impleme
 
     @Override
     public Set<OWLClass> getNamedClasses() {
-        Set<OWLClass> toReturn = null;
-        if (namedClasses != null) {
-            toReturn = namedClasses.get();
-        }
-        if (toReturn == null) {
-            Set<OWLClass> clses = new HashSet<OWLClass>(1);
-            for (OWLClassExpression desc : getClassExpressions()) {
-                if (!desc.isAnonymous() && !desc.isOWLNothing() && !desc.isOWLThing()) {
-                    clses.add(desc.asOWLClass());
-                }
+        Set<OWLClass> clses = new HashSet<OWLClass>(1);
+        for (OWLClassExpression desc : getClassExpressions()) {
+            if (!desc.isAnonymous() && !desc.isOWLNothing() && !desc.isOWLThing()) {
+                clses.add(desc.asOWLClass());
             }
-            toReturn = CollectionFactory
-                    .getCopyOnRequestSetFromImmutableCollection(clses);
-            namedClasses = new WeakReference<Set<OWLClass>>(toReturn);
         }
-        return toReturn;
+        return clses;
     }
 
     @Override
     public Set<OWLSubClassOfAxiom> asOWLSubClassOfAxioms() {
         Set<OWLSubClassOfAxiom> result = new HashSet<OWLSubClassOfAxiom>();
-        final List<OWLClassExpression> classExpressions = new ArrayList<OWLClassExpression>(
-                getClassExpressions());
+        final List<OWLClassExpression> classExpressions = new ArrayList<OWLClassExpression>(getClassExpressions());
         for (int i = 0; i < classExpressions.size(); i++) {
             for (int j = 0; j < classExpressions.size(); j++) {
                 if (i != j) {
-                    result.add(new OWLSubClassOfAxiomImpl(classExpressions.get(i),
-                            classExpressions.get(j), NO_ANNOTATIONS));
+                    result.add(new OWLSubClassOfAxiomImpl(classExpressions.get(i), classExpressions.get(j), NO_ANNOTATIONS));
                 }
             }
         }

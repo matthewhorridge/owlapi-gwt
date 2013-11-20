@@ -4,10 +4,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -647,6 +649,106 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
             @Override
             public void onSuccess(OWLDatatypeRestrictionImpl out) {
                 assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+
+    public void testShouldSerializeOWLSubClassOfAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClassExpression subCls = df.getOWLClass(IRI.create("http://stuff.com/A"));
+        OWLClassExpression supCls = df.getOWLClass(IRI.create("http://stuff.com/B"));
+        final OWLSubClassOfAxiomImpl ax = new OWLSubClassOfAxiomImpl(subCls, supCls, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLSubClassOfAxiomImpl(ax, new AsyncCallback<OWLSubClassOfAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLSubClassOfAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLEquivalentClassesAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
+        OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
+        OWLClassExpression clsC = df.getOWLClass(IRI.create("http://stuff.com/C"));
+        Set<OWLClassExpression> clses = CollectionFactory.createSet(clsA, clsB, clsC);
+        final OWLEquivalentClassesAxiomImpl ax = new OWLEquivalentClassesAxiomImpl(clses, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLEquivalentClassesAxiomImpl(ax, new AsyncCallback<OWLEquivalentClassesAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLEquivalentClassesAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDisjointClassesAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
+        OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
+        OWLClassExpression clsC = df.getOWLClass(IRI.create("http://stuff.com/C"));
+        Set<OWLClassExpression> clses = CollectionFactory.createSet(clsA, clsB, clsC);
+        final OWLDisjointClassesAxiomImpl ax = new OWLDisjointClassesAxiomImpl(clses, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDisjointClassesAxiomImpl(ax, new AsyncCallback<OWLDisjointClassesAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDisjointClassesAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDisjointUnionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
+        OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
+        OWLClassExpression clsC = df.getOWLClass(IRI.create("http://stuff.com/C"));
+        OWLClass clsX = df.getOWLClass(IRI.create("http://stuff.com/X"));
+        Set<OWLClassExpression> clses = CollectionFactory.createSet(clsA, clsB, clsC);
+        final OWLDisjointUnionAxiomImpl ax = new OWLDisjointUnionAxiomImpl(clsX, clses, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDisjointUnionAxiomImpl(ax, new AsyncCallback<OWLDisjointUnionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDisjointUnionAxiomImpl out) {
+                assertEquals(ax, out);
                 finishTest();
             }
         });

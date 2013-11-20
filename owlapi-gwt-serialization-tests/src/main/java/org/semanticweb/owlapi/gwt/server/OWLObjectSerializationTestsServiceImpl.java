@@ -227,4 +227,24 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLFacetRestrictionImpl testOWLFacetRestrictionImpl(OWLFacetRestrictionImpl facetRestriction) {
         return facetRestriction;
     }
+
+    @Override
+    public OWLSubClassOfAxiomImpl testOWLSubClassOfAxiomImpl(OWLSubClassOfAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLEquivalentClassesAxiomImpl testOWLEquivalentClassesAxiomImpl(OWLEquivalentClassesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDisjointClassesAxiomImpl testOWLDisjointClassesAxiomImpl(OWLDisjointClassesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDisjointUnionAxiomImpl testOWLDisjointUnionAxiomImpl(OWLDisjointUnionAxiomImpl axiom) {
+        return axiom;
+    }
 }
