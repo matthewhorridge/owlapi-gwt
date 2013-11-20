@@ -5,6 +5,8 @@
 
     <!-- This project builds an OWL API gwt module -->
 
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
@@ -12,9 +14,17 @@
     </parent>
 
     <artifactId>owlapi-gwt</artifactId>
+    <version>3.4.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <modelVersion>4.0.0</modelVersion>
+    <licenses>
+        <license>
+            <name>GNU LGPL Version 3.0</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
 
     <properties>
         <module-directory>org/semanticweb/owlapi/gwt</module-directory>
