@@ -6,7 +6,6 @@
 
     <formats>
         <format>jar</format>
-        <format>dir</format>
     </formats>
 
     <baseDirectory/>
