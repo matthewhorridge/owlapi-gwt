@@ -1425,6 +1425,29 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
             }
         });
     }
+
+    public void testShouldSerializeOWLDatatypeDefinitionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLDatatype dtA = df.getOWLDatatype(IRI.create("http://stuff.com/DtA"));
+        OWLDatatype dtB = df.getOWLDatatype(IRI.create("http://stuff.com/DtB"));
+        final OWLDatatypeDefinitionAxiomImpl ax = new OWLDatatypeDefinitionAxiomImpl(dtA, dtB, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDatatypeDefinitionAxiomImpl(ax, new AsyncCallback<OWLDatatypeDefinitionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDatatypeDefinitionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
     
     
 

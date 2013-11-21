@@ -392,4 +392,9 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLAnnotationPropertyRangeAxiomImpl testOWLAnnotationPropertyRangeAxiomImpl(OWLAnnotationPropertyRangeAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public OWLDatatypeDefinitionAxiomImpl testOWLDatatypeDefinitionAxiomImpl(OWLDatatypeDefinitionAxiomImpl axiom) {
+        return axiom;
+    }
 }
