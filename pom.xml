@@ -33,7 +33,6 @@
         <url>https://github.com/matthewhorridge/owlapi-gwt</url>
         <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
         <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
-      <tag>owlapi-gwt</tag>
   </scm>
 
     <developers>
