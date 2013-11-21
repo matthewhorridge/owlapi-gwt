@@ -282,4 +282,114 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLDifferentIndividualsAxiomImpl testOWLDifferentIndividualsAxiomImpl(OWLDifferentIndividualsAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public OWLSubObjectPropertyOfAxiomImpl testOWLSubObjectPropertyOfAxiomImpl(OWLSubObjectPropertyOfAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLEquivalentObjectPropertiesAxiomImpl testOWLEquivalentObjectPropertiesAxiomImpl(OWLEquivalentObjectPropertiesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDisjointObjectPropertiesAxiomImpl testOWLDisjointObjectPropertiesAxiomImpl(OWLDisjointObjectPropertiesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLInverseObjectPropertiesAxiomImpl testOWLInverseObjectPropertiesAxiomImpl(OWLInverseObjectPropertiesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLObjectPropertyDomainAxiomImpl testOWLObjectPropertyDomainAxiomImpl(OWLObjectPropertyDomainAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLObjectPropertyRangeAxiomImpl testOWLObjectPropertyRangeAxiomImpl(OWLObjectPropertyRangeAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLFunctionalObjectPropertyAxiomImpl testOWLFunctionalObjectPropertyAxiomImpl(OWLFunctionalObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLInverseFunctionalObjectPropertyAxiomImpl testOWLInverseFunctionalObjectPropertyAxiomImpl(OWLInverseFunctionalObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLReflexiveObjectPropertyAxiomImpl testOWLReflexiveObjectPropertyAxiomImpl(OWLReflexiveObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLIrreflexiveObjectPropertyAxiomImpl testOWLIrreflexiveObjectPropertyAxiomImpl(OWLIrreflexiveObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLSymmetricObjectPropertyAxiomImpl testOWLSymmetricObjectPropertyAxiomImpl(OWLSymmetricObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLAsymmetricObjectPropertyAxiomImpl testOWLAsymmetricObjectPropertyAxiomImpl(OWLAsymmetricObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLTransitiveObjectPropertyAxiomImpl testOWLTransitiveObjectPropertyAxiomImpl(OWLTransitiveObjectPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLSubDataPropertyOfAxiomImpl testOWLSubDataPropertyOfAxiomImpl(OWLSubDataPropertyOfAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLEquivalentDataPropertiesAxiomImpl testOWLEquivalentDataPropertiesAxiomImpl(OWLEquivalentDataPropertiesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDisjointDataPropertiesAxiomImpl testOWLDisjointDataPropertiesAxiomImpl(OWLDisjointDataPropertiesAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDataPropertyDomainAxiomImpl testOWLDataPropertyDomainAxiomImpl(OWLDataPropertyDomainAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLDataPropertyRangeAxiomImpl testOWLDataPropertyRangeAxiomImpl(OWLDataPropertyRangeAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLFunctionalDataPropertyAxiomImpl testOWLFunctionalDataPropertyAxiomImpl(OWLFunctionalDataPropertyAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLSubAnnotationPropertyOfAxiomImpl testOWLSubAnnotationPropertyOfAxiomImpl(OWLSubAnnotationPropertyOfAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLAnnotationPropertyDomainAxiomImpl testOWLAnnotationPropertyDomainAxiomImpl(OWLAnnotationPropertyDomainAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLAnnotationPropertyRangeAxiomImpl testOWLAnnotationPropertyRangeAxiomImpl(OWLAnnotationPropertyRangeAxiomImpl axiom) {
+        return axiom;
+    }
 }

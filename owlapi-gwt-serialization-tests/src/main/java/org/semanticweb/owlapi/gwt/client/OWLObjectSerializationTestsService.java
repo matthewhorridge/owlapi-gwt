@@ -136,4 +136,53 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLSameIndividualAxiomImpl testOWLSameIndividualAxiomImpl(OWLSameIndividualAxiomImpl axiom);
 
     OWLDifferentIndividualsAxiomImpl testOWLDifferentIndividualsAxiomImpl(OWLDifferentIndividualsAxiomImpl axiom);
+
+
+    OWLSubObjectPropertyOfAxiomImpl testOWLSubObjectPropertyOfAxiomImpl(OWLSubObjectPropertyOfAxiomImpl axiom);
+
+    OWLEquivalentObjectPropertiesAxiomImpl testOWLEquivalentObjectPropertiesAxiomImpl(OWLEquivalentObjectPropertiesAxiomImpl axiom);
+
+    OWLDisjointObjectPropertiesAxiomImpl testOWLDisjointObjectPropertiesAxiomImpl(OWLDisjointObjectPropertiesAxiomImpl axiom);
+
+    OWLInverseObjectPropertiesAxiomImpl testOWLInverseObjectPropertiesAxiomImpl(OWLInverseObjectPropertiesAxiomImpl axiom);
+
+    OWLObjectPropertyDomainAxiomImpl testOWLObjectPropertyDomainAxiomImpl(OWLObjectPropertyDomainAxiomImpl axiom);
+
+    OWLObjectPropertyRangeAxiomImpl testOWLObjectPropertyRangeAxiomImpl(OWLObjectPropertyRangeAxiomImpl axiom);
+
+    OWLFunctionalObjectPropertyAxiomImpl testOWLFunctionalObjectPropertyAxiomImpl(OWLFunctionalObjectPropertyAxiomImpl axiom);
+
+    OWLInverseFunctionalObjectPropertyAxiomImpl testOWLInverseFunctionalObjectPropertyAxiomImpl(OWLInverseFunctionalObjectPropertyAxiomImpl axiom);
+
+    OWLReflexiveObjectPropertyAxiomImpl testOWLReflexiveObjectPropertyAxiomImpl(OWLReflexiveObjectPropertyAxiomImpl axiom);
+
+    OWLIrreflexiveObjectPropertyAxiomImpl testOWLIrreflexiveObjectPropertyAxiomImpl(OWLIrreflexiveObjectPropertyAxiomImpl axiom);
+
+    OWLSymmetricObjectPropertyAxiomImpl testOWLSymmetricObjectPropertyAxiomImpl(OWLSymmetricObjectPropertyAxiomImpl axiom);
+
+    OWLAsymmetricObjectPropertyAxiomImpl testOWLAsymmetricObjectPropertyAxiomImpl(OWLAsymmetricObjectPropertyAxiomImpl axiom);
+
+    OWLTransitiveObjectPropertyAxiomImpl testOWLTransitiveObjectPropertyAxiomImpl(OWLTransitiveObjectPropertyAxiomImpl axiom);
+
+
+    OWLSubDataPropertyOfAxiomImpl testOWLSubDataPropertyOfAxiomImpl(OWLSubDataPropertyOfAxiomImpl axiom);
+
+    OWLEquivalentDataPropertiesAxiomImpl testOWLEquivalentDataPropertiesAxiomImpl(OWLEquivalentDataPropertiesAxiomImpl axiom);
+
+    OWLDisjointDataPropertiesAxiomImpl testOWLDisjointDataPropertiesAxiomImpl(OWLDisjointDataPropertiesAxiomImpl axiom);
+
+    OWLDataPropertyDomainAxiomImpl testOWLDataPropertyDomainAxiomImpl(OWLDataPropertyDomainAxiomImpl axiom);
+
+    OWLDataPropertyRangeAxiomImpl testOWLDataPropertyRangeAxiomImpl(OWLDataPropertyRangeAxiomImpl axiom);
+
+    OWLFunctionalDataPropertyAxiomImpl testOWLFunctionalDataPropertyAxiomImpl(OWLFunctionalDataPropertyAxiomImpl axiom);
+
+
+    OWLSubAnnotationPropertyOfAxiomImpl testOWLSubAnnotationPropertyOfAxiomImpl(OWLSubAnnotationPropertyOfAxiomImpl axiom);
+
+    OWLAnnotationPropertyDomainAxiomImpl testOWLAnnotationPropertyDomainAxiomImpl(OWLAnnotationPropertyDomainAxiomImpl axiom);
+
+    OWLAnnotationPropertyRangeAxiomImpl testOWLAnnotationPropertyRangeAxiomImpl(OWLAnnotationPropertyRangeAxiomImpl axiom);
+
+
 }
