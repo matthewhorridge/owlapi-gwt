@@ -640,6 +640,51 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    public void testShouldSerializeOWLDataComplementOfImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        final OWLDataRange dtA = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtA"));
+        final OWLDataComplementOfImpl in = new OWLDataComplementOfImpl(dtA);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataComplementOfImpl(in, new AsyncCallback<OWLDataComplementOfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataComplementOfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLDataOneOfImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        final OWLLiteral indA = dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/a");
+        final OWLLiteral indB= dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/b");
+        final OWLLiteral indC = dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/c");
+        Set<OWLLiteral> operands = CollectionFactory.createSet(indA, indB, indC);
+        final OWLDataOneOfImpl in = new OWLDataOneOfImpl(operands);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDataOneOfImpl(in, new AsyncCallback<OWLDataOneOfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLDataOneOfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
     public void testShouldSerializeOWLDataSomeValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
         OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
