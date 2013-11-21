@@ -414,7 +414,30 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
-    
+    public void testShouldSerializeOWLObjectOneOfImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        final OWLIndividual indA = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/a"));
+        final OWLIndividual indB= dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/b"));
+        final OWLIndividual indC = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/c"));
+        Set<OWLIndividual> operands = CollectionFactory.createSet(indA, indB, indC);
+        final OWLObjectOneOfImpl in = new OWLObjectOneOfImpl(operands);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectOneOfImpl(in, new AsyncCallback<OWLObjectOneOfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectOneOfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
     public void testShouldSerializeOWLObjectSomeValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
         OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
