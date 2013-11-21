@@ -20,7 +20,7 @@
         to be used in a GWT app on the client, and allows a subset of these to be serialized and sent over the
         wire.
     </description>
-    <url>https://github.com/matthewhorridge/gwt-owlapi</url>
+    <url>https://github.com/matthewhorridge/owlapi-gwt</url>
 
 
     <licenses>
@@ -32,9 +32,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/matthewhorridge/gwt-owlapi</url>
-        <connection>scm:git:git://github.com/matthewhorridge/gwt-owlapi.git</connection>
-        <developerConnection>scm:git:git@github.com:matthewhorridge/gwt-owlapi.git</developerConnection>
+        <url>https://github.com/matthewhorridge/owlapi-gwt</url>
+        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
     </scm>
 
     <developers>
@@ -48,7 +48,7 @@
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/matthewhorridge/gwt-owlapi/issues</url>
+        <url>https://github.com/matthewhorridge/owlapi-gwt/issues</url>
     </issueManagement>
 
     <modules>
@@ -114,8 +114,8 @@
 
     <distributionManagement>
         <repository>
-            <id>gwt-owlapi-github</id>
-            <url>https://github.com/matthewhorridge/gwt-owlapi</url>
+            <id>owlapi-gwt-github</id>
+            <url>https://github.com/matthewhorridge/owlapi-gwt</url>
         </repository>
     </distributionManagement>
 
