@@ -402,4 +402,9 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLHasKeyAxiomImpl testOWLHasKeyAxiomImpl(OWLHasKeyAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public OWLDeclarationAxiomImpl testOWLDeclarationAxiomImpl(OWLDeclarationAxiomImpl axiom) {
+        return axiom;
+    }
 }

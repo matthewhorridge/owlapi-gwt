@@ -1476,7 +1476,46 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    public void testShouldSerializeOWLDeclarationAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClass cls = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
+        final OWLDeclarationAxiomImpl ax = new OWLDeclarationAxiomImpl(cls, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLDeclarationAxiomImpl(ax, new AsyncCallback<OWLDeclarationAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
 
+            @Override
+            public void onSuccess(OWLDeclarationAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeOWLImportsDeclarationImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLImportsDeclarationImpl decl = new OWLImportsDeclarationImpl(IRI.create("http://stuff.com/ont"));
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLImportsDeclarationImpl(decl, new AsyncCallback<OWLImportsDeclarationImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLImportsDeclarationImpl out) {
+                assertEquals(decl, out);
+                finishTest();
+            }
+        });
+    }
 
 
 }
