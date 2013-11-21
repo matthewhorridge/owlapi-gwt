@@ -127,8 +127,8 @@
                 <version>2.4.2</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseLabel>owlapi-gwt</releaseLabel>
-                    <releaseVersion>${project.version}</releaseVersion>
+                    <!--<releaseLabel>owlapi-gwt-${project.version}</releaseLabel>-->
+                    <!--<releaseVersion>${project.version}</releaseVersion>-->
                 </configuration>
             </plugin>
 
