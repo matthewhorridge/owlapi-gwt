@@ -397,4 +397,9 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLDatatypeDefinitionAxiomImpl testOWLDatatypeDefinitionAxiomImpl(OWLDatatypeDefinitionAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public OWLHasKeyAxiomImpl testOWLHasKeyAxiomImpl(OWLHasKeyAxiomImpl axiom) {
+        return axiom;
+    }
 }

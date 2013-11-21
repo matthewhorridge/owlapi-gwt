@@ -1448,7 +1448,35 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
             }
         });
     }
-    
-    
+
+    public void testShouldSerializeOWLHasKeyAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        OWLClass cls = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
+        OWLDataProperty dpA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
+        OWLDataProperty dpB = df.getOWLDataProperty(IRI.create("http://stuff.com/propB"));
+        OWLObjectProperty opA = df.getOWLObjectProperty(IRI.create("http://stuff.com/opPropA"));
+        OWLObjectProperty opB = df.getOWLObjectProperty(IRI.create("http://stuff.com/opPropB"));
+        Set<OWLPropertyExpression<?,?>> props = CollectionFactory.<OWLPropertyExpression<?,?>>createSet(dpA, dpB, opA, opB);
+        final OWLHasKeyAxiomImpl ax = new OWLHasKeyAxiomImpl(cls, props, annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLHasKeyAxiomImpl(ax, new AsyncCallback<OWLHasKeyAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLHasKeyAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+
+
 
 }
