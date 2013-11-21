@@ -2,10 +2,10 @@
         "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to="owlapigwt">
 
-     I'm not sure if we really need an entry point, but it forces the GWT compiler to do it's job upfront
-    <entry-point class="org.semanticweb.owlapi.gwt.client.OWLObjectSerializationTests"/>
-
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="org.semanticweb.owlapi.gwt.owlapi"/>
+
+
+    <entry-point class="org.semanticweb.owlapi.gwt.client.OWLObjectSerializationTests"/>
 
 </module>
