@@ -59,14 +59,14 @@
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-gwt</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
     </dependencies>
 
     <build>
 
-        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+        <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
 
         <plugins>
             <!-- GWT Maven Plugin -->
