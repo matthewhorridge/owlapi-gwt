@@ -19,6 +19,12 @@
         and used on the server, and is compiled by the GWT compiler for use on the client.
     </description>
 
+    <scm>
+        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
+        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
+    </scm>
+
     <build>
         <plugins>
             <plugin>

@@ -23,6 +23,12 @@
         correctly, and that the GWT compiler can actually compile the source code used for client side emulation.
     </description>
 
+    <scm>
+        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
+        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
+    </scm>
+
 
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>

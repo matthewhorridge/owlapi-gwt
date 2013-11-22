@@ -25,6 +25,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <scm>
+        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
+        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
+    </scm>
 
 
     <!-- We depend on the server side custom field serializers and the client side emulation -->
