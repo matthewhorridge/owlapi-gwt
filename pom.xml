@@ -30,7 +30,7 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/matthewhorridge/owlapi-gwt</url>
+        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
         <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
         <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
   </scm>
