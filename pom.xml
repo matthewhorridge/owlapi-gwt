@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>6</version>
     </parent>
 
     <groupId>net.sourceforge.owlapi</groupId>
@@ -53,7 +53,7 @@
         <module>owlapi-gwt-serialization</module>
         <module>owlapi-gwt-client-side-emul</module>
         <module>owlapi-gwt</module>
-        <module>owlapi-gwt-serialization-tests</module>
+        <!--<module>owlapi-gwt-serialization-tests</module>-->
     </modules>
 
     <dependencies>
