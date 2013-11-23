@@ -88,7 +88,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
+                        <version>1.4</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -110,12 +110,12 @@
         <gwtVersion>2.5.1</gwtVersion>
     </properties>
 
-    <distributionManagement>
+    <!--distributionManagement>
         <repository>
             <id>owlapi-gwt-github</id>
             <url>https://github.com/matthewhorridge/owlapi-gwt</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement-->
 
     <build>
         <plugins>
