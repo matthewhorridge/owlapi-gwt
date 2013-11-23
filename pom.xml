@@ -10,7 +10,7 @@
 
     <groupId>net.sourceforge.owlapi</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
-    <version>3.4.8-ALPHA2-SNAPSHOT</version>
+    <version>3.4.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>owlapi-gwt-parent</name>
     <description>
@@ -109,13 +109,6 @@
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
     </properties>
-
-    <!--distributionManagement>
-        <repository>
-            <id>owlapi-gwt-github</id>
-            <url>https://github.com/matthewhorridge/owlapi-gwt</url>
-        </repository>
-    </distributionManagement-->
 
     <build>
         <plugins>
