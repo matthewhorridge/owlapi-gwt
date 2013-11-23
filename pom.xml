@@ -10,7 +10,7 @@
 
     <groupId>net.sourceforge.owlapi</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
-    <version>3.4.8</version>
+    <version>3.4.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>owlapi-gwt-parent</name>
     <description>
