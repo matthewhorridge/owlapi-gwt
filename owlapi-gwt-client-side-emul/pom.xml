@@ -6,7 +6,7 @@
     <parent>
         <artifactId>owlapi-gwt-parent</artifactId>
         <groupId>net.sourceforge.owlapi</groupId>
-        <version>3.4.9-ALPHA-SNAPSHOT</version>
+        <version>3.4.8-ALPHA-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
