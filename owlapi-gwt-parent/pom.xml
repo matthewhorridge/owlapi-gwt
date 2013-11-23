@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>net.sourceforge.owlapi</groupId>
+    <artifactId>owlapi-gwt-parent</artifactId>
+    <version>3.4.8-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>owlapi-gwt-parent</name>
+    <description>
+        A project that builds a GWT module of a subset of the OWL API.  This allows most OWL API model classes
+        to be used in a GWT app on the client, and allows a subset of these to be serialized and sent over the
+        wire.
+    </description>
+    <url>https://github.com/matthewhorridge/owlapi-gwt</url>
+
+
+    <licenses>
+        <license>
+            <name>GNU LGPL Version 3.0</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
+        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
+  </scm>
+
+    <developers>
+        <developer>
+            <id>matthewhorridge</id>
+            <name>Matthew Horridge</name>
+            <email>matthew.horridge@stanford.edu</email>
+        </developer>
+    </developers>
+
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/matthewhorridge/owlapi-gwt/issues</url>
+    </issueManagement>
+
+    <modules>
+        <module>owlapi-gwt-serialization</module>
+        <module>owlapi-gwt-client-side-emul</module>
+        <module>owlapi-gwt</module>
+        <module>owlapi-gwt-serialization-tests</module>
+    </modules>
+
+    <dependencies>
+        <!-- We have a global dependency of the gwt-user library as this is needed for both server side and client
+        side custom field serializers -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwtVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>3.4.8</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>owlapi-gwt-github</id>
+            <url>https://github.com/matthewhorridge/owlapi-gwt</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+
+    </build>
+
+</project>
