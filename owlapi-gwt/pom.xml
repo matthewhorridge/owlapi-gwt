@@ -34,11 +34,12 @@
         <resources>
             <resource>
                 <directory>src/main/java</directory>
-                <targetPath>org/semanticweb/owlapi/gwt/emul</targetPath>
+                <targetPath>${superSourceDirectory}</targetPath>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <targetPath>${project.build.outputDirectory}</targetPath>
+                <filtering>true</filtering>
             </resource>
         </resources>
 
@@ -89,25 +90,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<artifactId>maven-remote-resources-plugin</artifactId>-->
-                <!--<version>1.5</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>process</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<resourceBundles>-->
-                                <!--<resourceBundle>net.sourceforge.owlapi:owlapi-gwt-super-source:${project.version}</resourceBundle>-->
-                            <!--</resourceBundles>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-
-
         </plugins>
     </build>
 

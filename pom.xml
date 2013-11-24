@@ -102,6 +102,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
+        <gwtModuleDirectory>org/semanticweb/owlapi/gwt</gwtModuleDirectory>
+        <superSourceDirectoryName>emul</superSourceDirectoryName>
+        <superSourceDirectory>${gwtModuleDirectory}/${superSourceDirectoryName}</superSourceDirectory>
     </properties>
 
     <build>
