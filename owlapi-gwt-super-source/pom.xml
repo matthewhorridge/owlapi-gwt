@@ -11,9 +11,9 @@
     </parent>
 
     <!-- groupId and version are inherited from the parent pom -->
-    <artifactId>owlapi-gwt-client-side-emul</artifactId>
+    <artifactId>owlapi-gwt-super-source</artifactId>
     <packaging>jar</packaging>
-    <name>owlapi-gwt-client-side-emul</name>
+    <name>owlapi-gwt-super-source</name>
     <description>
         A component of the OWL API GWT module.  This maven module contains source code that is used for client
         side emulation.  The code in this module is not compiled by the Java compiler, but is placed in the
@@ -21,14 +21,13 @@
         module.
     </description>
 
-    <scm>
-        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
-        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
-        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <targetPath>org/semanticweb/owlapi/gwt/emul</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -43,6 +42,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--<plugin>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<excludes>-->
+                        <!--<exclude>**/*.class</exclude>-->
+                    <!--</excludes>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<artifactId>maven-remote-resources-plugin</artifactId>-->
+                <!--<version>1.5</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>bundle</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<includes>-->
+                                <!--<include>**/*.java</include>-->
+                            <!--</includes>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

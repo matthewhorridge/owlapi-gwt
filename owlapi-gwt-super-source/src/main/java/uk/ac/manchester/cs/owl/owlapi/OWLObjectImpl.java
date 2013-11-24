@@ -47,7 +47,6 @@ import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
@@ -62,19 +61,16 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
     /**
      * a convenience reference for an empty annotation set, saves on typing
      */
-    protected static final Set<OWLAnnotation> NO_ANNOTATIONS = Collections.<OWLAnnotation>emptySet();
+    protected static final Set<OWLAnnotation> NO_ANNOTATIONS = Collections.emptySet();
 
     private int hashCode = 0;
 
     public OWLObjectImpl() {
     }
 
-    // XXX there should be no datafactory here at all
-    @Deprecated
-    private static OWLDataFactory f = new OWLDataFactoryImpl(false, false);
-
     protected static final OWLClass OWL_THING = new OWLClassImpl(OWLRDFVocabulary.OWL_THING.getIRI());
 
+    @SuppressWarnings("unchecked")
     static <E extends OWLEntity> E getOWLEntity(EntityType<E> entityType, IRI iri) {
         if (entityType.equals(EntityType.CLASS)) {
             return (E) new OWLClassImpl(iri);
@@ -221,6 +217,7 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     protected static int compareSets(Set<? extends OWLObject> set1, Set<? extends OWLObject> set2) {
         SortedSet<? extends OWLObject> ss1;
         if (set1 instanceof SortedSet) {
@@ -249,20 +246,5 @@ public abstract class OWLObjectImpl implements OWLObject, Serializable {
             i++;
         }
         return ss1.size() - ss2.size();
-    }
-
-    protected static int compareLists(List<? extends OWLObject> list1, List<? extends OWLObject> list2) {
-        int i = 0;
-        int size = list1.size() < list2.size() ? list1.size() : list2.size();
-        while (i < size) {
-            OWLObject o1 = list1.get(i);
-            OWLObject o2 = list2.get(i);
-            int diff = o1.compareTo(o2);
-            if (diff != 0) {
-                return diff;
-            }
-            i++;
-        }
-        return list1.size() - list2.size();
     }
 }

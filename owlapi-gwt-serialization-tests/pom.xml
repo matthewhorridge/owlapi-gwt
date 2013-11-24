@@ -69,6 +69,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>3.4.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>

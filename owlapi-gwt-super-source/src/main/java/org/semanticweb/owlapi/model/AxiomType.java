@@ -53,9 +53,7 @@ import java.util.Set;
  * Bio-Health Informatics Group<br>
  * Date: 27-Jul-2007<br><br>
  * </p>
- * Represents the type of axioms which can belong to ontologies.  Axioms can be retrieved from ontologies
- * by their <code>AxiomType</code>.  For example, see {@link org.semanticweb.owlapi.model.OWLOntology#getAxioms(AxiomType)} and
- * {@link org.semanticweb.owlapi.model.OWLOntology#getAxiomCount(AxiomType, boolean)}.
+ * Represents the type of axioms which can belong to ontologies.
  */
 @SuppressWarnings("javadoc")
 public class AxiomType<C extends OWLAxiom> implements Serializable {
@@ -137,7 +135,7 @@ public class AxiomType<C extends OWLAxiom> implements Serializable {
     /**
      * Gets the set of axioms from a source set of axioms that are not of the specified type
      * @param sourceAxioms The source set of axioms
-     * @param axiomType    The types that will be filtered out of the source set
+     * @param axiomTypes    The types that will be filtered out of the source set
      * @return A set of axioms that represents the sourceAxioms without the specified types.  Note that sourceAxioms
      *         will not be modified.  The returned set is a copy.
      */
@@ -158,7 +156,7 @@ public class AxiomType<C extends OWLAxiom> implements Serializable {
     /**
      * Gets the set of axioms from a source set of axioms that have a specified type
      * @param sourceAxioms The source set of axioms
-     * @param axiomType    The types of axioms that will be returned
+     * @param axiomTypes    The types of axioms that will be returned
      * @return A set of axioms that represents the sourceAxioms that have the specified types.  Note that sourceAxioms
      *         will not be modified.  The returned set is a copy.
      */
