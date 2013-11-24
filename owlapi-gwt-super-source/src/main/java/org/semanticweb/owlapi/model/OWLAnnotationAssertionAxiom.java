@@ -65,8 +65,8 @@ public interface OWLAnnotationAssertionAxiom extends OWLAnnotationAxiom {
     /**
      * Gets the annotation value.  This is either an {@link org.semanticweb.owlapi.model.IRI}, an {@link org.semanticweb.owlapi.model.OWLAnonymousIndividual}
      * or an {@link OWLLiteral}. Annotation values can be visited with an {@link org.semanticweb.owlapi.model.OWLAnnotationValueVisitor}.
-     * @see {@link org.semanticweb.owlapi.model.OWLAnnotationValueVisitor}
-     * @see {@link OWLAnnotationValueVisitorEx}
+     * @see org.semanticweb.owlapi.model.OWLAnnotationValueVisitor
+     * @see OWLAnnotationValueVisitorEx
      * @return The annotation value.
      */
     OWLAnnotationValue getValue();
@@ -82,7 +82,7 @@ public interface OWLAnnotationAssertionAxiom extends OWLAnnotationAxiom {
      * Determines if this annotation assertion deprecates the IRI that is the subject of the annotation.
      * @return <code>true</code> if this annotation assertion deprecates the subject IRI of the assertion, otherwise
      * <code>false</code>.
-     * @see {@link OWLAnnotation#isDeprecatedIRIAnnotation()}
+     * @see OWLAnnotation#isDeprecatedIRIAnnotation()
      */
     boolean isDeprecatedIRIAssertion();
 

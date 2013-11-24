@@ -131,30 +131,30 @@ public enum SKOSVocabulary {
 
 
     /**
-     * @Deprecated No longer used
+     * @deprecated No longer used
      */
     DOCUMENT("Document", EntityType.CLASS),
 
 
      /**
-     * @Deprecated No longer used
+     * @deprecated No longer used
      */
     IMAGE("Image", EntityType.CLASS),
 
 
      /**
-     * @Deprecated No longer used
+     * @deprecated No longer used
      */
     COLLECTABLEPROPERTY("CollectableProperty", EntityType.ANNOTATION_PROPERTY),
 
      /**
-     * @Deprecated No longer used
+     * @deprecated No longer used
      */
     RESOURCE("Resource", EntityType.CLASS),
 
 
      /**
-     * @Deprecated No longer used
+     * @deprecated No longer used
      */
     COMMENT("comment", EntityType.ANNOTATION_PROPERTY);
 
