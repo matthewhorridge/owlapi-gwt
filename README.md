@@ -6,7 +6,7 @@ A large subset of the API is supported, which includes entities, class expressio
 can be used on the client side and sent over the wire using the GWT serialization mechanism.
 
 Usage
-=====
+-----
 
 To use, declare the following maven dependency (or place the ```owlapi-gwt-3.4.8.jar``` on your class path).
 
