@@ -29,8 +29,3 @@ You will also need the OWL API jars on your class path.  You can use the followi
     <version>3.4.8</version>
 </dependency>
 ```
-
-To use the module, include owlapi-gwt.jar on your class path and add an inherits declaration to your GWT module file
-with a name of
-
-```org.semanticweb.owlapi.gwt.owlapi```
