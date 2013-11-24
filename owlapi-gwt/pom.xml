@@ -13,18 +13,12 @@
     <!-- groupId and version are inherited from the parent pom -->
     <artifactId>owlapi-gwt</artifactId>
     <packaging>jar</packaging>
-    <name>owlapi-gwt-serialization</name>
+    <name>owlapi-gwt</name>
     <description>
-        A component of the OWL API GWT module that is used for object serialization.  This code is compiled by javac
-        and used on the server, and is compiled by the GWT compiler for use on the client.
+        A GWT Module that provides client side emulation of certain OWL API classes.  Broadly speaking, entities, class
+        expression and axioms are supported.  The module also provides GWT serialization mechanism for instances of
+        these classes.
     </description>
-
-    <scm>
-        <url>git@github.com:matthewhorridge/owlapi-gwt.git</url>
-        <connection>scm:git:git://github.com/matthewhorridge/owlapi-gwt.git</connection>
-        <developerConnection>scm:git:git@github.com:matthewhorridge/owlapi-gwt.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
 
     <dependencies>
         <dependency>
