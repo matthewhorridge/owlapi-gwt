@@ -8,7 +8,7 @@ can be used on the client side and sent over the wire using the GWT serializatio
 Usage
 =====
 
-To use, declare the following maven dependency (or place the owlapi-gwt-3.4.8.jar on your class path).
+To use, declare the following maven dependency (or place the ```owlapi-gwt-3.4.8.jar``` on your class path).
 
 ```
 <dependency>
