@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
-            <artifactId>owlapi-gwt-super-source</artifactId>
+            <artifactId>owlapi-gwt-supersource</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -73,7 +73,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>net.sourceforge.owlapi</groupId>
-                                    <artifactId>owlapi-gwt-super-source</artifactId>
+                                    <artifactId>owlapi-gwt-supersource</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>false</overWrite>

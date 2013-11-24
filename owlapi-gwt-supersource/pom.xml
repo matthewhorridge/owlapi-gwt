@@ -11,14 +11,12 @@
     </parent>
 
     <!-- groupId and version are inherited from the parent pom -->
-    <artifactId>owlapi-gwt-super-source</artifactId>
+    <artifactId>owlapi-gwt-supersource</artifactId>
     <packaging>jar</packaging>
-    <name>owlapi-gwt-super-source</name>
+    <name>owlapi-gwt-supersource</name>
     <description>
-        A component of the OWL API GWT module.  This maven module contains source code that is used for client
-        side emulation.  The code in this module is not compiled by the Java compiler, but is placed in the
-        super-source directory for use by the GWT compiler when this module is built and packaged by the parent
-        module.
+        This maven module contains source code that is used for client
+        side emulation and is placed in the supersource directory.
     </description>
 
     <build>

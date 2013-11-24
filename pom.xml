@@ -52,19 +52,16 @@
 
     <modules>
         <module>owlapi-gwt</module>
-        <module>owlapi-gwt-super-source</module>
+        <module>owlapi-gwt-supersource</module>
         <module>owlapi-gwt-serialization-tests</module>
     </modules>
 
     <dependencies>
-        <!-- We have a global dependency of the gwt-user library as this is needed for both server side and client
-        side custom field serializers -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwtVersion}</version>
         </dependency>
-
     </dependencies>
 
 
