@@ -3,6 +3,7 @@ package org.semanticweb.owlapi.gwt.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
 /**
@@ -190,4 +191,6 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLHasKeyAxiomImpl testOWLHasKeyAxiomImpl(OWLHasKeyAxiomImpl axiom);
 
     OWLDeclarationAxiomImpl testOWLDeclarationAxiomImpl(OWLDeclarationAxiomImpl axiom);
+
+    OWLFacet testOWLFacet(OWLFacet facet);
 }

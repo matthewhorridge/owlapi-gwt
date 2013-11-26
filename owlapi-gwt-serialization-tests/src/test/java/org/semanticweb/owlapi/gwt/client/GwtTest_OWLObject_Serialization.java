@@ -1704,5 +1704,24 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    public void testShouldSerializeOWLFacet() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLFacet(OWLFacet.MIN_INCLUSIVE, new AsyncCallback<OWLFacet>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLFacet out) {
+                assertEquals(OWLFacet.MIN_INCLUSIVE, out);
+                finishTest();
+            }
+        });
+
+    }
+
 
 }

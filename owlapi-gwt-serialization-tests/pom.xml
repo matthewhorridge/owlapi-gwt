@@ -82,6 +82,7 @@
                 <!-- Plugin configuration. There are many available options, see
                   gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
+                    <module>org.semanticweb.owlapi.gwt.owlapi</module>
                     <runTarget>owlapi.html</runTarget>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
                     <out>${project.build.directory}/www-test</out>

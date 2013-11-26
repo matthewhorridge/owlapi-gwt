@@ -3,6 +3,7 @@ package org.semanticweb.owlapi.gwt.server;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.semanticweb.owlapi.gwt.client.OWLObjectSerializationTestsService;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
 /**
@@ -406,5 +407,10 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     @Override
     public OWLDeclarationAxiomImpl testOWLDeclarationAxiomImpl(OWLDeclarationAxiomImpl axiom) {
         return axiom;
+    }
+
+    @Override
+    public OWLFacet testOWLFacet(OWLFacet facet) {
+        return facet;
     }
 }
