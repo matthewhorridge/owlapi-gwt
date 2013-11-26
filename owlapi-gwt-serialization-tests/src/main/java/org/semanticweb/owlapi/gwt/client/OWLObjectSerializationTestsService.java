@@ -20,7 +20,6 @@ import uk.ac.manchester.cs.owl.owlapi.*;
 @RemoteServiceRelativePath("owlobjects")
 public interface OWLObjectSerializationTestsService extends RemoteService {
 
-
     AxiomType<?> testAxiomType(AxiomType<?> axiomType);
 
     EntityType<?> testEntityType(EntityType<?> entityType);

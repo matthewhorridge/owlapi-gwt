@@ -9,7 +9,6 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
