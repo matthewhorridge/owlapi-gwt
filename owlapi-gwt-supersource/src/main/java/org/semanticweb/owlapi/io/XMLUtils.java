@@ -54,15 +54,15 @@ package org.semanticweb.owlapi.io;
 @SuppressWarnings("javadoc")
 public class XMLUtils {
 
-    public static final String LT = "&lt;";
-
-    public static final String GT = "&gt;";
-
-    public static final String QUOT = "&quot;";
-
-    public static final String AMP = "&amp;";
-
-    public static final String APOS = "&apos;";
+//    public static final String LT = "&lt;";
+//
+//    public static final String GT = "&gt;";
+//
+//    public static final String QUOT = "&quot;";
+//
+//    public static final String AMP = "&amp;";
+//
+//    public static final String APOS = "&apos;";
 
     // For some point in the future
     public static final String OWL_PROCESSING_INSTRUCTION_NAME = "owl";
@@ -215,6 +215,10 @@ public class XMLUtils {
      * -1 if the character sequence <code>s</code> does not have a suffix that is an NCName.
      */
     public static int getNCNameSuffixIndex(CharSequence s) {
+        // identify bnode labels and do not try to split them
+        if (s.length() > 1 && s.charAt(0) == '_' && s.charAt(1) == ':') {
+            return -1;
+        }
         int index = -1;
         for(int i = s.length() - 1; i > -1; i--) {
             if (!Character.isLowSurrogate(s.charAt(i))) {
@@ -238,8 +242,11 @@ public class XMLUtils {
      * <code>null</code> if the character sequence <code>s</code> does not have a suffix that is an NCName.
      */
     public static String getNCNameSuffix(CharSequence s) {
+        if (s.length() > 1 && s.charAt(0) == '_' && s.charAt(1) == ':') {
+            return null;
+        }
         int localPartStartIndex = getNCNameSuffixIndex(s);
-        if(localPartStartIndex != -1) {
+        if(localPartStartIndex > -1) {
             return s.toString().substring(localPartStartIndex);
         }
         else {
@@ -251,15 +258,18 @@ public class XMLUtils {
      * @param s the charsequence to split
      * @return the prefix split at the last non-ncname character, or the whole input if no ncname is found*/
     public static String getNCNamePrefix(CharSequence s) {
+        if (s.length() > 1 && s.charAt(0) == '_' && s.charAt(1) == ':') {
+            return s.toString();
+        }
         int localPartStartIndex = getNCNameSuffixIndex(s);
-        if(localPartStartIndex != -1) {
+        if (localPartStartIndex > -1) {
             return s.toString().substring(0, localPartStartIndex);
         }
         else {
             return s.toString();
         }
     }
-//
+
 //    /**
 //     * Escapes a character sequence so that it is valid XML.
 //     * @param s The character sequence.
@@ -296,7 +306,7 @@ public class XMLUtils {
 //        }
 //        return sb.toString();
 //    }
-//
+
 
 
 
