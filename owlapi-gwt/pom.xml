@@ -65,7 +65,7 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
@@ -79,11 +79,11 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                                     <includes>**/*.java,**/*.xml</includes>
-                                    <excludes>**/*.class</excludes>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>**/*.java</includes>
+                            <includes>**/*.java,**/*.xml</includes>
                             <excludes>**/*.properties</excludes>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
