@@ -13,7 +13,7 @@ import java.util.Set;
  * Bio-Medical Informatics Research Group<br>
  * Date: 19/11/2012
  */
-public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotationSubject, OWLAnnotationValue {
+public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotationSubject, OWLAnnotationValue, OWLPrimitive {
 
     /**
      * Determines if this IRI is absolute

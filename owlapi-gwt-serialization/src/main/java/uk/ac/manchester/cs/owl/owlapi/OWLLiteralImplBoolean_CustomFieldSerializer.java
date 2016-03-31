@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.CustomFieldSerializer;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamReader;
 import com.google.gwt.user.client.rpc.SerializationStreamWriter;
+import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
 /**
  * An implementation of CustomFieldSerilizer for serializing {@link OWLLiteralImplBoolean}

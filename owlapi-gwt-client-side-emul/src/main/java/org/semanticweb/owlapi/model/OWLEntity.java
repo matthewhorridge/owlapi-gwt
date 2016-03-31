@@ -51,7 +51,7 @@ import java.util.Set;
  * Represents <a href="http://www.w3.org/TR/2009/REC-owl2-syntax-20091027/#Entities.2C_Literals.2C_and_Anonymous_Individuals">Entities</a> in the OWL 2 Specification.
  * </p>
  */
-public interface OWLEntity extends OWLObject, OWLNamedObject {
+public interface OWLEntity extends OWLObject, OWLNamedObject, OWLPrimitive {
 
     /**
      * Gets the entity type for this entity

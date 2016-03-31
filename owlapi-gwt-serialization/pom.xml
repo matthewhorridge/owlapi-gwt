@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
-        <version>3.4.8-SNAPSHOT</version>
+        <version>3.5.4-SNAPSHOT</version>
     </parent>
 
     <!-- groupId and version are inherited from the parent pom -->
