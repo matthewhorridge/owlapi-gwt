@@ -10,13 +10,18 @@
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
-package org.semanticweb.owlapi.io;
-
-import java.io.Serializable;
+package org.semanticweb.owlapi.vocab;
 
 /**
  * @author Matthew Horridge, The University of Manchester, Bio-Health
  *         Informatics Group
  * @since 3.1.0
  */
-public interface OWLOntologyLoaderMetaData extends Serializable {}
+public enum BuiltInVocabulary {
+    /** Dublin core */
+    DUBLIN_CORE,
+    /** SKOS */
+    SKOS,
+    /** SWRL */
+    SWRL
+}
