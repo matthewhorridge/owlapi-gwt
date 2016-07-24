@@ -13,12 +13,10 @@
 package org.semanticweb.owlapi.util;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.semanticweb.owlapi.formats.PrefixDocumentFormat;
 import org.semanticweb.owlapi.io.OWLObjectRenderer;
 import org.semanticweb.owlapi.model.*;
 
@@ -62,16 +60,6 @@ public class SimpleRenderer implements OWLObjectVisitor, OWLObjectRenderer {
         DefaultPrefixManager defaultPrefixManager = new DefaultPrefixManager();
         shortFormProvider = defaultPrefixManager;
         iriShortFormProvider = defaultPrefixManager;
-    }
-
-    private void copyPrefixes(OWLDocumentFormat ontologyFormat) {
-        if (!(ontologyFormat instanceof PrefixDocumentFormat)) {
-            return;
-        }
-        PrefixDocumentFormat prefixFormat = (PrefixDocumentFormat) ontologyFormat;
-        for (Map.Entry<String, String> e : prefixFormat.getPrefixName2PrefixMap().entrySet()) {
-            setPrefix(e.getKey(), e.getValue());
-        }
     }
 
     /**
