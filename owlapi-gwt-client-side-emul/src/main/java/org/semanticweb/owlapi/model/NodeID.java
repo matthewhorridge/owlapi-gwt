@@ -1,256 +1,199 @@
-/*
- * This file is part of the OWL API.
- *
+/* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (C) 2011, The University of Manchester
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- *
- *
- * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
- * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
- *
- * Copyright 2011, University of Manchester
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.model;
 
-import com.google.gwt.user.client.rpc.CustomFieldSerializer;
-import com.google.gwt.user.client.rpc.SerializationException;
-import com.google.gwt.user.client.rpc.SerializationStreamReader;
-import com.google.gwt.user.client.rpc.SerializationStreamWriter;
-
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.annotation.Nonnull;
 
 /**
- * Author: Matthew Horridge<br> The University of Manchester<br> Information Management Group<br>
- * Date: 15-Jan-2009
- * <p/>
  * Represents the Node ID for anonymous individuals
+ * 
+ * @author Matthew Horridge, The University of Manchester, Information
+ *         Management Group
+ * @since 3.0.0
  */
-public abstract class NodeID implements Comparable<NodeID>, Serializable {
+public final class NodeID implements Comparable<NodeID>, Serializable {
 
-    private static final long serialVersionUID = 30402L;
+    private static final long serialVersionUID = 40000L;
+    private static final AtomicLong COUNTER = new AtomicLong();
     private static final String NODE_ID_PREFIX = "genid";
     private static final String SHARED_NODE_ID_PREFIX = "genid-nodeid-";
     private static final String PREFIX = "_:";
+    private static final String PREFIX_NODE = PREFIX + NODE_ID_PREFIX;
+    private static final String PREFIX_SHARED_NODE = PREFIX + SHARED_NODE_ID_PREFIX;
 
-    /** @param id
-     * @return string version of id */
+    /**
+     * @param id
+     *        the node id
+     * @return string version of id
+     */
+    @Nonnull
     public static String nodeString(int id) {
-        return NodeID.NODE_ID_PREFIX + Integer.toString(id);
+        return PREFIX_NODE + Integer.toString(id);
     }
 
-    /** Returns an absolute IRI from a nodeID attribute.
+    /**
+     * @param id
+     *        id
+     * @return IRI with full node id
+     */
+    @Nonnull
+    public static IRI nodeId(int id) {
+        return IRI.create(PREFIX_NODE + Integer.toString(id));
+    }
+
+    /**
+     * @return IRI with fresh node id
+     */
+    @Nonnull
+    public static IRI nextFreshNodeId() {
+        return IRI.create(PREFIX_NODE + COUNTER.incrementAndGet());
+    }
+
+    /**
+     * Returns an absolute IRI from a nodeID attribute.
      * 
      * @param nodeID
-     * @return absolute IRI */
+     *        the node id
+     * @return absolute IRI
+     */
+    @Nonnull
     public static String getIRIFromNodeID(String nodeID) {
-        return PREFIX + SHARED_NODE_ID_PREFIX + nodeID;
+        if (nodeID.startsWith(PREFIX_SHARED_NODE)) {
+            return nodeID;
+        }
+        return PREFIX_SHARED_NODE + nodeID.replace(NODE_ID_PREFIX, "");
     }
 
-//    /** Generates next anonymous IRI.
-//     *
-//     * @return absolute IRI */
-//    public static String nextAnonymousIRI() {
-//        return PREFIX + NODE_ID_PREFIX + counter.incrementAndGet();
-//    }
+    /**
+     * Generates next anonymous IRI.
+     * 
+     * @return absolute IRI
+     */
+    @Nonnull
+    public static String nextAnonymousIRI() {
+        return PREFIX_NODE + COUNTER.incrementAndGet();
+    }
 
-    /** Tests whether supplied IRI was generated by this parser in order to label
+    /**
+     * Tests whether supplied IRI was generated by this parser in order to label
      * an anonymous node.
      * 
      * @param uri
-     *            the IRI
-     * @return <code>true</code> if the IRI was generated by this parser to
-     *         label an anonymous node */
-    public static boolean isAnonymousNodeIRI(String uri) {
-        return uri != null && uri.indexOf(NodeID.NODE_ID_PREFIX) != -1;
-    }
-
-    /** @param iri
-     * @return true if the iri is an anonymous label */
-    public static boolean isAnonymousNodeID(String iri) {
-        return iri != null && iri.indexOf(NodeID.SHARED_NODE_ID_PREFIX) > -1;
-    }
-    /**
-     * Gets the string representation of the node ID.  This will begin with _:
-     * @return The string representation of the node ID.
+     *        the IRI
+     * @return {@code true} if the IRI was generated by this parser to label an
+     *         anonymous node
      */
-    public abstract String getID();
+    public static boolean isAnonymousNodeIRI(String uri) {
+        return uri != null && uri.startsWith(PREFIX) && uri.contains(NODE_ID_PREFIX);
+    }
 
-    /** Gets a NodeID with a specific identifier string
+    /**
+     * Tests whether supplied IRI was generated by this parser in order to label
+     * an anonymous node.
+     * 
+     * @param iri
+     *        the IRI
+     * @return {@code true} if the IRI was generated by this parser to label an
+     *         anonymous node
+     */
+    public static boolean isAnonymousNodeIRI(IRI iri) {
+        return iri != null && iri.getNamespace().startsWith(PREFIX) && iri.getNamespace().contains(NODE_ID_PREFIX);
+    }
+
+    /**
+     * @param iri
+     *        the iri or node id
+     * @return true if the iri is an anonymous label
+     */
+    public static boolean isAnonymousNodeID(String iri) {
+        return iri != null && iri.contains(PREFIX_SHARED_NODE);
+    }
+
+    /**
+     * Gets a NodeID with a specific identifier string
      * 
      * @param id
-     *            The String that identifies the node. If the String doesn't
-     *            start with "_:" then this will be concatenated to the front of
-     *            the specified id String; if the string is empty or null, an
-     *            autogenerated id will be used.
-     * @return A NodeID */
+     *        The String that identifies the node. If the String doesn't start
+     *        with "_:" then this will be concatenated to the front of the
+     *        specified id String; if the string is empty or null, an
+     *        autogenerated id will be used.
+     * @return A NodeID
+     */
+    @Nonnull
     public static NodeID getNodeID(String id) {
-//        String _id = id == null || id.length() == 0 ? PREFIX + NODE_ID_PREFIX
-//                + Long.toString(counter.incrementAndGet()) : id;
-        return new NodeIDImpl(id);
-    }
-
-    static class NodeIDImpl extends NodeID {
-        private static final long serialVersionUID = 30402L;
-        private final String id;
-
-        public NodeIDImpl(String id) {
-            if (id.startsWith(PREFIX)) {
-                this.id = id;
-            }
-            else {
-                this.id = PREFIX + id;
-            }
-        }
-
-        @Override
-        public String toString() {
-            return id;
-        }
-
-        @Override
-        public int compareTo(NodeID o) {
-            return id.compareTo(o.toString());
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof NodeID)) {
-                return false;
-            }
-            NodeID other = (NodeID) obj;
-            return id.equals(other.getID());
-        }
-
-        @Override
-        public int hashCode() {
-            return id.hashCode();
-        }
-
-        /**
-         * Gets the string representation of the node ID.  This will begin with _:
-         * @return The string representation of the node ID.
-         */
-        @Override
-        public String getID() {
-            return id;
-        }
+        String nonBlankId = id == null || id.isEmpty() ? nextAnonymousIRI() : id;
+        return new NodeID(nonBlankId);
     }
 
     /**
-     * This is needed here because of a GWT issue (bug?).  The NodeID$NodeIDImpl_CustomFieldSerializer only
-     * works on the server side and not on the client side.
+     * @return node id with fresh id value
      */
-    static class NodeIDImpl_CustomFieldSerializer extends CustomFieldSerializer<NodeIDImpl> {
+    @Nonnull
+    public static NodeID getNodeID() {
+        return getNodeID(nextAnonymousIRI());
+    }
 
-        /**
-         * @return <code>true</code> if a specialist {@link #instantiateInstance} is
-         *         implemented; <code>false</code> otherwise
-         */
-        @Override
-        public boolean hasCustomInstantiateInstance() {
-            return true;
-        }
+    @Nonnull private final String id;
 
-        /**
-         * Instantiates an object from the {@link com.google.gwt.user.client.rpc.SerializationStreamReader}.
-         * <p>
-         * Most of the time, this can be left unimplemented and the framework
-         * will instantiate the instance itself.  This is typically used when the
-         * object being deserialized is immutable, hence it has to be created with
-         * its state already set.
-         * <p>
-         * If this is overridden, the {@link #hasCustomInstantiateInstance} method
-         * must return <code>true</code> in order for the framework to know to call
-         * it.
-         * @param streamReader the {@link com.google.gwt.user.client.rpc.SerializationStreamReader} to read the
-         * object's content from
-         * @return an object that has been loaded from the
-         *         {@link com.google.gwt.user.client.rpc.SerializationStreamReader}
-         * @throws com.google.gwt.user.client.rpc.SerializationException
-         *          if the instantiation operation is not
-         *          successful
-         */
-        @Override
-        public NodeIDImpl instantiateInstance(SerializationStreamReader streamReader) throws SerializationException {
-            return instantiate(streamReader);
-        }
-
-        public static NodeIDImpl instantiate(SerializationStreamReader streamReader) throws SerializationException {
-            return new NodeIDImpl(streamReader.readString());
-        }
-
-
-        /**
-         * Serializes the content of the object into the
-         * {@link com.google.gwt.user.client.rpc.SerializationStreamWriter}.
-         * @param streamWriter the {@link com.google.gwt.user.client.rpc.SerializationStreamWriter} to write the
-         * object's content to
-         * @param instance the object instance to serialize
-         * @throws com.google.gwt.user.client.rpc.SerializationException
-         *          if the serialization operation is not
-         *          successful
-         */
-        @Override
-        public void serializeInstance(SerializationStreamWriter streamWriter, NodeIDImpl instance) throws SerializationException {
-            serialize(streamWriter, instance);
-        }
-
-        public static void serialize(SerializationStreamWriter streamWriter, NodeIDImpl instance) throws SerializationException {
-            streamWriter.writeString(instance.getID());
-        }
-
-
-        /**
-         * Deserializes the content of the object from the
-         * {@link com.google.gwt.user.client.rpc.SerializationStreamReader}.
-         * @param streamReader the {@link com.google.gwt.user.client.rpc.SerializationStreamReader} to read the
-         * object's content from
-         * @param instance the object instance to deserialize
-         * @throws com.google.gwt.user.client.rpc.SerializationException
-         *          if the deserialization operation is not
-         *          successful
-         */
-        @Override
-        public void deserializeInstance(SerializationStreamReader streamReader, NodeIDImpl instance) throws SerializationException {
-            deserialize(streamReader, instance);
-        }
-
-        public static void deserialize(SerializationStreamReader streamReader, NodeIDImpl instance) throws SerializationException {
-
+    private NodeID(String id) {
+        if (id.startsWith(PREFIX)) {
+            this.id = id;
+        } else {
+            this.id = PREFIX + id;
         }
     }
 
+    @Nonnull
+    @Override
+    public String toString() {
+        return id;
+    }
+
+    @Override
+    public int compareTo(NodeID o) {
+        return id.compareTo(o.toString());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof NodeID)) {
+            return false;
+        }
+        NodeID other = (NodeID) obj;
+        return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    /**
+     * Gets the string representation of the node ID. This will begin with _:
+     * 
+     * @return The string representation of the node ID.
+     */
+    @Nonnull
+    public String getID() {
+        return id;
+    }
 }

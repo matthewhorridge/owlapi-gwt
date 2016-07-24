@@ -1,147 +1,333 @@
-/*
- * This file is part of the OWL API.
- *
+/* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (C) 2011, The University of Manchester
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- *
- *
- * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
- * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
- *
- * Copyright 2011, University of Manchester
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.semanticweb.owlapi.model.OWLObject;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
- * Author: Matthew Horridge<br>
- * The University Of Manchester<br>
- * Bio-Health Informatics Group<br>
- * Date: 10-Jan-2007<br>
- * <br>
+ * @author Matthew Horridge, The University Of Manchester, Bio-Health
+ *         Informatics Group
+ * @since 2.0.0
  */
 public class CollectionFactory {
 
+    /**
+     * Sort the input collection; if the ordering is unstable and an error is
+     * thrown (due to the use of TimSort in JDK 1.7 and newer), catch it and
+     * leave the collection unsorted. NOTE: use this method if ordering is
+     * desirable but not necessary.
+     * 
+     * @param <T>
+     *        list type
+     * @param toReturn
+     *        list to sort
+     */
+    public static <T extends Comparable<T>> void sortOptionallyComparables(@Nonnull List<T> toReturn) {
+        try {
+            Collections.sort(toReturn);
+        } catch (IllegalArgumentException e) {
+            // catch possible sorting misbehaviour
+            if (!e.getMessage().contains("Comparison method violates its general contract!")) {
+                throw e;
+            }
+            // otherwise print a warning and leave the list unsorted
+        }
+    }
+
+    /**
+     * Sort the input collection; if the ordering is unstable and an error is
+     * thrown (due to the use of TimSort in JDK 1.7 and newer), catch it and
+     * leave the collection unsorted. NOTE: use this method if ordering is
+     * desirable but not necessary.
+     * 
+     * @param toReturn
+     *        list to sort
+     */
+    public static void sortOptionally(@Nonnull List<? extends OWLObject> toReturn) {
+        try {
+            Collections.sort(toReturn);
+        } catch (IllegalArgumentException e) {
+            // catch possible sorting misbehaviour
+            if (!e.getMessage().contains("Comparison method violates its general contract!")) {
+                throw e;
+            }
+            // otherwise print a warning and leave the list unsorted
+        }
+    }
+
+    /**
+     * Sort a copy of the input collection; if the ordering is unstable and an
+     * error is thrown (due to the use of TimSort in JDK 1.7 and newer), catch
+     * it and leave the collection unsorted. NOTE: use this method if ordering
+     * is desirable but not necessary.
+     * 
+     * @param toReturn
+     *        collection to sort
+     * @param <T>
+     *        list type
+     * @return sorted copy of the input, if no errors are raised. Copy of the
+     *         original otherwise.
+     */
+    @Nonnull
+    public static <T extends Comparable<T>> List<T> sortOptionallyComparables(@Nonnull Collection<T> toReturn) {
+        List<T> list = new ArrayList<>(toReturn);
+        try {
+            Collections.sort(list);
+        } catch (IllegalArgumentException e) {
+            // catch possible sorting misbehaviour
+            if (!e.getMessage().contains("Comparison method violates its general contract!")) {
+                throw e;
+            }
+            // otherwise print a warning and leave the list unsorted
+        }
+        return list;
+    }
+
+    /**
+     * Sort a copy of the input collection; if the ordering is unstable and an
+     * error is thrown (due to the use of TimSort in JDK 1.7 and newer), catch
+     * it and leave the collection unsorted. NOTE: use this method if ordering
+     * is desirable but not necessary.
+     * 
+     * @param toReturn
+     *        collection to sort
+     * @param <T>
+     *        list type
+     * @return sorted copy of the input, if no errors are raised. Copy of the
+     *         original otherwise.
+     */
+    @Nonnull
+    public static <T extends OWLObject> List<T> sortOptionally(@Nonnull Collection<T> toReturn) {
+        List<T> list = new ArrayList<>(toReturn);
+        try {
+            Collections.sort(list);
+        } catch (IllegalArgumentException e) {
+            // catch possible sorting misbehaviour
+            if (!e.getMessage().contains("Comparison method violates its general contract!")) {
+                throw e;
+            }
+            // otherwise print a warning and leave the list unsorted
+        }
+        return list;
+    }
+
+    /**
+     * Wrapper for Collections.emptySet() to allow nullity annotations.
+     * 
+     * @param <T>
+     *        set type
+     * @return empty set
+     */
+    @Nonnull
+    public static <T> Set<T> emptySet() {
+        return Collections.emptySet();
+    }
 
     /**
      * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
      */
+    @Nonnull
     public static <T> Set<T> createSet() {
-        //TODO large number of sets stay very small, wasting space
-        return new HashSet<T>();
+        // TODO large number of sets stay very small, wasting space
+        return new HashSet<>();
+    }
+
+    /**
+     * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
+     */
+    @Nonnull
+    public static <T> Set<T> createLinkedSet() {
+        // TODO large number of sets stay very small, wasting space
+        return new LinkedHashSet<>();
     }
 
     /**
      * @return fresh non threadsafe list
+     * @param <T>
+     *        axiom type
      */
+    @Nonnull
     public static <T> List<T> createList() {
-        //TODO large number of sets stay very small, wasting space
-        return new ArrayList<T>();
+        return new ArrayList<>();
+    }
+
+    /**
+     * @param i
+     *        iterable
+     * @return list from iterable
+     * @param <T>
+     *        type
+     */
+    @Nonnull
+    public static <T> List<T> list(Iterable<T> i) {
+        return Lists.newArrayList(i);
+    }
+
+    /**
+     * @param i
+     *        iterable
+     * @return list from iterable
+     * @param <T>
+     *        type
+     */
+    @Nonnull
+    @SafeVarargs
+    public static <T> List<T> list(T... i) {
+        return Lists.newArrayList(i);
+    }
+
+    /**
+     * @param i
+     *        iterable
+     * @return list from iterable
+     * @param <T>
+     *        type
+     */
+    @Nonnull
+    public static <T> List<T> list(T i) {
+        return Collections.singletonList(i);
+    }
+
+    /**
+     * @return empty list
+     * @param <T>
+     *        type
+     */
+    @Nonnull
+    public static <T> List<T> emptyList() {
+        return Collections.emptyList();
     }
 
     /**
      * @param c
-     *            values to add to the set
+     *        values to add to the set
      * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
      */
-    public static <T> Set<T> createSet(Collection<T> c) {
-        return new HashSet<T>(c);
+    @Nonnull
+    public static <T> Set<T> createSet(@Nonnull Collection<T> c) {
+        return new HashSet<>(c);
     }
 
     /**
      * @param initialCapacity
-     *            initial capacity for the new set
+     *        initial capacity for the new set
      * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
      */
+    @Nonnull
     public static <T> Set<T> createSet(int initialCapacity) {
-        return new HashSet<T>(initialCapacity);
-    }
-
-    /** @return fresh map */
-    public static <K, V> Map<K, V> createMap() {
-        return new HashMap<K, V>();
+        return new HashSet<>(initialCapacity);
     }
 
     /**
-     * @param elements
-     *            values to add to the set
-     * @return fresh non threadsafe set
+     * @return fresh map
+     * @param <K>
+     *        key type
+     * @param <V>
+     *        value type
      */
-    public static <T> Set<T> createSet(T... elements) {
+    @Nonnull
+    public static <K, V> Map<K, V> createMap() {
+        return new HashMap<>();
+    }
+
+
+    /**
+     * @param elements
+     *        values to add to the set
+     * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
+     */
+    @Nonnull
+    @SafeVarargs
+    public static <T> Set<T> createSet(@Nonnull T... elements) {
+        return Sets.newHashSet(elements);
+    }
+
+    /**
+     * @param element
+     *        value to add to the set
+     * @return fresh non threadsafe set
+     * @param <T>
+     *        axiom type
+     */
+    @Nonnull
+    public static <T> Set<T> createSet(@Nonnull T element) {
         Set<T> result = createSet();
-        for (T t : elements) {
-            result.add(t);
-        }
+        result.add(element);
         return result;
     }
 
 
-
     /**
-     *
      * @param source
-     *            the collection to lazily copy
+     *        the collection to lazily copy
      * @return a lazy defensive copy for source; the source collection will not
      *         be copied until a method that modifies the collection gets
      *         called, e.g., add(), addAll()
+     * @param <T>
+     *        axiom type
      */
+    @Nonnull
     public static <T> Set<T> getCopyOnRequestSet(Collection<T> source) {
         return getCopyOnRequestSetFromMutableCollection(source);
     }
 
-    /** @param source
-     * @return copy on request that builds a list from the input set */
-    public static <T> Set<T> getCopyOnRequestSetFromMutableCollection(Collection<T> source) {
+    /**
+     * @param source
+     *        source collection
+     * @return copy on request that builds a list from the input set
+     * @param <T>
+     *        axiom type
+     */
+    @Nonnull
+    public static <T> Set<T> getCopyOnRequestSetFromMutableCollection(@Nullable Collection<T> source) {
         if (source == null || source.isEmpty()) {
-            return Collections.emptySet();
+            return emptySet();
         }
-        return new ConditionalCopySet<T>(source, true);
+        return new ConditionalCopySet<>(source, true);
     }
 
-    /** @param source
-     * @return copy on request that does not build a list immediately */
-    public static <T> Set<T> getCopyOnRequestSetFromImmutableCollection(Collection<T> source) {
+    /**
+     * @param source
+     *        the source collection
+     * @return copy on request that does not build a list immediately
+     * @param <T>
+     *        axiom type
+     */
+    @Nonnull
+    public static <T> Set<T> getCopyOnRequestSetFromImmutableCollection(@Nullable Collection<T> source) {
         if (source == null || source.isEmpty()) {
-            return Collections.emptySet();
+            return emptySet();
         }
-        return new ConditionalCopySet<T>(source, false);
+        return new ConditionalCopySet<>(source, false);
     }
-
 
     /**
      * a set implementation that uses a delegate collection for all read-only
@@ -152,42 +338,41 @@ public class CollectionFactory {
      * to the copy are reflected in the copy. If the source collection is not
      * supposed to change, then this collection behaves just like a regular
      * defensive copy; if the source collection can change, then this collection
-     * should be built from a cheap copy of the original collection.
-     *
-     * For example, if the source collection is a set, it can be copied into a
-     * list; the cost of the copy operation from set to list is approximately
-     * 1/3 of the cost of copying into a new HashSet. This is not efficient if
-     * the most common operations performed on the copy are contains() or
-     * containsAll(), since they are more expensive for lists wrt sets; a
-     * counter for these calls is maintained by the collection, so if a large
-     * number of contains/containsAll calls takes place, the delegate is turned
-     * into a regular set.
-     *
-     * This implementation is not threadsafe even if the source set is: there is
-     * no lock during the copy, and the new set is not threadsafe.
-     *
+     * should be built from a cheap copy of the original collection. For
+     * example, if the source collection is a set, it can be copied into a list;
+     * the cost of the copy operation from set to list is approximately 1/3 of
+     * the cost of copying into a new HashSet. This is not efficient if the most
+     * common operations performed on the copy are contains() or containsAll(),
+     * since they are more expensive for lists wrt sets; a counter for these
+     * calls is maintained by the collection, so if a large number of
+     * contains/containsAll calls takes place, the delegate is turned into a
+     * regular set. This implementation is not threadsafe even if the source set
+     * is: there is no lock during the copy, and the new set is not threadsafe.
+     * 
      * @param <T>
-     *            the type contained
+     *        the type contained
      */
     public static class ConditionalCopySet<T> implements Set<T> {
+
+        private static final int MAXCONTAINS = 10;
         private boolean copyDone = false;
         protected Collection<T> delegate;
-        private final static int maxContains = 10;
         private int containsCounter = 0;
 
-        /** @param source
-         *            initial elements
+        /**
+         * @param source
+         *        initial elements
          * @param listCopy
-         *            true if a copy must be made */
-        public ConditionalCopySet(Collection<T> source, boolean listCopy) {
-            if(listCopy) {
-                this.delegate = new ArrayList<T>(source);
-            }else {
-                this.delegate=source;
+         *        true if a copy must be made
+         */
+        public ConditionalCopySet(@Nonnull Collection<T> source, boolean listCopy) {
+            if (listCopy) {
+                delegate = new ArrayList<>(source);
+            } else {
+                delegate = source;
             }
         }
 
-        @SuppressWarnings("rawtypes")
         @Override
         public boolean equals(Object obj) {
             if (obj == null) {
@@ -197,10 +382,11 @@ public class CollectionFactory {
                 return true;
             }
             if (obj instanceof ConditionalCopySet) {
-                return delegate.containsAll(((ConditionalCopySet) obj).delegate) && ((ConditionalCopySet<?>) obj).delegate.containsAll(delegate);
+                return delegate.containsAll(((ConditionalCopySet<?>) obj).delegate)
+                    && ((ConditionalCopySet<?>) obj).delegate.containsAll(delegate);
             }
             if (obj instanceof Collection) {
-                return delegate.containsAll((Collection<?>)obj) && ((Collection<?>)obj).containsAll(delegate);
+                return delegate.containsAll((Collection<?>) obj) && ((Collection<?>) obj).containsAll(delegate);
             }
             return false;
         }
@@ -216,56 +402,57 @@ public class CollectionFactory {
         }
 
         @Override
-        public boolean add(T arg0) {
+        public boolean add(T e) {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>(delegate);
+                delegate = new LinkedHashSet<>(delegate);
             }
-            return delegate.add(arg0);
+            return delegate.add(e);
         }
 
         @Override
-        public boolean addAll(Collection<? extends T> arg0) {
+        public boolean addAll(Collection<? extends T> c) {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>(delegate);
+                delegate = new LinkedHashSet<>(delegate);
             }
-            return delegate.addAll(arg0);
+            return delegate.addAll(c);
         }
 
         @Override
         public void clear() {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>();
+                delegate = new LinkedHashSet<>();
             }
             delegate.clear();
         }
 
         @Override
-        public boolean contains(Object arg0) {
+        public boolean contains(Object o) {
             containsCounter++;
-            if (containsCounter >= maxContains && !copyDone) {
-                // many calls to contains, inefficient if the delegate is not a set
-                if (!(delegate instanceof Set)) {
-                    copyDone = true;
-                    delegate = new HashSet<T>(delegate);
-                }
+            if (containsCounter >= MAXCONTAINS && !copyDone) {
+                checkDelegate();
             }
-            return delegate.contains(arg0);
+            return delegate.contains(o);
+        }
+
+        private void checkDelegate() {
+            // many calls to contains, inefficient if the delegate is not a
+            // set
+            if (!(delegate instanceof Set)) {
+                copyDone = true;
+                delegate = new LinkedHashSet<>(delegate);
+            }
         }
 
         @Override
-        public boolean containsAll(Collection<?> arg0) {
+        public boolean containsAll(Collection<?> c) {
             containsCounter++;
-            if (containsCounter >= maxContains && !copyDone) {
-                // many calls to contains, inefficient if the delegate is not a set
-                if (!(delegate instanceof Set)) {
-                    copyDone = true;
-                    delegate = new HashSet<T>(delegate);
-                }
+            if (containsCounter >= MAXCONTAINS && !copyDone) {
+                checkDelegate();
             }
-            return delegate.containsAll(arg0);
+            return delegate.containsAll(c);
         }
 
         @Override
@@ -273,36 +460,37 @@ public class CollectionFactory {
             return delegate.isEmpty();
         }
 
+        @Nonnull
         @Override
         public Iterator<T> iterator() {
             return delegate.iterator();
         }
 
         @Override
-        public boolean remove(Object arg0) {
+        public boolean remove(Object o) {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>(delegate);
+                delegate = new LinkedHashSet<>(delegate);
             }
-            return delegate.remove(arg0);
+            return delegate.remove(o);
         }
 
         @Override
-        public boolean removeAll(Collection<?> arg0) {
+        public boolean removeAll(Collection<?> c) {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>(delegate);
+                delegate = new LinkedHashSet<>(delegate);
             }
-            return delegate.removeAll(arg0);
+            return delegate.removeAll(c);
         }
 
         @Override
-        public boolean retainAll(Collection<?> arg0) {
+        public boolean retainAll(Collection<?> c) {
             if (!copyDone) {
                 copyDone = true;
-                delegate = new HashSet<T>(delegate);
+                delegate = new LinkedHashSet<>(delegate);
             }
-            return delegate.retainAll(arg0);
+            return delegate.retainAll(c);
         }
 
         @Override
@@ -310,16 +498,16 @@ public class CollectionFactory {
             return delegate.size();
         }
 
+        @Nonnull
         @Override
         public Object[] toArray() {
             return delegate.toArray();
         }
 
+        @Nonnull
         @Override
-        public <Type> Type[] toArray(Type[] arg0) {
-            return delegate.toArray(arg0);
+        public <Type> Type[] toArray(Type[] a) {
+            return delegate.toArray(a);
         }
     }
-
-
 }

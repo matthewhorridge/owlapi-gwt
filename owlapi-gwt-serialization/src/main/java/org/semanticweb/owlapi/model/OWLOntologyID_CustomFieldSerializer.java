@@ -1,5 +1,6 @@
 package org.semanticweb.owlapi.model;
 
+import com.google.common.base.Optional;
 import com.google.gwt.user.client.rpc.CustomFieldSerializer;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamReader;
@@ -48,7 +49,7 @@ public class OWLOntologyID_CustomFieldSerializer extends CustomFieldSerializer<O
     public static OWLOntologyID instantiate(SerializationStreamReader streamReader) throws SerializationException {
         IRI ontologyIRI = (IRI) streamReader.readObject();
         IRI versionIRI = (IRI) streamReader.readObject();
-        return new OWLOntologyID(ontologyIRI, versionIRI);
+        return new OWLOntologyID(Optional.fromNullable(ontologyIRI), Optional.fromNullable(versionIRI));
     }
 
 
@@ -68,8 +69,8 @@ public class OWLOntologyID_CustomFieldSerializer extends CustomFieldSerializer<O
     }
 
     public static void serialize(SerializationStreamWriter streamWriter, OWLOntologyID instance) throws SerializationException {
-        streamWriter.writeObject(instance.getOntologyIRI());
-        streamWriter.writeObject(instance.getVersionIRI());
+        streamWriter.writeObject(instance.getOntologyIRI().orNull());
+        streamWriter.writeObject(instance.getVersionIRI().orNull());
     }
 
 

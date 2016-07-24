@@ -1,35 +1,53 @@
+/* This file is part of the OWL API.
+ * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+ *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.model;
 
+import com.google.common.base.Optional;
 import org.semanticweb.owlapi.io.XMLUtils;
+import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.vocab.Namespaces;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
-import java.util.Collections;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Set;
 
+import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
+
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 19/11/2012
+ * Represents International Resource Identifiers
+ *
+ * @author Matthew Horridge, The University of Manchester, Information
+ *         Management Group
+ * @since 3.0.0
  */
-public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotationSubject, OWLAnnotationValue, OWLPrimitive {
+public class IRI implements OWLAnnotationSubject, OWLAnnotationValue, SWRLPredicate, CharSequence, OWLPrimitive,
+        HasShortForm {
 
     /**
      * Determines if this IRI is absolute
      *
-     * @return <code>true</code> if this IRI is absolute or <code>false</code>
-     *         if this IRI is not absolute
+     * @return {@code true} if this IRI is absolute or {@code false} if this IRI
+     * is not absolute
      */
     public boolean isAbsolute() {
-        int colonIndex = prefix.indexOf(':');
+        int colonIndex = namespace.indexOf(':');
         if (colonIndex == -1) {
             return false;
         }
         for (int i = 0; i < colonIndex; i++) {
-            char ch = prefix.charAt(i);
-            if (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '.'
-                    && ch != '+' && ch != '-') {
+            char ch = namespace.charAt(i);
+            if (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '.' && ch != '+' && ch != '-') {
                 return false;
             }
         }
@@ -37,32 +55,24 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
     }
 
     /**
-     * @return the IRI scheme, e.g., http, urn... can be null
+     * @return the IRI scheme, e.g., http, urn
      */
+    @Nullable
     public String getScheme() {
-        int colonIndex = prefix.indexOf(':');
+        int colonIndex = namespace.indexOf(':');
         if (colonIndex == -1) {
             return null;
         }
-        return prefix.substring(0, colonIndex);
+        return namespace.substring(0, colonIndex);
     }
 
     /**
-     * @return the prefix. Can be null.
-     * @deprecated use getNamespace instead - better name
+     * @return the prefix
      */
-    @Deprecated
-    public String getStart() {
-        return prefix;
-    }
-
-    /**
-     * @return the prefix. Can be null.
-     */
+    @Nonnull
     public String getNamespace() {
-        return prefix;
+        return namespace;
     }
-
 
     /**
      * Determines if this IRI is in the reserved vocabulary. An IRI is in the
@@ -72,35 +82,33 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      * &lt;http://www.w3.org/2001/XMLSchema#&gt; or
      * &lt;http://www.w3.org/2002/07/owl#&gt;
      *
-     * @return <code>true</code> if the IRI is in the reserved vocabulary,
-     *         otherwise <code>false</code>.
+     * @return {@code true} if the IRI is in the reserved vocabulary, otherwise
+     * {@code false}.
      */
     public boolean isReservedVocabulary() {
-        return Namespaces.OWL.inNamespace(prefix) || Namespaces.RDF.inNamespace(prefix)
-                || Namespaces.RDFS.inNamespace(prefix)
-                || Namespaces.XSD.inNamespace(prefix);
+        return Namespaces.OWL.inNamespace(namespace) || Namespaces.RDF.inNamespace(namespace) || Namespaces.RDFS
+                .inNamespace(namespace) || Namespaces.XSD.inNamespace(namespace);
     }
 
     /**
-     * Determines if this IRI is equal to the IRI that <code>owl:Thing</code> is
+     * Determines if this IRI is equal to the IRI that {@code owl:Thing} is
      * named with
      *
-     * @return <code>true</code> if this IRI is equal to
-     *         &lt;http://www.w3.org/2002/07/owl#Thing&gt; and otherwise
-     *         <code>false</code>
+     * @return {@code true} if this IRI is equal to
+     * &lt;http://www.w3.org/2002/07/owl#Thing&gt; and otherwise
+     * {@code false}
      */
     public boolean isThing() {
-        return remainder != null && remainder.equals("Thing")
-                && Namespaces.OWL.inNamespace(prefix);
+        return equals(OWLRDFVocabulary.OWL_THING.getIRI());
     }
 
     /**
-     * Determines if this IRI is equal to the IRI that <code>owl:Nothing</code>
-     * is named with
+     * Determines if this IRI is equal to the IRI that {@code owl:Nothing} is
+     * named with
      *
-     * @return <code>true</code> if this IRI is equal to
-     *         &lt;http://www.w3.org/2002/07/owl#Nothing&gt; and otherwise
-     *         <code>false</code>
+     * @return {@code true} if this IRI is equal to
+     * &lt;http://www.w3.org/2002/07/owl#Nothing&gt; and otherwise
+     * {@code false}
      */
     public boolean isNothing() {
         return equals(OWLRDFVocabulary.OWL_NOTHING.getIRI());
@@ -108,25 +116,39 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
 
     /**
      * Determines if this IRI is equal to the IRI that is named
-     * <code>rdf:PlainLiteral</code>
+     * {@code rdf:PlainLiteral}
      *
-     * @return <code>true</code> if this IRI is equal to
-     *         &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral&gt;,
-     *         otherwise <code>false</code>
+     * @return {@code true} if this IRI is equal to
+     * &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral&gt;,
+     * otherwise {@code false}
      */
     public boolean isPlainLiteral() {
-        return remainder != null && remainder.equals("PlainLiteral")
-                && Namespaces.RDF.inNamespace(prefix);
+        return remainder.equals("PlainLiteral") && Namespaces.RDF.inNamespace(namespace);
     }
 
     /**
      * Gets the fragment of the IRI.
      *
-     * @return The IRI fragment, or <code>null</code> if the IRI does not have a
-     *         fragment
+     * @return The IRI fragment, or empty string if the IRI does not have a
+     * fragment
+     * @deprecated use getNCName() - getFragment() does not return a real
+     * fragment. e.g., it does not allow / and () on it
      */
+    @Deprecated
+    @Nonnull
     public String getFragment() {
         return remainder;
+    }
+
+    /**
+     * @return the remainder (coincident with NCName usually) for this IRI.
+     */
+    @Nonnull
+    public Optional<String> getRemainder() {
+        if (remainder.isEmpty()) {
+            return Optional.absent();
+        }
+        return Optional.of(remainder);
     }
 
     /**
@@ -134,31 +156,24 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      *
      * @return This IRI surrounded by &lt; and &gt;
      */
+    @Nonnull
     public String toQuotedString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<");
-        sb.append(prefix);
-        if (remainder != null) {
-            sb.append(remainder);
-        }
-        sb.append(">");
-        return sb.toString();
+        return '<' + namespace + remainder + '>';
     }
 
     /**
      * Creates an IRI from the specified String.
      *
-     * @param str The String that specifies the IRI. Cannot be null.
+     * @param str The String that specifies the IRI
      * @return The IRI that has the specified string representation.
      */
-    public static IRI create(String str) {
-        if (str == null) {
-            throw new IllegalArgumentException("String must not be null");
-        }
+    @Nonnull
+    public static IRI create(@Nonnull String str) {
+        checkNotNull(str, "str cannot be null");
         int index = XMLUtils.getNCNameSuffixIndex(str);
         if (index < 0) {
             // no ncname
-            return new IRI(str, null);
+            return new IRI(str, "");
         }
         return new IRI(str.substring(0, index), str.substring(index));
     }
@@ -167,13 +182,18 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
      * Creates an IRI by concatenating two strings. The full IRI is an IRI that
      * contains the characters in prefix + suffix.
      *
-     * @param prefix The first string. May be <code>null</code>.
-     * @param suffix The second string. May be <code>null</code>.
+     * @param prefix The first string
+     * @param suffix The second string
      * @return An IRI whose characters consist of prefix + suffix.
      * @since 3.3
      */
-    public static IRI create(String prefix, String suffix) {
+    @Nonnull
+    public static IRI create(@Nullable String prefix, @Nullable String suffix) {
+        if (prefix == null && suffix == null) {
+            throw new IllegalArgumentException("prefix and suffix cannot both be null");
+        }
         if (prefix == null) {
+            assert suffix != null;
             return create(suffix);
         }
         else if (suffix == null) {
@@ -200,40 +220,51 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // //
-    // // Impl - All constructors are private - factory methods are used for
+    // Impl - All constructors are private - factory methods are used for
     // public creation
-    // //
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    private static final long serialVersionUID = 40000L;
 
+
+    @Nonnull
     private final String remainder;
 
-    private final String prefix;
-
-    private int hashCode = 0;
+    @Nonnull
+    private final String namespace;
 
     /**
      * Constructs an IRI which is built from the concatenation of the specified
      * prefix and suffix.
      *
-     * @param prefix   The prefix.
-     * @param fragment The suffix.
+     * @param prefix The prefix.
+     * @param suffix The suffix.
      */
-    protected IRI(String prefix, String fragment) {
-        this.prefix = prefix;
-        remainder = fragment;
+    protected IRI(@Nonnull String prefix, @Nullable String suffix) {
+        namespace = prefix;
+        remainder = suffix == null ? "" : suffix;
     }
 
-    protected IRI(String s) {
+    /**
+     * @param suffix suffix to turn to optional. Empty string is the same as null
+     * @return optional value for remainder
+     */
+    @Nonnull
+    protected Optional<String> asOptional(String suffix) {
+        if (suffix == null) {
+            return Optional.absent();
+        }
+        else if (suffix.isEmpty()) {
+            return Optional.absent();
+        }
+        return Optional.fromNullable(suffix);
+    }
+
+    protected IRI(@Nonnull String s) {
         this(XMLUtils.getNCNamePrefix(s), XMLUtils.getNCNameSuffix(s));
     }
 
     @Override
     public int length() {
-        return prefix.length() + (remainder == null ? 0 : remainder.length());
+        return namespace.length() + remainder.length();
     }
 
     @Override
@@ -241,144 +272,177 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
         if (index < 0) {
             throw new IndexOutOfBoundsException(Integer.toString(index));
         }
-        if (index >= length()) {
-            throw new IndexOutOfBoundsException(Integer.toString(index));
+        if (index < namespace.length()) {
+            return namespace.charAt(index);
         }
-        if (index < prefix.length()) {
-            return prefix.charAt(index);
-        }
-        return remainder.charAt(index - prefix.length());
+        return remainder.charAt(index - namespace.length());
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
         StringBuilder sb = new StringBuilder();
-        sb.append(prefix);
+        sb.append(namespace);
         sb.append(remainder);
         return sb.subSequence(start, end);
     }
 
+    /**
+     * @param prefix prefix to use for replacing the IRI namespace
+     * @return prefix plus IRI ncname
+     */
+    @Nonnull
+    public String prefixedBy(@Nonnull String prefix) {
+        checkNotNull(prefix, "prefix cannot be null");
+        if (remainder.isEmpty()) {
+            return prefix;
+        }
+        return prefix + remainder;
+    }
+
     @Override
-    public void accept(OWLObjectVisitor visitor) {
+    @Nonnull
+    public String getShortForm() {
+        if (!remainder.isEmpty()) {
+            return remainder;
+        }
+        int lastSlashIndex = namespace.lastIndexOf('/');
+        if (lastSlashIndex != -1 && lastSlashIndex != namespace.length() - 1) {
+            return namespace.substring(lastSlashIndex + 1);
+        }
+        return toQuotedString();
+    }
+
+    @Override
+    public void accept(@Nonnull OWLObjectVisitor visitor) {
         visitor.visit(this);
     }
 
     @Override
-    public <O> O accept(OWLObjectVisitorEx<O> visitor) {
+    public <O> O accept(@Nonnull OWLObjectVisitorEx<O> visitor) {
         return visitor.visit(this);
     }
 
     @Override
-    public void accept(OWLAnnotationSubjectVisitor visitor) {
+    public void accept(@Nonnull OWLAnnotationSubjectVisitor visitor) {
         visitor.visit(this);
     }
 
     @Override
-    public <E> E accept(OWLAnnotationSubjectVisitorEx<E> visitor) {
+    public <E> E accept(@Nonnull OWLAnnotationSubjectVisitorEx<E> visitor) {
         return visitor.visit(this);
     }
 
+    @Nonnull
     @Override
     public Set<OWLClass> getClassesInSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Nonnull
     @Override
     public Set<OWLDataProperty> getDataPropertiesInSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Nonnull
     @Override
     public Set<OWLNamedIndividual> getIndividualsInSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Nonnull
     @Override
     public Set<OWLObjectProperty> getObjectPropertiesInSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Nonnull
     @Override
     public Set<OWLEntity> getSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Override
+    public boolean containsEntityInSignature(OWLEntity owlEntity) {
+        return false;
+    }
+
+    @Nonnull
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
+    @Nonnull
     @Override
     public Set<OWLDatatype> getDatatypesInSignature() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
     @Override
+    public Set<OWLAnnotationProperty> getAnnotationPropertiesInSignature() {
+        return CollectionFactory.emptySet();
+    }
+
+    @Nonnull
+    @Override
     public Set<OWLClassExpression> getNestedClassExpressions() {
-        return Collections.emptySet();
+        return CollectionFactory.emptySet();
     }
 
     @Override
     public int compareTo(OWLObject o) {
-        if (o == this) {
+        if (o == this || equals(o)) {
             return 0;
         }
         if (!(o instanceof IRI)) {
             return -1;
         }
         IRI other = (IRI) o;
-        int diff = prefix.compareTo(other.prefix);
+        int diff = namespace.compareTo(other.namespace);
         if (diff != 0) {
             return diff;
         }
-        String otherRemainder = other.remainder;
-        if (remainder == null) {
-            if (otherRemainder == null) {
-                return 0;
-            }
-            else {
-                return -1;
-            }
-        }
-        else {
-            if (otherRemainder == null) {
-                return 1;
-            }
-            else {
-                return remainder.compareTo(otherRemainder);
-            }
-        }
+        return remainder.compareTo(other.remainder);
     }
 
+    @Nonnull
     @Override
     public String toString() {
-        if (remainder != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(prefix);
-            sb.append(remainder);
-            return sb.toString();
+        if (remainder.isEmpty()) {
+            return namespace;
         }
-        else {
-            return prefix;
-        }
+        return namespace + remainder;
     }
 
     @Override
     public int hashCode() {
-        if (hashCode == 0) {
-            hashCode = prefix.hashCode() + (remainder != null ? remainder.hashCode() : 0);
-        }
-        return hashCode;
+        return namespace.hashCode() + remainder.hashCode();
     }
 
     @Override
-    public void accept(OWLAnnotationValueVisitor visitor) {
+    public void accept(@Nonnull OWLAnnotationValueVisitor visitor) {
         visitor.visit(this);
     }
 
     @Override
-    public <O> O accept(OWLAnnotationValueVisitorEx<O> visitor) {
+    public <O> O accept(@Nonnull OWLAnnotationValueVisitorEx<O> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Optional<IRI> asIRI() {
+        return Optional.of(this);
+    }
+
+    @Override
+    public Optional<OWLAnonymousIndividual> asAnonymousIndividual() {
+        return Optional.absent();
+    }
+
+    @Override
+    public Optional<OWLLiteral> asLiteral() {
+        return Optional.absent();
     }
 
     @Override
@@ -403,13 +467,6 @@ public class IRI implements CharSequence, OWLObject, SWRLPredicate, OWLAnnotatio
             return false;
         }
         IRI other = (IRI) obj;
-        String otherRemainder = other.remainder;
-        if (remainder == null) {
-            return otherRemainder == null && prefix.equals(other.prefix);
-        }
-        else {
-            return otherRemainder != null && remainder.equals(otherRemainder)
-                    && other.prefix.equals(prefix);
-        }
+        return remainder.equals(other.remainder) && other.namespace.equals(namespace);
     }
 }

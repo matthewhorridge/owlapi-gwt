@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.CustomFieldSerializer;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamReader;
 import com.google.gwt.user.client.rpc.SerializationStreamWriter;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
 /**
@@ -46,7 +47,7 @@ public class OWLLiteralImplBoolean_CustomFieldSerializer extends CustomFieldSeri
     }
 
     public static OWLLiteralImplBoolean instantiate(SerializationStreamReader streamReader) throws SerializationException {
-        return new OWLLiteralImplBoolean(streamReader.readBoolean());
+        return new OWLLiteralImplBoolean(streamReader.readBoolean(), new OWL2DatatypeImpl(OWL2Datatype.XSD_BOOLEAN));
     }
 
 

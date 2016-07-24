@@ -1,4 +1,24 @@
+/* This file is part of the OWL API.
+ * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+ *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
+
+import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
+import static org.semanticweb.owlapi.vocab.OWL2Datatype.*;
+
+import java.util.Collections;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
@@ -6,60 +26,31 @@ import org.semanticweb.owlapi.util.HashCode;
 import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Set;
-
 /**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 24/10/2012
- * </p>
  * An optimised implementation of OWLDatatype for OWL2Datatypes.
+ * 
+ * @author Matthew Horridge, Stanford University, Bio-Medical Informatics
+ *         Research Group
+ * @since 3.2.0
  */
-public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
-    // NOTE: This class did extend OWLObjectImpl but this created a circular
-    // dependency and caused initialisation
-    // problems with static methods.
-    private static final long serialVersionUID = 30406L;
-    private static final EnumMap<OWL2Datatype, OWLDatatype> instanceMap;
-    static {
-        final EnumMap<OWL2Datatype, OWLDatatype> map = new EnumMap<OWL2Datatype, OWLDatatype>(
-                OWL2Datatype.class);
-        for (OWL2Datatype datatype : OWL2Datatype.values()) {
-            map.put(datatype, new OWL2DatatypeImpl(datatype));
-        }
-        instanceMap = map;
-    }
+public class OWL2DatatypeImpl implements OWLDatatype {
 
-    /** Creates an instance of {@code OWLDatatypeImplForOWL2Datatype} for the
-     * specified {@link OWL2Datatype}
-     *
+    private static final long serialVersionUID = 40000L;
+
+    /**
+     * Creates an instance of {@code OWLDatatypeImplForOWL2Datatype} for the
+     * specified {@link OWL2Datatype}.
+     * 
      * @param owl2Datatype
-     *            The datatype. Not {@code null}.
+     *        The datatype. Not {@code null}.
      * @throws NullPointerException
-     *             if {@code owl2Datatype} is {@code null}. */
-    private OWL2DatatypeImpl(OWL2Datatype owl2Datatype) {
-        if (owl2Datatype == null) {
-            throw new NullPointerException("owl2Datatype must not be null");
-        }
-        this.owl2Datatype = owl2Datatype;
+     *         if {@code owl2Datatype} is {@code null}.
+     */
+    public OWL2DatatypeImpl(@Nonnull OWL2Datatype owl2Datatype) {
+        this.owl2Datatype = checkNotNull(owl2Datatype, "owl2Datatype must not be null");
     }
 
-    /** A factory method which gets an instance of {@link OWLDatatype} for an
-     * instance of {@link OWL2Datatype} specified by the {@code owl2Datatype}
-     * parameter.
-     *
-     * @param owl2Datatype
-     *            The datatype to be retrieved.
-     * @return A {@link OWLDatatype} that has the same IRI as the IRI returned
-     *         by {@code owl2Datatype#getIRI()}. */
-    public static OWLDatatype getDatatype(OWL2Datatype owl2Datatype) {
-        return instanceMap.get(owl2Datatype);
-    }
-
+    @Nonnull
     private final OWL2Datatype owl2Datatype;
 
     @Override
@@ -69,32 +60,32 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public boolean isString() {
-        return owl2Datatype == OWL2Datatype.XSD_STRING;
+        return owl2Datatype == XSD_STRING;
     }
 
     @Override
     public boolean isInteger() {
-        return owl2Datatype == OWL2Datatype.XSD_INTEGER;
+        return owl2Datatype == XSD_INTEGER;
     }
 
     @Override
     public boolean isFloat() {
-        return owl2Datatype == OWL2Datatype.XSD_FLOAT;
+        return owl2Datatype == XSD_FLOAT;
     }
 
     @Override
     public boolean isDouble() {
-        return owl2Datatype == OWL2Datatype.XSD_DOUBLE;
+        return owl2Datatype == XSD_DOUBLE;
     }
 
     @Override
     public boolean isBoolean() {
-        return owl2Datatype == OWL2Datatype.XSD_BOOLEAN;
+        return owl2Datatype == XSD_BOOLEAN;
     }
 
     @Override
     public boolean isRDFPlainLiteral() {
-        return owl2Datatype == OWL2Datatype.RDF_PLAIN_LITERAL;
+        return owl2Datatype == RDF_PLAIN_LITERAL;
     }
 
     @Override
@@ -104,9 +95,10 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public boolean isTopDatatype() {
-        return owl2Datatype == OWL2Datatype.RDFS_LITERAL;
+        return owl2Datatype == RDFS_LITERAL;
     }
 
+    @Nonnull
     @Override
     public OWLDatatype asOWLDatatype() {
         return this;
@@ -143,14 +135,8 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
     }
 
     @Override
-    public <E extends OWLEntity> E getOWLEntity(EntityType<E> entityType) {
-        return OWLObjectImpl.getOWLEntity(entityType,
-                OWL2Datatype.RDF_PLAIN_LITERAL.getIRI());
-    }
-
-    @Override
     public boolean isType(EntityType<?> entityType) {
-        return entityType == EntityType.DATATYPE;
+        return EntityType.DATATYPE.equals(entityType);
     }
 
     @Override
@@ -165,7 +151,7 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public OWLClass asOWLClass() {
-        throw new RuntimeException("Not an OWLClass");
+        throw new UnsupportedOperationException("Not an OWLClass");
     }
 
     @Override
@@ -175,7 +161,7 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public OWLObjectProperty asOWLObjectProperty() {
-        throw new RuntimeException("Not an OWLObjectProperty");
+        throw new UnsupportedOperationException("Not an OWLObjectProperty");
     }
 
     @Override
@@ -185,7 +171,7 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public OWLDataProperty asOWLDataProperty() {
-        throw new RuntimeException("Not an OWLDataProperty");
+        throw new UnsupportedOperationException("Not an OWLDataProperty");
     }
 
     @Override
@@ -195,7 +181,7 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public OWLNamedIndividual asOWLNamedIndividual() {
-        throw new RuntimeException("Not an OWLNamedIndividual");
+        throw new UnsupportedOperationException("Not an OWLNamedIndividual");
     }
 
     @Override
@@ -210,7 +196,7 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public OWLAnnotationProperty asOWLAnnotationProperty() {
-        throw new RuntimeException("Not an OWLAnnotationProperty");
+        throw new UnsupportedOperationException("Not an OWLAnnotationProperty");
     }
 
     @Override
@@ -254,6 +240,11 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
     }
 
     @Override
+    public <O> O accept(OWLNamedObjectVisitorEx<O> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -267,54 +258,63 @@ public class OWL2DatatypeImpl implements OWLDatatype, Serializable {
 
     @Override
     public Set<OWLEntity> getSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections.<OWLEntity>singleton(this));
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections.<OWLEntity> singleton(this));
+    }
+
+    @Override
+    public boolean containsEntityInSignature(OWLEntity owlEntity) {
+        return equals(owlEntity);
     }
 
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLAnonymousIndividual> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLAnonymousIndividual> emptySet());
     }
 
     @Override
     public Set<OWLClass> getClassesInSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLClass> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory.<OWLClass> emptySet());
     }
 
     @Override
     public Set<OWLDataProperty> getDataPropertiesInSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLDataProperty> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLDataProperty> emptySet());
     }
 
     @Override
     public Set<OWLObjectProperty> getObjectPropertiesInSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLObjectProperty> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLObjectProperty> emptySet());
+    }
+
+    @Override
+    public Set<OWLAnnotationProperty> getAnnotationPropertiesInSignature() {
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLAnnotationProperty> emptySet());
     }
 
     @Override
     public Set<OWLNamedIndividual> getIndividualsInSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLNamedIndividual> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLNamedIndividual> emptySet());
     }
 
     @Override
     public Set<OWLDatatype> getDatatypesInSignature() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .singleton((OWLDatatype) this));
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections.singleton((OWLDatatype) this));
     }
 
     @Override
     public Set<OWLClassExpression> getNestedClassExpressions() {
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(Collections
-                .<OWLClassExpression> emptySet());
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(CollectionFactory
+            .<OWLClassExpression> emptySet());
     }
 
     @Override
     public boolean isTopEntity() {
-        return owl2Datatype == OWL2Datatype.RDF_PLAIN_LITERAL;
+        return owl2Datatype == RDF_PLAIN_LITERAL;
     }
 
     @Override

@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
-        <version>3.5.4-SNAPSHOT</version>
+        <version>4.2.5-SNAPSHOT</version>
     </parent>
 
     <!-- groupId and version are inherited from the parent pom -->
@@ -17,6 +17,14 @@
         A component of the OWL API GWT module that is used for object serialization.  This code is compiled by javac
         and used on the server, and is compiled by the GWT compiler for use on the client.
     </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-gwt-client-side-emul</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

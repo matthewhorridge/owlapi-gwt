@@ -58,7 +58,7 @@ public class OWLHasKeyAxiomImpl_CustomFieldSerializer extends CustomFieldSeriali
     public static OWLHasKeyAxiomImpl instantiate(SerializationStreamReader streamReader) throws SerializationException {
         Set<OWLAnnotation> annotations = CustomFieldSerializerUtil.deserializeAnnotations(streamReader);
         OWLClass cls = (OWLClass) streamReader.readObject();
-        Set<OWLPropertyExpression<?,?>> properties = CustomFieldSerializerUtil.deserializeSet(streamReader);
+        Set<OWLPropertyExpression> properties = CustomFieldSerializerUtil.deserializeSet(streamReader);
         return new OWLHasKeyAxiomImpl(cls, properties, annotations);
     }
 

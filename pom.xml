@@ -10,7 +10,7 @@
 
     <groupId>net.sourceforge.owlapi</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
-    <version>3.5.4-SNAPSHOT</version>
+    <version>4.2.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>owlapi-gwt-parent</name>
     <description>
@@ -67,9 +67,15 @@
         </dependency>
 
         <dependency>
-            <groupId>net.sourceforge.owlapi</groupId>
-            <artifactId>owlapi-distribution</artifactId>
-            <version>3.5.4</version>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
         </dependency>
 
     </dependencies>
@@ -109,6 +115,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.7.0</gwtVersion>
+        <owlapi.version>4.2.5</owlapi.version>
     </properties>
 
     <distributionManagement>
@@ -133,6 +140,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -146,6 +154,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -154,9 +163,18 @@
                         </goals>
                         <configuration>
                             <additionalparam>-Xdoclint:none</additionalparam>
+                            <quiet>true</quiet>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
         </plugins>
 

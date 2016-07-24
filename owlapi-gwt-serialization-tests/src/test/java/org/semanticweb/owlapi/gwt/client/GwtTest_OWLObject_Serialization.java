@@ -1,5 +1,6 @@
 package org.semanticweb.owlapi.gwt.client;
 
+import com.google.common.base.Optional;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -9,6 +10,7 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,7 @@ import java.util.Set;
  *     as a regular test case.
  * </p>
  */
-public class GwtTest_OWLObject_Serialization extends GWTTestCase {
+public class GwtTest_OWLObject_Serialization extends GWTTestCase implements OWLObjectSerializationTestMethods {
 
     public static final int TEST_DELAY_MS = 10000;
 
@@ -107,7 +109,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLOntologyID() {
         delayTestFinish(TEST_DELAY_MS);
-        final OWLOntologyID in = new OWLOntologyID(IRI.create("http://stuff.com/A"));
+        final OWLOntologyID in = new OWLOntologyID(Optional.of(IRI.create("http://stuff.com/A")), Optional.<IRI>absent());
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
         service.testOWLOntologyId(in, new AsyncCallback<OWLOntologyID>() {
             @Override
@@ -232,9 +234,28 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    @Override
+    public void testShouldSerializeOWLLiteralImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLLiteralImpl in = new OWLLiteralImpl("Hello", "en", null);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLLiteralImpl(in, new AsyncCallback<OWLLiteralImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLLiteralImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
     public void testShouldSerializeOWLLiteralImplBoolean() {
         delayTestFinish(TEST_DELAY_MS);
-        final OWLLiteralImplBoolean in = new OWLLiteralImplBoolean(true);
+        final OWLLiteralImplBoolean in = new OWLLiteralImplBoolean(true, new OWL2DatatypeImpl(OWL2Datatype.XSD_BOOLEAN));
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
         service.testOWLLiteralImplBoolean(in, new AsyncCallback<OWLLiteralImplBoolean>() {
             @Override
@@ -288,7 +309,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWL2DatatypeImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        final OWL2DatatypeImpl in = (OWL2DatatypeImpl) OWL2DatatypeImpl.getDatatype(OWL2Datatype.RDF_PLAIN_LITERAL);
+        final OWL2DatatypeImpl in = new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
         service.testOWL2DatatypeImpl(in, new AsyncCallback<OWL2DatatypeImpl>() {
             @Override
@@ -327,8 +348,8 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectInverseOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
-        OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
+        OWLObjectPropertyExpression property = dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLObjectInverseOfImpl in = new OWLObjectInverseOfImpl(property);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
         service.testOWLObjectInverseOfImpl(in, new AsyncCallback<OWLObjectInverseOfImpl>() {
@@ -347,7 +368,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectIntersectionOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLClassExpression clsA = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsA"));
         final OWLClassExpression clsB= dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsB"));
         final OWLClassExpression clsC = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsC"));
@@ -371,7 +392,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectUnionOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLClassExpression clsA = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsA"));
         final OWLClassExpression clsB= dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsB"));
         final OWLClassExpression clsC = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsC"));
@@ -395,7 +416,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectComplementOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLClassExpression clsA = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/clsA"));
         final OWLObjectComplementOfImpl in = new OWLObjectComplementOfImpl(clsA);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
@@ -416,7 +437,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectOneOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLIndividual indA = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/a"));
         final OWLIndividual indB= dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/b"));
         final OWLIndividual indC = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/c"));
@@ -440,7 +461,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectSomeValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLObjectSomeValuesFromImpl in = new OWLObjectSomeValuesFromImpl(property, filler);
@@ -462,7 +483,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectAllValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLObjectAllValuesFromImpl in = new OWLObjectAllValuesFromImpl(property, filler);
@@ -484,7 +505,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectHasValueImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLIndividual filler = dataFactory.getOWLNamedIndividual(IRI.create("http://org.semanticweb.owlapi/ind"));
         final OWLObjectHasValueImpl in = new OWLObjectHasValueImpl(property, filler);
@@ -506,7 +527,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectMinCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLObjectMinCardinalityImpl in = new OWLObjectMinCardinalityImpl(property, 3, filler);
@@ -528,7 +549,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectMaxCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLObjectMaxCardinalityImpl in = new OWLObjectMaxCardinalityImpl(property, 3, filler);
@@ -550,7 +571,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectExactCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLClassExpression filler = dataFactory.getOWLClass(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLObjectExactCardinalityImpl in = new OWLObjectExactCardinalityImpl(property, 3, filler);
@@ -572,7 +593,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectHasSeltImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLObjectPropertyExpression property = dataFactory.getOWLObjectInverseOf(dataFactory.getOWLObjectProperty(IRI.create("http://org.semanticweb.owlapi/prop")));
         final OWLObjectHasSelfImpl in = new OWLObjectHasSelfImpl(property);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
@@ -594,7 +615,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataIntersectionOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLDatatype dtA = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtA"));
         final OWLDatatype dtB= dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtB"));
         final OWLDatatype dtC = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtC"));
@@ -618,7 +639,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataUnionOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLDataRange dtA = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtA"));
         final OWLDataRange dtB= dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtB"));
         final OWLDataRange dtC = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtC"));
@@ -642,7 +663,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataComplementOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLDataRange dtA = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/dtA"));
         final OWLDataComplementOfImpl in = new OWLDataComplementOfImpl(dtA);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
@@ -663,7 +684,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataOneOfImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         final OWLLiteral indA = dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/a");
         final OWLLiteral indB= dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/b");
         final OWLLiteral indC = dataFactory.getOWLLiteral("http://org.semanticweb.owlapi/c");
@@ -687,7 +708,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataSomeValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLDataSomeValuesFromImpl in = new OWLDataSomeValuesFromImpl(property, filler);
@@ -709,7 +730,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataAllValuesFromImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLDataAllValuesFromImpl in = new OWLDataAllValuesFromImpl(property, filler);
@@ -731,7 +752,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataHasValueImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLLiteral filler = dataFactory.getOWLLiteral("Test");
         final OWLDataHasValueImpl in = new OWLDataHasValueImpl(property, filler);
@@ -753,7 +774,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataMinCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLDataMinCardinalityImpl in = new OWLDataMinCardinalityImpl(property, 3, filler);
@@ -775,7 +796,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataMaxCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLDataMaxCardinalityImpl in = new OWLDataMaxCardinalityImpl(property, 3, filler);
@@ -797,7 +818,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataExactCardinalityImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl(false, false);
+        OWLDataFactoryImpl dataFactory = new OWLDataFactoryImpl();
         OWLDataPropertyExpression property = dataFactory.getOWLDataProperty(IRI.create("http://org.semanticweb.owlapi/prop"));
         final OWLDataRange filler = dataFactory.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi/cls"));
         final OWLDataExactCardinalityImpl in = new OWLDataExactCardinalityImpl(property, 3, filler);
@@ -819,7 +840,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDatatypeRestrictionImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         OWLDatatype datatype = df.getOWLDatatype(IRI.create("http://org.semanticweb.owlapi.gwt#A"));
         Set<OWLFacetRestriction> facetRestrictions = new HashSet<OWLFacetRestriction>();
         facetRestrictions.add(df.getOWLFacetRestriction(OWLFacet.MIN_LENGTH, df.getOWLLiteral("3")));
@@ -844,7 +865,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSubClassOfAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClassExpression subCls = df.getOWLClass(IRI.create("http://stuff.com/A"));
         OWLClassExpression supCls = df.getOWLClass(IRI.create("http://stuff.com/B"));
@@ -867,7 +888,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLEquivalentClassesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
         OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
@@ -892,7 +913,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDisjointClassesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
         OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
@@ -917,7 +938,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDisjointUnionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/A"));
         OWLClassExpression clsB = df.getOWLClass(IRI.create("http://stuff.com/B"));
@@ -943,7 +964,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLClassAssertionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClassExpression clsX = df.getOWLClass(IRI.create("http://stuff.com/X"));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
@@ -966,7 +987,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectPropertyAssertionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression property = df.getOWLObjectProperty(IRI.create("http://stuff.com/prop"));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
@@ -990,7 +1011,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLNegativeObjectPropertyAssertionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectProperty property = df.getOWLObjectProperty(IRI.create("http://stuff.com/prop"));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
@@ -1014,7 +1035,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataPropertyAssertionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression property = df.getOWLDataProperty(IRI.create("http://stuff.com/prop"));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
@@ -1038,7 +1059,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLNegativeDataPropertyAssertionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataProperty property = df.getOWLDataProperty(IRI.create("http://stuff.com/prop"));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
@@ -1062,7 +1083,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSameIndividualAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
         OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/b"));
@@ -1087,7 +1108,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDifferentIndividualsAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLIndividual indA = df.getOWLNamedIndividual(IRI.create("http://stuff.com/a"));
         OWLIndividual indB = df.getOWLNamedIndividual(IRI.create("http://stuff.com/b"));
@@ -1112,7 +1133,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSubObjectPropertyOfAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLObjectPropertyExpression propB = df.getOWLObjectProperty(IRI.create("http://stuff.com/propB"));
@@ -1135,7 +1156,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLEquivalentObjectPropertiesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLObjectPropertyExpression propB = df.getOWLObjectProperty(IRI.create("http://stuff.com/propB"));
@@ -1159,7 +1180,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDisjointObjectPropertiesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLObjectPropertyExpression propB = df.getOWLObjectProperty(IRI.create("http://stuff.com/propB"));
@@ -1183,7 +1204,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLInverseObjectPropertiesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLObjectPropertyExpression propB = df.getOWLObjectProperty(IRI.create("http://stuff.com/propB"));
@@ -1206,7 +1227,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectPropertyDomainAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
@@ -1229,7 +1250,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLObjectPropertyRangeAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
@@ -1252,7 +1273,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLFunctionalObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLFunctionalObjectPropertyAxiomImpl ax = new OWLFunctionalObjectPropertyAxiomImpl(propA, annos);
@@ -1274,7 +1295,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLInverseFunctionalObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLInverseFunctionalObjectPropertyAxiomImpl ax = new OWLInverseFunctionalObjectPropertyAxiomImpl(propA, annos);
@@ -1296,7 +1317,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLReflexiveObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLReflexiveObjectPropertyAxiomImpl ax = new OWLReflexiveObjectPropertyAxiomImpl(propA, annos);
@@ -1318,7 +1339,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLIrreflexiveObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLIrreflexiveObjectPropertyAxiomImpl ax = new OWLIrreflexiveObjectPropertyAxiomImpl(propA, annos);
@@ -1340,7 +1361,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSymmetricObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLSymmetricObjectPropertyAxiomImpl ax = new OWLSymmetricObjectPropertyAxiomImpl(propA, annos);
@@ -1362,7 +1383,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLAsymmetricObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLAsymmetricObjectPropertyAxiomImpl ax = new OWLAsymmetricObjectPropertyAxiomImpl(propA, annos);
@@ -1384,7 +1405,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLTransitiveObjectPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLObjectPropertyExpression propA = df.getOWLObjectProperty(IRI.create("http://stuff.com/propA"));
         final OWLTransitiveObjectPropertyAxiomImpl ax = new OWLTransitiveObjectPropertyAxiomImpl(propA, annos);
@@ -1406,7 +1427,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSubDataPropertyOfAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLDataPropertyExpression propB = df.getOWLDataProperty(IRI.create("http://stuff.com/propB"));
@@ -1429,7 +1450,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLEquivalentDataPropertiesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLDataPropertyExpression propB = df.getOWLDataProperty(IRI.create("http://stuff.com/propB"));
@@ -1453,7 +1474,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDisjointDataPropertiesAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLDataPropertyExpression propB = df.getOWLDataProperty(IRI.create("http://stuff.com/propB"));
@@ -1477,7 +1498,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataPropertyDomainAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLClassExpression clsA = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
@@ -1500,7 +1521,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDataPropertyRangeAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLDataRange clsA = df.getOWLDatatype(IRI.create("http://stuff.com/TypeA"));
@@ -1523,7 +1544,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLFunctionalDataPropertyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDataPropertyExpression propA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         final OWLFunctionalDataPropertyAxiomImpl ax = new OWLFunctionalDataPropertyAxiomImpl(propA, annos);
@@ -1546,7 +1567,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLSubAnnotationPropertyOfAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLAnnotationProperty propA = df.getOWLAnnotationProperty(IRI.create("http://stuff.com/propA"));
         OWLAnnotationProperty propB = df.getOWLAnnotationProperty(IRI.create("http://stuff.com/propB"));
@@ -1569,7 +1590,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLAnnotationPropertyDomainAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLAnnotationProperty propA = df.getOWLAnnotationProperty(IRI.create("http://stuff.com/propA"));
         OWLClass clsA = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
@@ -1592,7 +1613,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLAnnotationPropertyRangeAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLAnnotationProperty propA = df.getOWLAnnotationProperty(IRI.create("http://stuff.com/propA"));
         OWLClass clsA = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
@@ -1615,7 +1636,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDatatypeDefinitionAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLDatatype dtA = df.getOWLDatatype(IRI.create("http://stuff.com/DtA"));
         OWLDatatype dtB = df.getOWLDatatype(IRI.create("http://stuff.com/DtB"));
@@ -1638,14 +1659,14 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLHasKeyAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClass cls = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
         OWLDataProperty dpA = df.getOWLDataProperty(IRI.create("http://stuff.com/propA"));
         OWLDataProperty dpB = df.getOWLDataProperty(IRI.create("http://stuff.com/propB"));
         OWLObjectProperty opA = df.getOWLObjectProperty(IRI.create("http://stuff.com/opPropA"));
         OWLObjectProperty opB = df.getOWLObjectProperty(IRI.create("http://stuff.com/opPropB"));
-        Set<OWLPropertyExpression<?,?>> props = CollectionFactory.<OWLPropertyExpression<?,?>>createSet(dpA, dpB, opA, opB);
+        Set<OWLPropertyExpression> props = CollectionFactory.<OWLPropertyExpression>createSet(dpA, dpB, opA, opB);
         final OWLHasKeyAxiomImpl ax = new OWLHasKeyAxiomImpl(cls, props, annos);
         OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
         service.testOWLHasKeyAxiomImpl(ax, new AsyncCallback<OWLHasKeyAxiomImpl>() {
@@ -1665,7 +1686,7 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
 
     public void testShouldSerializeOWLDeclarationAxiomImpl() {
         delayTestFinish(TEST_DELAY_MS);
-        OWLDataFactory df = new OWLDataFactoryImpl(false, false);
+        OWLDataFactory df = new OWLDataFactoryImpl();
         Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
         OWLClass cls = df.getOWLClass(IRI.create("http://stuff.com/ClsA"));
         final OWLDeclarationAxiomImpl ax = new OWLDeclarationAxiomImpl(cls, annos);
@@ -1704,5 +1725,194 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase {
         });
     }
 
+    @Override
+    public void testShouldSerializeOWLAnnotationAssertionAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl();
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        final OWLAnnotationAssertionAxiomImpl ax = new OWLAnnotationAssertionAxiomImpl(
+            IRI.create("http://the.subject"), df.getRDFSComment(), IRI.create("http://the.value"), annos
+        );
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLAnnotationAssertionAxiomImpl(ax, new AsyncCallback<OWLAnnotationAssertionAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
 
+            @Override
+            public void onSuccess(OWLAnnotationAssertionAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLAnnotationImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl();
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        final OWLAnnotationImpl annotation = new OWLAnnotationImpl(df.getRDFSComment(), IRI.create("http://the.value"), annos);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLAnnotationImpl(annotation, new AsyncCallback<OWLAnnotationImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLAnnotationImpl out) {
+                assertEquals(annotation, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLAnonymousIndividualImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        NodeID nodeId = NodeID.getNodeID("TheNodeId");
+        final OWLAnonymousIndividualImpl individual = new OWLAnonymousIndividualImpl(nodeId);
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLAnonymousIndividualImpl(individual, new AsyncCallback<OWLAnonymousIndividualImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLAnonymousIndividualImpl out) {
+                assertEquals(individual, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLLiteralImplFloat() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLLiteralImplFloat in = new OWLLiteralImplFloat(33.0f, new OWL2DatatypeImpl(OWL2Datatype.XSD_FLOAT));
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLLiteralImplFloat(in, new AsyncCallback<OWLLiteralImplFloat>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLLiteralImplFloat out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLLiteralImplString() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLLiteralImplString in = new OWLLiteralImplString("Hello");
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLLiteralImplString(in, new AsyncCallback<OWLLiteralImplString>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLLiteralImplString out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLLiteralImplPlain() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLLiteralImplPlain in = new OWLLiteralImplPlain("Hello", "en");
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLLiteralImplPlain(in, new AsyncCallback<OWLLiteralImplPlain>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLLiteralImplPlain out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLObjectHasSelfImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLObjectHasSelfImpl in = new OWLObjectHasSelfImpl(new OWLObjectPropertyImpl(IRI.create("http://the.property")));
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLObjectHasSelfImpl(in, new AsyncCallback<OWLObjectHasSelfImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLObjectHasSelfImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLSubPropertyChainAxiomImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        OWLDataFactory df = new OWLDataFactoryImpl();
+        Set<OWLAnnotation> annos = Collections.singleton(df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral("Hello")));
+        final OWLSubPropertyChainAxiomImpl ax = new OWLSubPropertyChainAxiomImpl(
+                Arrays.<OWLObjectPropertyExpression>asList(
+                        df.getOWLObjectProperty(IRI.create("http://object.property.P")),
+                        df.getOWLObjectProperty(IRI.create("http://object.property.Q")),
+                        df.getOWLObjectProperty(IRI.create("http://object.property.R"))
+                ),
+                df.getOWLObjectProperty(IRI.create("http://object.property.S")), annos
+        );
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLSubPropertyChainAxiomImpl(ax, new AsyncCallback<OWLSubPropertyChainAxiomImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLSubPropertyChainAxiomImpl out) {
+                assertEquals(ax, out);
+                finishTest();
+            }
+        });
+    }
+
+    @Override
+    public void testShouldSerializeOWLFacetRestrictionImpl() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWLFacetRestrictionImpl in = new OWLFacetRestrictionImpl(OWLFacet.LENGTH, new OWLLiteralImplInteger(33, new OWL2DatatypeImpl(OWL2Datatype.XSD_INTEGER)));
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWLFacetRestrictionImpl(in, new AsyncCallback<OWLFacetRestrictionImpl>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWLFacetRestrictionImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
 }

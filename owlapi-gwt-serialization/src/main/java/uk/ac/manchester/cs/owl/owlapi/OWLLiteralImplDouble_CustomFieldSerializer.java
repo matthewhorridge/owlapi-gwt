@@ -5,12 +5,15 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.SerializationStreamReader;
 import com.google.gwt.user.client.rpc.SerializationStreamWriter;
 import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * An implementation of CustomFieldSerilizer for serializing {@link OWLLiteralImplDouble}
  * objects.
  */
 public class OWLLiteralImplDouble_CustomFieldSerializer extends CustomFieldSerializer<OWLLiteralImplDouble> {
+
+    public static final OWL2DatatypeImpl DATATYPE = new OWL2DatatypeImpl(OWL2Datatype.XSD_DOUBLE);
 
     /**
      * @return <code>true</code> if a specialist {@link #instantiateInstance} is
@@ -46,9 +49,8 @@ public class OWLLiteralImplDouble_CustomFieldSerializer extends CustomFieldSeria
     }
 
     public static OWLLiteralImplDouble instantiate(SerializationStreamReader streamReader) throws SerializationException {
-        OWLDatatype datatype = (OWLDatatype) streamReader.readObject();
         double value = streamReader.readDouble();
-        return new OWLLiteralImplDouble(value, datatype);
+        return new OWLLiteralImplDouble(value, DATATYPE);
     }
 
 
@@ -68,7 +70,6 @@ public class OWLLiteralImplDouble_CustomFieldSerializer extends CustomFieldSeria
     }
 
     public static void serialize(SerializationStreamWriter streamWriter, OWLLiteralImplDouble instance) throws SerializationException {
-        streamWriter.writeObject(instance.getDatatype());
         streamWriter.writeDouble(instance.parseDouble());
     }
 

@@ -51,7 +51,7 @@ public class OWL2DatatypeImpl_CustomFieldSerializer extends CustomFieldSerialize
         String iriStr = streamReader.readString();
         IRI iri = IRI.create(iriStr);
         OWL2Datatype datatype = OWL2Datatype.getDatatype(iri);
-        return (OWL2DatatypeImpl) OWL2DatatypeImpl.getDatatype(datatype);
+        return new OWL2DatatypeImpl(datatype);
     }
 
 

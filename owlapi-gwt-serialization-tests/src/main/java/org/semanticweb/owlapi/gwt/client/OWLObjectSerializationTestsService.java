@@ -42,6 +42,8 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
 
     OWLDatatypeImpl testOWLDatatypeImpl(OWLDatatypeImpl datatype);
 
+    OWLLiteralImpl testOWLLiteralImpl(OWLLiteralImpl literal);
+
     OWLAnonymousIndividualImpl testOWLAnonymousIndividualImpl(OWLAnonymousIndividualImpl individual);
 
     OWLAnnotationImpl testOWLAnnotationImpl(OWLAnnotationImpl annotation);
@@ -54,12 +56,17 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
 
     OWLLiteralImplInteger testOWLLiteralImplInteger(OWLLiteralImplInteger literal);
 
+    OWLLiteralImplString testOWLLiteralImplString(OWLLiteralImplString literal);
+
+    OWLLiteralImplFloat testOWLLiteralImplFloat(OWLLiteralImplFloat literal);
+
+    OWLLiteralImplPlain testOWLLiteralImplPlain(OWLLiteralImplPlain literal);
+
     OWLLiteralImplNoCompression testOWLLiteralImplNoCompression(OWLLiteralImplNoCompression literal);
 
     OWL2DatatypeImpl testOWL2DatatypeImpl(OWL2DatatypeImpl datatype);
 
     OWLObjectInverseOfImpl testOWLObjectInverseOfImpl(OWLObjectInverseOfImpl property);
-
 
     // Complex class expressions
 
@@ -190,4 +197,8 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLHasKeyAxiomImpl testOWLHasKeyAxiomImpl(OWLHasKeyAxiomImpl axiom);
 
     OWLDeclarationAxiomImpl testOWLDeclarationAxiomImpl(OWLDeclarationAxiomImpl axiom);
+
+    OWLAnnotationAssertionAxiomImpl testOWLAnnotationAssertionAxiomImpl(OWLAnnotationAssertionAxiomImpl axiom);
+
+    OWLSubPropertyChainAxiomImpl testOWLSubPropertyChainAxiomImpl(OWLSubPropertyChainAxiomImpl axiom);
 }

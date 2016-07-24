@@ -1,632 +1,143 @@
-/*
- * This file is part of the OWL API.
- *
+/* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (C) 2011, The University of Manchester
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- *
- *
- * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
- * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
- *
- * Copyright 2011, University of Manchester
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
 
-import org.semanticweb.owlapi.model.*;
+import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 /**
- * Author: Matthew Horridge<br>
- * The University Of Manchester<br>
- * Bio-Health Informatics Group<br>
- * Date: 13-Nov-2006<br>
- * <br>
- * <p/>
  * A utility class that visits axioms, class expressions etc. and accumulates
  * the named objects that are referred to in those axioms, class expressions
  * etc. For example, if the collector visited the axiom (propP some C)
  * subClassOf (propQ some D), it would contain the objects propP, C, propQ and
  * D.
+ * 
+ * @author Matthew Horridge, The University Of Manchester, Bio-Health
+ *         Informatics Group
+ * @since 2.0.0
  */
-public class OWLEntityCollectionContainerCollector implements OWLObjectVisitor, SWRLObjectVisitor {
+public class OWLEntityCollectionContainerCollector extends
+        AbstractEntityRegistrationManager {
 
     private Collection<OWLEntity> objects;
-
+    @Nullable
     private final Collection<OWLAnonymousIndividual> anonymousIndividuals;
-
     private boolean collectClasses = true;
-
     private boolean collectObjectProperties = true;
-
     private boolean collectDataProperties = true;
-
     private boolean collectIndividuals = true;
-
     private boolean collectDatatypes = true;
 
     /**
-     * @param toReturn      the set that will contain the results
-     * @param anonsToReturn the set that will contain the anon individuals
+     * @param toReturn
+     *        the set that will contain the results
+     * @param anonsToReturn
+     *        the set that will contain the anon individuals
      */
-    public OWLEntityCollectionContainerCollector(Set<OWLEntity> toReturn, Collection<OWLAnonymousIndividual> anonsToReturn) {
+    public OWLEntityCollectionContainerCollector(Set<OWLEntity> toReturn,
+            Collection<OWLAnonymousIndividual> anonsToReturn) {
         objects = toReturn;
         anonymousIndividuals = anonsToReturn;
     }
 
     /**
-     * @param toReturn the set that will contain the results
+     * @param toReturn
+     *        the set that will contain the results
      */
     public OWLEntityCollectionContainerCollector(Set<OWLEntity> toReturn) {
         objects = toReturn;
-        anonymousIndividuals = fake;
-    }
-
-    /**
-     * Deprecated default constructor: use one of the other constructors to get
-     * more efficient set creation
-     */
-    @Deprecated
-    public OWLEntityCollectionContainerCollector() {
-        this(new HashSet<OWLEntity>(), new HashSet<OWLAnonymousIndividual>());
+        anonymousIndividuals = null;
     }
 
     /**
      * Clears all objects that have accumulated during the course of visiting
      * axioms, class expressions etc.
-     *
-     * @param toReturn the set that will contain the results
+     * 
+     * @param toReturn
+     *        the set that will contain the results
      */
-    //XXX not in the interface
+    // XXX not in the interface
     public void reset(Set<OWLEntity> toReturn) {
         objects = toReturn;
-        anonymousIndividuals.clear();
+        if (anonymousIndividuals != null) {
+            verifyNotNull(anonymousIndividuals).clear();
+        }
     }
 
     /**
-     * @param collectClasses true to collect classes
+     * @param collectClasses
+     *        true to collect classes
      */
-    //XXX not in the interface
+    // XXX not in the interface
     public void setCollectClasses(boolean collectClasses) {
         this.collectClasses = collectClasses;
     }
 
     /**
-     * @param collectObjectProperties true to collect object properties
+     * @param collectObjectProperties
+     *        true to collect object properties
      */
-    //XXX not in the interface
+    // XXX not in the interface
     public void setCollectObjectProperties(boolean collectObjectProperties) {
         this.collectObjectProperties = collectObjectProperties;
     }
 
     /**
-     * @param collectDataProperties true to collect data properties
+     * @param collectDataProperties
+     *        true to collect data properties
      */
     public void setCollectDataProperties(boolean collectDataProperties) {
         this.collectDataProperties = collectDataProperties;
     }
 
     /**
-     * @param collectIndividuals true to collect individuals
+     * @param collectIndividuals
+     *        true to collect individuals
      */
-    //XXX not in the interface
+    // XXX not in the interface
     public void setCollectIndividuals(boolean collectIndividuals) {
         this.collectIndividuals = collectIndividuals;
     }
 
     /**
-     * @param collectDatatypes true to collect datatypes
+     * @param collectDatatypes
+     *        true to collect datatypes
      */
-    //XXX not in the interface
+    // XXX not in the interface
     public void setCollectDatatypes(boolean collectDatatypes) {
         this.collectDatatypes = collectDatatypes;
     }
 
-    /**
-     * Gets the objects that are used by all axioms, class expressions etc. that
-     * this collector has visited since it was constructed or reset.
-     * <p/>
-     * Deprecated: if the non deprecated constructors are used, this method is
-     * useless and inefficient
-     *
-     * @return A set of entities. This will be a copy.
-     */
-    @Deprecated
-    public Set<OWLEntity> getObjects() {
-        return new HashSet<OWLEntity>(objects);
-    }
-
-    /**
-     * A convenience method. Although anonymous individuals are not entities
-     * they are collected by this collector and stored in a separate set. This
-     * method returns collected individuals.
-     * <p/>
-     * Deprecated: if the non deprecated constructors are used, this method is
-     * useless and inefficient
-     *
-     * @return The set of anonymous individuals that were collected by the
-     *         collector
-     */
-    @Deprecated
-    public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        return new HashSet<OWLAnonymousIndividual>(anonymousIndividuals);
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Axiom Visitor stuff
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    private final CollectionContainerVisitor<OWLAnnotation> annotationVisitor = new CollectionContainerVisitor<OWLAnnotation>() {
-        @Override
-        public void visit(CollectionContainer<OWLAnnotation> c) {
-        }
-
-        @Override
-        public void visitItem(OWLAnnotation c) {
-            c.accept(OWLEntityCollectionContainerCollector.this);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    protected void processAxiomAnnotations(OWLAxiom ax) {
-        // an OWLAxiomImpl will implement this interface with <OWLAnnotation > parameter; this will avoid creating a defensive copy of the annotation set
-        if (ax instanceof CollectionContainer) {
-            ((CollectionContainer<OWLAnnotation>) ax).accept(annotationVisitor);
-        }
-        else {
-            // default behavior: iterate over the annotations outside the axiom
-            for (OWLAnnotation anno : ax.getAnnotations()) {
-                anno.accept(this);
-            }
-        }
-    }
-
     @Override
-    public void visit(OWLSubClassOfAxiom axiom) {
-        axiom.getSubClass().accept(this);
-        axiom.getSuperClass().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
-        axiom.getSubject().accept(this);
-        axiom.getProperty().accept(this);
-        axiom.getObject().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLAsymmetricObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLReflexiveObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDisjointClassesAxiom axiom) {
-        for (OWLClassExpression desc : axiom.getClassExpressions()) {
-            desc.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDataPropertyDomainAxiom axiom) {
-        axiom.getDomain().accept(this);
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLObjectPropertyDomainAxiom axiom) {
-        axiom.getDomain().accept(this);
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLEquivalentObjectPropertiesAxiom axiom) {
-        for (OWLObjectPropertyExpression prop : axiom.getProperties()) {
-            prop.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLNegativeDataPropertyAssertionAxiom axiom) {
-        axiom.getSubject().accept(this);
-        axiom.getProperty().accept(this);
-        axiom.getObject().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDifferentIndividualsAxiom axiom) {
-        for (OWLIndividual ind : axiom.getIndividuals()) {
-            ind.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDisjointDataPropertiesAxiom axiom) {
-        for (OWLDataPropertyExpression prop : axiom.getProperties()) {
-            prop.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDisjointObjectPropertiesAxiom axiom) {
-        for (OWLObjectPropertyExpression prop : axiom.getProperties()) {
-            prop.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLObjectPropertyRangeAxiom axiom) {
-        axiom.getRange().accept(this);
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLObjectPropertyAssertionAxiom axiom) {
-        axiom.getSubject().accept(this);
-        axiom.getProperty().accept(this);
-        axiom.getObject().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLFunctionalObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSubObjectPropertyOfAxiom axiom) {
-        axiom.getSubProperty().accept(this);
-        axiom.getSuperProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDisjointUnionAxiom axiom) {
-        axiom.getOWLClass().accept((OWLEntityVisitor) this);
-        for (OWLClassExpression desc : axiom.getClassExpressions()) {
-            desc.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDeclarationAxiom axiom) {
-        axiom.getEntity().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSymmetricObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDataPropertyRangeAxiom axiom) {
-        axiom.getProperty().accept(this);
-        axiom.getRange().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLFunctionalDataPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLEquivalentDataPropertiesAxiom axiom) {
-        for (OWLDataPropertyExpression prop : axiom.getProperties()) {
-            prop.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLClassAssertionAxiom axiom) {
-        axiom.getClassExpression().accept(this);
-        axiom.getIndividual().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLEquivalentClassesAxiom axiom) {
-        for (OWLClassExpression desc : axiom.getClassExpressions()) {
-            desc.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDataPropertyAssertionAxiom axiom) {
-        axiom.getSubject().accept(this);
-        axiom.getProperty().accept(this);
-        axiom.getObject().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLTransitiveObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLIrreflexiveObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSubDataPropertyOfAxiom axiom) {
-        axiom.getSubProperty().accept(this);
-        axiom.getSuperProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSameIndividualAxiom axiom) {
-        for (OWLIndividual ind : axiom.getIndividuals()) {
-            ind.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSubPropertyChainOfAxiom axiom) {
-        for (OWLObjectPropertyExpression prop : axiom.getPropertyChain()) {
-            prop.accept(this);
-        }
-        axiom.getSuperProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLInverseObjectPropertiesAxiom axiom) {
-        axiom.getFirstProperty().accept(this);
-        axiom.getSecondProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLHasKeyAxiom axiom) {
-        axiom.getClassExpression().accept(this);
-        for (OWLPropertyExpression<?, ?> prop : axiom.getPropertyExpressions()) {
-            prop.accept(this);
-        }
-        processAxiomAnnotations(axiom);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // OWLClassExpressionVisitor
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public void visit(OWLClass desc) {
+    public void visit(OWLClass ce) {
         if (collectClasses) {
-            objects.add(desc);
+            objects.add(ce);
         }
     }
 
-    @Override
-    public void visit(OWLObjectIntersectionOf desc) {
-        for (OWLClassExpression operand : desc.getOperands()) {
-            operand.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLObjectUnionOf desc) {
-        for (OWLClassExpression operand : desc.getOperands()) {
-            operand.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLObjectComplementOf desc) {
-        desc.getOperand().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectSomeValuesFrom desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectAllValuesFrom desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectHasValue desc) {
-        desc.getProperty().accept(this);
-        desc.getValue().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectMinCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectExactCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectMaxCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectHasSelf desc) {
-        desc.getProperty().accept(this);
-    }
-
-    @Override
-    public void visit(OWLObjectOneOf desc) {
-        for (OWLIndividual ind : desc.getIndividuals()) {
-            ind.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLDataSomeValuesFrom desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataAllValuesFrom desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataHasValue desc) {
-        desc.getProperty().accept(this);
-        desc.getValue().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataMinCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataExactCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataMaxCardinality desc) {
-        desc.getProperty().accept(this);
-        desc.getFiller().accept(this);
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Data visitor
-    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public void visit(OWLDataComplementOf node) {
-        node.getDataRange().accept(this);
-    }
-
-    @Override
-    public void visit(OWLDataOneOf node) {
-        for (OWLLiteral val : node.getValues()) {
-            val.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLDataIntersectionOf node) {
-        for (OWLDataRange dr : node.getOperands()) {
-            dr.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLDataUnionOf node) {
-        for (OWLDataRange dr : node.getOperands()) {
-            dr.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLDatatypeRestriction node) {
-        node.getDatatype().accept(this);
-        for (OWLFacetRestriction facetRestriction : node.getFacetRestrictions()) {
-            facetRestriction.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLFacetRestriction node) {
-        node.getFacetValue().accept(this);
-    }
-
-    @Override
-    public void visit(OWLLiteral node) {
-        node.getDatatype().accept(this);
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Property expression visitor
-    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public void visit(OWLObjectInverseOf expression) {
-        expression.getInverse().accept(this);
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Entity  visitor
-    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void visit(OWLObjectProperty property) {
         if (collectObjectProperties) {
@@ -649,256 +160,23 @@ public class OWLEntityCollectionContainerCollector implements OWLObjectVisitor, 
     }
 
     @Override
-    public void visit(OWLDatatype datatype) {
+    public void visit(OWLDatatype node) {
         if (collectDatatypes) {
-            objects.add(datatype);
+            objects.add(node);
         }
-    }
-
-    @Override
-    public void visit(OWLAnnotation annotation) {
-        annotation.getProperty().accept(this);
-        annotation.getValue().accept(this);
-        for (OWLAnnotation anno : annotation.getAnnotations()) {
-            anno.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(OWLAnnotationAssertionAxiom axiom) {
-        axiom.getSubject().accept(this);
-        axiom.getProperty().accept(this);
-        axiom.getValue().accept(this);
-        processAxiomAnnotations(axiom);
     }
 
     @Override
     public void visit(OWLAnonymousIndividual individual) {
         // Anon individuals aren't entities
         // But store them in a set anyway for utility
-        anonymousIndividuals.add(individual);
-    }
-
-    @Override
-    public void visit(IRI iri) {
+        if (anonymousIndividuals != null) {
+            verifyNotNull(anonymousIndividuals).add(individual);
+        }
     }
 
     @Override
     public void visit(OWLAnnotationProperty property) {
         objects.add(property);
     }
-
-    @Override
-    public void visit(OWLAnnotationPropertyDomainAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLAnnotationPropertyRangeAxiom axiom) {
-        axiom.getProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLSubAnnotationPropertyOfAxiom axiom) {
-        axiom.getSubProperty().accept(this);
-        axiom.getSuperProperty().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    @Override
-    public void visit(OWLDatatypeDefinitionAxiom axiom) {
-        axiom.getDatatype().accept(this);
-        axiom.getDataRange().accept(this);
-        processAxiomAnnotations(axiom);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // SWRL Object Visitor
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public void visit(SWRLRule rule) {
-        for (SWRLAtom atom : rule.getBody()) {
-            atom.accept(this);
-        }
-        for (SWRLAtom atom : rule.getHead()) {
-            atom.accept(this);
-        }
-        processAxiomAnnotations(rule);
-    }
-
-    @Override
-    public void visit(SWRLClassAtom node) {
-        node.getArgument().accept(this);
-        node.getPredicate().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLDataRangeAtom node) {
-        node.getArgument().accept(this);
-        node.getPredicate().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLObjectPropertyAtom node) {
-        node.getPredicate().accept(this);
-        node.getFirstArgument().accept(this);
-        node.getSecondArgument().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLDataPropertyAtom node) {
-        node.getPredicate().accept(this);
-        node.getFirstArgument().accept(this);
-        node.getSecondArgument().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLBuiltInAtom node) {
-        for (SWRLArgument obj : node.getAllArguments()) {
-            obj.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(SWRLVariable node) {
-    }
-
-    @Override
-    public void visit(SWRLIndividualArgument node) {
-        node.getIndividual().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLLiteralArgument node) {
-        node.getLiteral().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLDifferentIndividualsAtom node) {
-        node.getFirstArgument().accept(this);
-    }
-
-    @Override
-    public void visit(SWRLSameIndividualAtom node) {
-        node.getSecondArgument().accept(this);
-    }
-
-    private static final List<OWLAnonymousIndividual> fake = new List<OWLAnonymousIndividual>() {
-        @Override
-        public <T> T[] toArray(T[] arg0) {
-            return arg0;
-        }
-
-        @Override
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        @Override
-        public List<OWLAnonymousIndividual> subList(int arg0, int arg1) {
-            return null;
-        }
-
-        @Override
-        public int size() {
-            return 0;
-        }
-
-        @Override
-        public OWLAnonymousIndividual set(int arg0, OWLAnonymousIndividual arg1) {
-            return null;
-        }
-
-        @Override
-        public boolean retainAll(Collection<?> arg0) {
-            return false;
-        }
-
-        @Override
-        public boolean removeAll(Collection<?> arg0) {
-            return false;
-        }
-
-        @Override
-        public OWLAnonymousIndividual remove(int arg0) {
-            return null;
-        }
-
-        @Override
-        public boolean remove(Object arg0) {
-            return false;
-        }
-
-        @Override
-        public ListIterator<OWLAnonymousIndividual> listIterator(int arg0) {
-            return null;
-        }
-
-        @Override
-        public ListIterator<OWLAnonymousIndividual> listIterator() {
-            return null;
-        }
-
-        @Override
-        public int lastIndexOf(Object arg0) {
-            return 0;
-        }
-
-        @Override
-        public Iterator<OWLAnonymousIndividual> iterator() {
-            return null;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public int indexOf(Object arg0) {
-            return 0;
-        }
-
-        @Override
-        public OWLAnonymousIndividual get(int arg0) {
-            return null;
-        }
-
-        @Override
-        public boolean containsAll(Collection<?> arg0) {
-            return false;
-        }
-
-        @Override
-        public boolean contains(Object arg0) {
-            return false;
-        }
-
-        @Override
-        public void clear() {
-        }
-
-        @Override
-        public boolean addAll(int arg0, Collection<? extends OWLAnonymousIndividual> arg1) {
-            return false;
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends OWLAnonymousIndividual> arg0) {
-            return false;
-        }
-
-        @Override
-        public void add(int arg0, OWLAnonymousIndividual arg1) {
-        }
-
-        @Override
-        public boolean add(OWLAnonymousIndividual arg0) {
-            return false;
-        }
-    };
 }

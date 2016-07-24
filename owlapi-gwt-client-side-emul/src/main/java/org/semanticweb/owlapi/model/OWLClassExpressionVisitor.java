@@ -1,91 +1,171 @@
-/*
- * This file is part of the OWL API.
- *
+/* This file is part of the OWL API.
  * The contents of this file are subject to the LGPL License, Version 3.0.
+ * Copyright 2014, The University of Manchester
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (C) 2011, The University of Manchester
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- *
- *
- * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
- * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
- *
- * Copyright 2011, University of Manchester
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0 in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.model;
+
+import javax.annotation.Nonnull;
+
 /**
- * Author: Matthew Horridge<br>
- * The University Of Manchester<br>
- * Bio-Health Informatics Group<br>
- * Date: 13-Nov-2006<br><br>
- * </p>
- * An interface to objects that can visit {@link org.semanticweb.owlapi.model.OWLClassExpression}s.
- * (See the <a href="http://en.wikipedia.org/wiki/Visitor_pattern">Visitor Patterns</a>)
- *
+ * An interface to objects that can visit
+ * {@link org.semanticweb.owlapi.model.OWLClassExpression}s. (See the <a
+ * href="http://en.wikipedia.org/wiki/Visitor_pattern">Visitor Patterns</a>)
+ * 
+ * @author Matthew Horridge, The University Of Manchester Bio-Health Informatics
+ *         Group
+ * @since 2.0.0
  */
-@SuppressWarnings("javadoc")
 public interface OWLClassExpressionVisitor {
 
-	void visit(OWLClass ce);
+    /**
+     * visit OWLClass type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLClass ce);
 
-    void visit(OWLObjectIntersectionOf ce);
+    /**
+     * visit OWLObjectIntersectionOf type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectIntersectionOf ce);
 
-    void visit(OWLObjectUnionOf ce);
+    /**
+     * visit OWLObjectUnionOf type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectUnionOf ce);
 
-    void visit(OWLObjectComplementOf ce);
+    /**
+     * visit OWLObjectComplementOf type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectComplementOf ce);
 
-    void visit(OWLObjectSomeValuesFrom ce);
+    /**
+     * visit OWLObjectSomeValuesFrom type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectSomeValuesFrom ce);
 
-    void visit(OWLObjectAllValuesFrom ce);
+    /**
+     * visit OWLObjectAllValuesFrom type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectAllValuesFrom ce);
 
-    void visit(OWLObjectHasValue ce);
+    /**
+     * visit OWLObjectHasValue type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectHasValue ce);
 
-    void visit(OWLObjectMinCardinality ce);
+    /**
+     * visit OWLObjectMinCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectMinCardinality ce);
 
-    void visit(OWLObjectExactCardinality ce);
+    /**
+     * visit OWLObjectExactCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectExactCardinality ce);
 
-    void visit(OWLObjectMaxCardinality ce);
+    /**
+     * visit OWLObjectMaxCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectMaxCardinality ce);
 
-    void visit(OWLObjectHasSelf ce);
+    /**
+     * visit OWLObjectHasSelf type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectHasSelf ce);
 
-    void visit(OWLObjectOneOf ce);
+    /**
+     * visit OWLObjectOneOf type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLObjectOneOf ce);
 
-    void visit(OWLDataSomeValuesFrom ce);
+    /**
+     * visit OWLDataSomeValuesFrom type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataSomeValuesFrom ce);
 
-    void visit(OWLDataAllValuesFrom ce);
+    /**
+     * visit OWLDataAllValuesFrom type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataAllValuesFrom ce);
 
-    void visit(OWLDataHasValue ce);
+    /**
+     * visit OWLDataHasValue type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataHasValue ce);
 
-    void visit(OWLDataMinCardinality ce);
+    /**
+     * visit OWLDataMinCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataMinCardinality ce);
 
-    void visit(OWLDataExactCardinality ce);
+    /**
+     * visit OWLDataExactCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataExactCardinality ce);
 
-    void visit(OWLDataMaxCardinality ce);
-
-
+    /**
+     * visit OWLDataMaxCardinality type
+     * 
+     * @param ce
+     *        ce to visit
+     */
+    void visit(@Nonnull OWLDataMaxCardinality ce);
 }

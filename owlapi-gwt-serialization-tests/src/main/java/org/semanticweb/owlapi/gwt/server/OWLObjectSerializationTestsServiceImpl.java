@@ -99,6 +99,21 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     }
 
     @Override
+    public OWLLiteralImplString testOWLLiteralImplString(OWLLiteralImplString literal) {
+        return literal;
+    }
+
+    @Override
+    public OWLLiteralImplPlain testOWLLiteralImplPlain(OWLLiteralImplPlain literal) {
+        return literal;
+    }
+
+    @Override
+    public OWLLiteralImplFloat testOWLLiteralImplFloat(OWLLiteralImplFloat literal) {
+        return literal;
+    }
+
+    @Override
     public OWLLiteralImplNoCompression testOWLLiteralImplNoCompression(OWLLiteralImplNoCompression literal) {
         return literal;
     }
@@ -405,6 +420,21 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
 
     @Override
     public OWLDeclarationAxiomImpl testOWLDeclarationAxiomImpl(OWLDeclarationAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLLiteralImpl testOWLLiteralImpl(OWLLiteralImpl literal) {
+        return literal;
+    }
+
+    @Override
+    public OWLAnnotationAssertionAxiomImpl testOWLAnnotationAssertionAxiomImpl(OWLAnnotationAssertionAxiomImpl axiom) {
+        return axiom;
+    }
+
+    @Override
+    public OWLSubPropertyChainAxiomImpl testOWLSubPropertyChainAxiomImpl(OWLSubPropertyChainAxiomImpl axiom) {
         return axiom;
     }
 }

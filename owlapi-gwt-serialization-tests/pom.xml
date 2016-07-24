@@ -9,7 +9,7 @@
     <parent>
         <groupId>net.sourceforge.owlapi</groupId>
         <artifactId>owlapi-gwt-parent</artifactId>
-        <version>3.5.4-SNAPSHOT</version>
+        <version>4.2.5-SNAPSHOT</version>
     </parent>
 
     <!-- groupId and version are inherited from the parent pom -->
@@ -54,6 +54,11 @@
             <version>4.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <version>18.0</version>
+        </dependency>
 
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
