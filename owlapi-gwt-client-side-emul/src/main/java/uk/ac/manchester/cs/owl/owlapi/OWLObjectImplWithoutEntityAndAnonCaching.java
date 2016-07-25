@@ -12,11 +12,6 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
 
-import java.io.Serializable;
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
 import org.semanticweb.owlapi.io.ToStringRenderer;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
@@ -25,20 +20,30 @@ import org.semanticweb.owlapi.util.OWLClassExpressionCollector;
 import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.util.*;
+
 /**
  * @author Matthew Horridge, The University Of Manchester, Bio-Health
  *         Informatics Group
  * @since 2.0.0
  */
 public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObject,
-    HasIncrementalSignatureGenerationSupport, Serializable {
+        HasIncrementalSignatureGenerationSupport, Serializable {
 
     private static final long serialVersionUID = 40000L;
-    /** a convenience reference for an empty annotation set, saves on typing. */
+
+    /**
+     * a convenience reference for an empty annotation set, saves on typing.
+     */
     @Nonnull
     protected static final Set<OWLAnnotation> NO_ANNOTATIONS = CollectionFactory.emptySet();
+
     static final OWLObjectTypeIndexProvider OWLOBJECT_TYPEINDEX_PROVIDER = new OWLObjectTypeIndexProvider();
+
     protected int hashCode = 0;
+
     @Nonnull
     protected static final OWLClass OWL_THING = new OWLClassImpl(OWLRDFVocabulary.OWL_THING.getIRI());
 
@@ -59,24 +64,26 @@ public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObj
     }
 
     protected static void addEntitiesFromAnnotationsToSet(Collection<OWLAnnotation> annotations,
-        Set<OWLEntity> entities) {
+                                                          Set<OWLEntity> entities) {
         for (OWLAnnotation annotation : annotations) {
             if (annotation instanceof OWLAnnotationImpl) {
                 OWLAnnotationImpl owlAnnotation = (OWLAnnotationImpl) annotation;
                 owlAnnotation.addSignatureEntitiesToSet(entities);
-            } else {
+            }
+            else {
                 entities.addAll(annotation.getSignature());
             }
         }
     }
 
     protected static void addAnonymousIndividualsFromAnnotationsToSet(Collection<OWLAnnotation> annotations,
-        Set<OWLAnonymousIndividual> anons) {
+                                                                      Set<OWLAnonymousIndividual> anons) {
         for (OWLAnnotation annotation : annotations) {
             if (annotation instanceof OWLAnnotationImpl) {
                 OWLAnnotationImpl owlAnnotation = (OWLAnnotationImpl) annotation;
                 owlAnnotation.addAnonymousIndividualsToSet(anons);
-            } else {
+            }
+            else {
                 anons.addAll(annotation.getAnonymousIndividuals());
             }
         }
@@ -163,17 +170,19 @@ public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObj
         if (canHasSignature instanceof HasIncrementalSignatureGenerationSupport) {
             HasIncrementalSignatureGenerationSupport hasIncrementalSignatureGenerationSupport = (HasIncrementalSignatureGenerationSupport) canHasSignature;
             hasIncrementalSignatureGenerationSupport.addSignatureEntitiesToSet(entities);
-        } else {
+        }
+        else {
             entities.addAll(canHasSignature.getSignature());
         }
     }
 
     protected void addAnonymousIndividualsToSetForValue(Set<OWLAnonymousIndividual> anons,
-        HasAnonymousIndividuals canHasAnons) {
+                                                        HasAnonymousIndividuals canHasAnons) {
         if (canHasAnons instanceof HasIncrementalSignatureGenerationSupport) {
             HasIncrementalSignatureGenerationSupport hasIncrementalSignatureGenerationSupport = (HasIncrementalSignatureGenerationSupport) canHasAnons;
             hasIncrementalSignatureGenerationSupport.addAnonymousIndividualsToSet(anons);
-        } else {
+        }
+        else {
             anons.addAll(canHasAnons.getAnonymousIndividuals());
         }
     }
@@ -199,7 +208,8 @@ public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObj
         int otherTypeIndex = 0;
         if (o instanceof OWLObjectImplWithoutEntityAndAnonCaching) {
             otherTypeIndex = ((OWLObjectImplWithoutEntityAndAnonCaching) o).index();
-        } else {
+        }
+        else {
             otherTypeIndex = OWLOBJECT_TYPEINDEX_PROVIDER.getTypeIndex(o);
         }
         int diff = thisTypeIndex - otherTypeIndex;
@@ -213,7 +223,7 @@ public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObj
         }
         if (this instanceof OWLAxiom) {
             diff = compareLists(new ArrayList<>(((OWLAxiom) this).getAnnotations()), new ArrayList<>(((OWLAxiom) o)
-                .getAnnotations()));
+                    .getAnnotations()));
         }
         return diff;
     }
@@ -260,13 +270,15 @@ public abstract class OWLObjectImplWithoutEntityAndAnonCaching implements OWLObj
         SortedSet<? extends OWLObject> ss1;
         if (set1 instanceof SortedSet) {
             ss1 = (SortedSet<? extends OWLObject>) set1;
-        } else {
+        }
+        else {
             ss1 = new TreeSet<>(set1);
         }
         SortedSet<? extends OWLObject> ss2;
         if (set2 instanceof SortedSet) {
             ss2 = (SortedSet<? extends OWLObject>) set2;
-        } else {
+        }
+        else {
             ss2 = new TreeSet<>(set2);
         }
         int i = 0;

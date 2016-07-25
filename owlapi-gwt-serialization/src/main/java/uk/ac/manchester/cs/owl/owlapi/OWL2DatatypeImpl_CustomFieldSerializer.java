@@ -48,9 +48,8 @@ public class OWL2DatatypeImpl_CustomFieldSerializer extends CustomFieldSerialize
     }
 
     public static OWL2DatatypeImpl instantiate(SerializationStreamReader streamReader) throws SerializationException {
-        String iriStr = streamReader.readString();
-        IRI iri = IRI.create(iriStr);
-        OWL2Datatype datatype = OWL2Datatype.getDatatype(iri);
+        String name = streamReader.readString();
+        OWL2Datatype datatype = OWL2Datatype.valueOf(name);
         return new OWL2DatatypeImpl(datatype);
     }
 
@@ -71,7 +70,7 @@ public class OWL2DatatypeImpl_CustomFieldSerializer extends CustomFieldSerialize
     }
 
     public static void serialize(SerializationStreamWriter streamWriter, OWL2DatatypeImpl instance) throws SerializationException {
-        streamWriter.writeString(instance.getIRI().toString());
+        streamWriter.writeString(instance.getBuiltInDatatype().name());
     }
 
 
