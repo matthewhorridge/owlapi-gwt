@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.Namespaces;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
 /**
@@ -206,4 +207,6 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     DataRangeType testDataRangeType(DataRangeType dataRangeType);
 
     Namespaces testNamespaces(Namespaces namespaces);
+
+    OWL2Datatype testOWL2Datatype(OWL2Datatype datatype);
 }

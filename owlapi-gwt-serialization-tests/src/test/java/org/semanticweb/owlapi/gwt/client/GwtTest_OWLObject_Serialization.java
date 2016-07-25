@@ -1952,4 +1952,23 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase implements OWLO
             }
         });
     }
+
+    public void testShouldSerializeOWL2Datatype() {
+        delayTestFinish(TEST_DELAY_MS);
+        final OWL2Datatype in = OWL2Datatype.OWL_RATIONAL;
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testOWL2Datatype(in, new AsyncCallback<OWL2Datatype>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(OWL2Datatype out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
 }
