@@ -6,6 +6,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
+import org.semanticweb.owlapi.vocab.Namespaces;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 import uk.ac.manchester.cs.owl.owlapi.*;
@@ -1928,6 +1929,24 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase implements OWLO
 
             @Override
             public void onSuccess(OWLFacetRestrictionImpl out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
+    public void testShouldSerializeNamespaces() {
+        delayTestFinish(TEST_DELAY_MS);
+        final Namespaces in = Namespaces.CC;
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testNamespaces(in, new AsyncCallback<Namespaces>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Namespaces out) {
                 assertEquals(in, out);
                 finishTest();
             }
