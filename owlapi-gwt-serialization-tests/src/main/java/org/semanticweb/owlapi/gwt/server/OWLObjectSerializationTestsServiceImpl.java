@@ -437,4 +437,9 @@ public class OWLObjectSerializationTestsServiceImpl extends RemoteServiceServlet
     public OWLSubPropertyChainAxiomImpl testOWLSubPropertyChainAxiomImpl(OWLSubPropertyChainAxiomImpl axiom) {
         return axiom;
     }
+
+    @Override
+    public DataRangeType testDataRangeType(DataRangeType dataRangeType) {
+        return dataRangeType;
+    }
 }

@@ -88,7 +88,25 @@ public class GwtTest_OWLObject_Serialization extends GWTTestCase implements OWLO
             }
         });
     }
-    
+
+    public void testShouldSerializeDataRangeType() {
+        delayTestFinish(TEST_DELAY_MS);
+        final DataRangeType in = DataRangeType.DATA_COMPLEMENT_OF;
+        OWLObjectSerializationTestsServiceAsync service = GWT.create(OWLObjectSerializationTestsService.class);
+        service.testDataRangeType(in, new AsyncCallback<DataRangeType>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(DataRangeType out) {
+                assertEquals(in, out);
+                finishTest();
+            }
+        });
+    }
+
     public void testShouldSerializeIRI() {
         delayTestFinish(TEST_DELAY_MS);
         final IRI in = IRI.create("http://stuff.com/A");

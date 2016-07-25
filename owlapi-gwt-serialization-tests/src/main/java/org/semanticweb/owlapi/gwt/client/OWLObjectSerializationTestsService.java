@@ -201,4 +201,6 @@ public interface OWLObjectSerializationTestsService extends RemoteService {
     OWLAnnotationAssertionAxiomImpl testOWLAnnotationAssertionAxiomImpl(OWLAnnotationAssertionAxiomImpl axiom);
 
     OWLSubPropertyChainAxiomImpl testOWLSubPropertyChainAxiomImpl(OWLSubPropertyChainAxiomImpl axiom);
+
+    DataRangeType testDataRangeType(DataRangeType dataRangeType);
 }
