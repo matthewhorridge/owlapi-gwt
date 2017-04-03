@@ -75,7 +75,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>20.0</version>
         </dependency>
 
     </dependencies>
@@ -114,7 +114,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.8.0-beta1</gwtVersion>
+        <gwtVersion>2.8.0</gwtVersion>
         <owlapi.version>4.2.5</owlapi.version>
     </properties>
 
