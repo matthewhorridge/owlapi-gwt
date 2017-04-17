@@ -37,17 +37,17 @@ import com.google.common.base.Optional;
 
 /**
  * An OWLLiteral whose datatype is RDF_PLAIN_LITERAL
- *
+ * 
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group, Date:
  *         26-Oct-2006
  */
 public class OWLLiteralImplPlain extends OWLObjectImplWithoutEntityAndAnonCaching
-        implements OWLLiteral {
+    implements OWLLiteral {
 
     private static final long serialVersionUID = 30406L;
     @Nonnull
     private static final OWLDatatype RDF_PLAIN_LITERAL =
-            new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
+        new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
     @Nonnull
     private final String literal;
     @Nonnull
@@ -182,10 +182,10 @@ public class OWLLiteralImplPlain extends OWLObjectImplWithoutEntityAndAnonCachin
         OWLLiteral other = (OWLLiteral) obj;
         if (other instanceof OWLLiteralImplPlain) {
             return literal.equals(((OWLLiteralImplPlain) other).literal)
-                    && lang.equals(other.getLang());
+                && lang.equals(other.getLang());
         }
         return getLiteral().equals(other.getLiteral()) && getDatatype().equals(other.getDatatype())
-                && lang.equals(other.getLang());
+            && lang.equals(other.getLang());
     }
 
     @Override

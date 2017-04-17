@@ -15,17 +15,8 @@ package uk.ac.manchester.cs.owl.owlapi;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Serializable;
-import java.io.Writer;
 import java.util.Set;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,18 +42,17 @@ import com.google.common.base.Optional;
 /**
  * Implementation of {@link OWLLiteral} that uses compression of strings. See also
  * {@link OWLLiteralImplNoCompression}
- *
+ * 
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
  * @since 2.0.0
  */
 public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching implements OWLLiteral {
 
     private static final long serialVersionUID = 40000L;
-
     private final LiteralWrapper literal;
     @Nonnull
     private static final OWLDatatype RDF_PLAIN_LITERAL =
-            new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
+        new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
     @Nonnull
     private final OWLDatatype datatype;
     @Nonnull
@@ -82,7 +72,7 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
      *        be RDFPlainLiteral
      */
     public OWLLiteralImpl(@Nonnull String literal, @Nullable String lang,
-                          @Nullable OWLDatatype datatype) {
+        @Nullable OWLDatatype datatype) {
         this.literal = new LiteralWrapper(checkNotNull(literal, "literal cannot be null"));
         if (lang == null || lang.isEmpty()) {
             language = "";
@@ -96,7 +86,7 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
                 // ERROR: attempting to build a literal with a language tag and
                 // type different from plain literal
                 throw new OWLRuntimeException("Error: cannot build a literal with type: "
-                                                      + datatype.getIRI() + " and language: " + lang);
+                    + datatype.getIRI() + " and language: " + lang);
             }
             language = lang;
             this.datatype = RDF_PLAIN_LITERAL;
@@ -243,7 +233,7 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
         }
         OWLLiteral other = (OWLLiteral) obj;
         return literal.get().equals(other.getLiteral()) && datatype.equals(other.getDatatype())
-                && language.equals(other.getLang());
+            && language.equals(other.getLang());
     }
 
     @Override
@@ -308,15 +298,16 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     // Literal Wrapper
     private static class LiteralWrapper implements Serializable {
 
+        private static final long serialVersionUID = 40000L;
         String l;
 
         LiteralWrapper(String s) {
-                l = s;
+            l = s;
         }
 
         @Nonnull
         String get() {
-            return verifyNotNull(l);
+                return verifyNotNull(l);
         }
     }
 }

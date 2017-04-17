@@ -53,14 +53,12 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
         false, XSDBOOLEAN);
     @Nullable
     private OWLLiteral negativeFloatZero;
-    private final boolean useCompression;
 
     /**
      * @param useCompression
      *        true if compression of literals should be used
      */
     public OWLDataFactoryInternalsImplNoCache(boolean useCompression) {
-        this.useCompression = useCompression;
     }
 
     @Override
@@ -103,10 +101,6 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
 
     @Override
     public OWLLiteral getOWLLiteral(@Nonnull String value) {
-        if (useCompression) {
-            return new OWLLiteralImpl(value, "",
-                getOWLDatatype(XSDVocabulary.STRING.getIRI()));
-        }
         return new OWLLiteralImplString(value);
     }
 
@@ -117,9 +111,6 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
             normalisedLang = "";
         } else {
             normalisedLang = lang.trim().toLowerCase(Locale.ENGLISH);
-        }
-        if (useCompression) {
-            return new OWLLiteralImpl(literal, normalisedLang, null);
         }
         return new OWLLiteralImplPlain(literal, normalisedLang);
     }
@@ -218,16 +209,8 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
     protected OWLLiteral getBasicLiteral(@Nonnull String lexicalValue,
         String lang, OWLDatatype datatype) {
         OWLLiteral literal = null;
-        if (useCompression) {
-            if (datatype == null || datatype.isRDFPlainLiteral()) {
-                literal = new OWLLiteralImplPlain(lexicalValue, lang);
-            } else {
-                literal = new OWLLiteralImpl(lexicalValue, lang, datatype);
-            }
-        } else {
             literal = new OWLLiteralImplNoCompression(lexicalValue, lang,
                 datatype);
-        }
         return literal;
     }
 

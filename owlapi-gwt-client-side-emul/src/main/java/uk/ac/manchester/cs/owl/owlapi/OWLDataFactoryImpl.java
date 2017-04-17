@@ -53,9 +53,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable,
     //@formatter:on
     private final OWLDataFactoryInternals dataFactoryInternals;
 
-    /**
-     * Constructs an OWLDataFactoryImpl that uses caching but no compression.
-     */
+
     public OWLDataFactoryImpl() {
         this(new OWLDataFactoryInternalsImplNoCache(false));
     }
@@ -878,33 +876,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory, Serializable,
         @Nonnull Set<? extends OWLAnnotation> annotations) {
         checkNull(classExpressions, "classExpressions", true);
         checkAnnotations(annotations);
-        // Hack to handle the case where classExpressions has only a single
-        // member
-        // which will usually be the result of :x owl:disjointWith :x .
-        if (classExpressions.size() == 1) {
-            Set<OWLClassExpression> modifiedClassExpressions = new HashSet<>(2);
-            OWLClassExpression classExpression = classExpressions.iterator()
-                .next();
-            OWLClass addedClass = classExpression.isOWLThing() ? OWL_NOTHING
-                : OWL_THING;
-            modifiedClassExpressions.add(addedClass);
-            modifiedClassExpressions.add(classExpression);
-            return new OWLDisjointClassesAxiomImpl(modifiedClassExpressions,
-                makeSingletonDisjoinClassWarningAnnotation(annotations,
-                    classExpression, addedClass));
-        }
         return new OWLDisjointClassesAxiomImpl(classExpressions, annotations);
-    }
-
-    @Nonnull
-    protected Set<? extends OWLAnnotation> makeSingletonDisjoinClassWarningAnnotation(
-        Set<? extends OWLAnnotation> annotations,
-        OWLClassExpression classExpression,
-        OWLClassExpression addedClass) {
-        Set<OWLAnnotation> modifiedAnnotations = new HashSet<>(
-            annotations.size() + 1);
-        modifiedAnnotations.addAll(annotations);
-        return modifiedAnnotations;
     }
 
     @Nonnull

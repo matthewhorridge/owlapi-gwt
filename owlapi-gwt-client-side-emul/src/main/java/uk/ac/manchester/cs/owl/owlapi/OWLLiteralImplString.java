@@ -44,7 +44,7 @@ import com.google.common.base.Optional;
 
 /**
  * An OWLLiteral with xsd:string datatype and no language tag
- *
+ * 
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group, Date:
  *         26-Oct-2006
  */
@@ -167,7 +167,7 @@ public class OWLLiteralImplString implements OWLLiteral {
         }
         OWLLiteral other = (OWLLiteral) obj;
         return getLiteral().equals(other.getLiteral()) && getDatatype().equals(other.getDatatype())
-                && getLang().equals(other.getLang());
+            && getLang().equals(other.getLang());
     }
 
     @Override
@@ -276,7 +276,7 @@ public class OWLLiteralImplString implements OWLLiteral {
             otherTypeIndex = ((OWLObjectImplWithEntityAndAnonCaching) o).index();
         } else {
             otherTypeIndex =
-                    OWLObjectImplWithEntityAndAnonCaching.OWLOBJECT_TYPEINDEX_PROVIDER.getTypeIndex(o);
+                OWLObjectImplWithEntityAndAnonCaching.OWLOBJECT_TYPEINDEX_PROVIDER.getTypeIndex(o);
         }
         int diff = thisTypeIndex - otherTypeIndex;
         if (diff == 0) {

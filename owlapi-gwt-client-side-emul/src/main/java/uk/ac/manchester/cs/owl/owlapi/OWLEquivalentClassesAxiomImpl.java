@@ -12,11 +12,10 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
 
-
-import java.io.IOException;
 import java.util.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
@@ -29,6 +28,9 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 public class OWLEquivalentClassesAxiomImpl extends OWLNaryClassAxiomImpl implements OWLEquivalentClassesAxiom {
 
     private static final long serialVersionUID = 40000L;
+
+    @Nullable
+    private transient Set<OWLClass> namedClasses = null;
 
     /**
      * @param classExpressions
@@ -108,13 +110,21 @@ public class OWLEquivalentClassesAxiomImpl extends OWLNaryClassAxiomImpl impleme
 
     @Override
     public Set<OWLClass> getNamedClasses() {
-        Set<OWLClass> clses = new HashSet<>(1);
+        Set<OWLClass> toReturn = null;
+        if (namedClasses != null) {
+            toReturn = new HashSet<>(namedClasses);
+        }
+        if (toReturn == null) {
+            Set<OWLClass> clses = new HashSet<>(1);
             for (OWLClassExpression desc : getClassExpressions()) {
                 if (!desc.isAnonymous() && !desc.isOWLNothing() && !desc.isOWLThing()) {
                     clses.add(desc.asOWLClass());
                 }
             }
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(clses);
+            toReturn = CollectionFactory.getCopyOnRequestSetFromImmutableCollection(clses);
+            namedClasses = toReturn;
+        }
+        return toReturn;
     }
 
     @Override

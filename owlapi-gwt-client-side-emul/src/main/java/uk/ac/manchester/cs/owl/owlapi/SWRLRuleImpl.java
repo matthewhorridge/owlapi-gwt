@@ -14,8 +14,6 @@ package uk.ac.manchester.cs.owl.owlapi;
 
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -62,6 +60,8 @@ public class SWRLRuleImpl extends OWLLogicalAxiomImplWithEntityAndAnonCaching
     private final LinkedHashSet<SWRLAtom> head;
     private final LinkedHashSet<SWRLAtom> body;
     private final boolean containsAnonymousClassExpressions;
+    private transient Set<SWRLVariable> variables = null;
+    private transient Set<OWLClassExpression> classAtomsPredicates = null;
 
     /**
      * @param body
@@ -109,9 +109,17 @@ public class SWRLRuleImpl extends OWLLogicalAxiomImplWithEntityAndAnonCaching
     @Nonnull
     @Override
     public Set<SWRLVariable> getVariables() {
+        Set<SWRLVariable> toReturn = null;
+        if (variables != null) {
+            toReturn = new HashSet<>(variables);
+        }
+        if (toReturn != null) {
+            return toReturn;
+        }
         SWRLVariableExtractor extractor = new SWRLVariableExtractor();
         accept(extractor);
-        Set<SWRLVariable> toReturn = extractor.getVariables();
+        toReturn = extractor.getVariables();
+        variables = toReturn;
         return toReturn;
     }
 
@@ -138,7 +146,14 @@ public class SWRLRuleImpl extends OWLLogicalAxiomImplWithEntityAndAnonCaching
 
     @Override
     public Set<OWLClassExpression> getClassAtomPredicates() {
-        Set<OWLClassExpression> toReturn = new LinkedHashSet<>();
+        Set<OWLClassExpression> toReturn = null;
+        if (classAtomsPredicates != null) {
+            toReturn = new HashSet<>(classAtomsPredicates);
+        }
+        if (toReturn != null) {
+            return toReturn;
+        }
+        toReturn = new LinkedHashSet<>();
         for (SWRLAtom atom : head) {
             if (atom instanceof SWRLClassAtom) {
                 toReturn.add(((SWRLClassAtom) atom).getPredicate());
@@ -149,6 +164,7 @@ public class SWRLRuleImpl extends OWLLogicalAxiomImplWithEntityAndAnonCaching
                 toReturn.add(((SWRLClassAtom) atom).getPredicate());
             }
         }
+        classAtomsPredicates = toReturn;
         return toReturn;
     }
 

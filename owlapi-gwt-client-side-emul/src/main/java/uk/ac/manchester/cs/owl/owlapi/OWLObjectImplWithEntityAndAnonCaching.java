@@ -12,6 +12,16 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
 
+import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.semanticweb.owlapi.io.ToStringRenderer;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.CollectionFactory;
@@ -19,10 +29,6 @@ import org.semanticweb.owlapi.util.HashCode;
 import org.semanticweb.owlapi.util.OWLClassExpressionCollector;
 import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
-
-import javax.annotation.Nonnull;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author Matthew Horridge, The University Of Manchester, Bio-Health
@@ -32,26 +38,31 @@ import java.util.*;
 public abstract class OWLObjectImplWithEntityAndAnonCaching implements OWLObject, Serializable {
 
     private static final long serialVersionUID = 40000L;
-
-    /**
-     * a convenience reference for an empty annotation set, saves on typing.
-     */
+    /** a convenience reference for an empty annotation set, saves on typing. */
     @Nonnull
     protected static final Set<OWLAnnotation> NO_ANNOTATIONS = CollectionFactory.emptySet();
-
     static final OWLObjectTypeIndexProvider OWLOBJECT_TYPEINDEX_PROVIDER = new OWLObjectTypeIndexProvider();
-
-    private transient int hashCode = 0;
-
+    private int hashCode = 0;
+    @Nullable
+    private transient Set<OWLEntity> signature = null;
+    private transient Set<OWLAnonymousIndividual> anons = null;
     @Nonnull
     protected static final OWLClass OWL_THING = new OWLClassImpl(OWLRDFVocabulary.OWL_THING.getIRI());
 
     @Override
     public Set<OWLEntity> getSignature() {
-        Set<OWLEntity> set = new HashSet<>();
-        Set<OWLAnonymousIndividual> anon = new HashSet<>();
-        OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
-        accept(collector);
+        Set<OWLEntity> set = null;
+        if (signature != null) {
+            set = new HashSet<>(signature);
+        }
+        if (set == null) {
+            set = new HashSet<>();
+            Set<OWLAnonymousIndividual> anon = new HashSet<>();
+            OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
+            accept(collector);
+            signature = new HashSet<>(set);
+            anons = new HashSet<>(anon);
+        }
         return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(set);
     }
 
@@ -62,11 +73,10 @@ public abstract class OWLObjectImplWithEntityAndAnonCaching implements OWLObject
 
     @Override
     public Set<OWLAnonymousIndividual> getAnonymousIndividuals() {
-        Set<OWLEntity> set = new HashSet<>();
-        Set<OWLAnonymousIndividual> anon = new HashSet<>();
-        OWLEntityCollectionContainerCollector collector = new OWLEntityCollectionContainerCollector(set, anon);
-        accept(collector);
-        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anon);
+        if (signature == null) {
+            getSignature();
+        }
+        return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(anons);
     }
 
     @Override
@@ -162,8 +172,7 @@ public abstract class OWLObjectImplWithEntityAndAnonCaching implements OWLObject
         int otherTypeIndex = 0;
         if (o instanceof OWLObjectImplWithEntityAndAnonCaching) {
             otherTypeIndex = ((OWLObjectImplWithEntityAndAnonCaching) o).index();
-        }
-        else {
+        } else {
             otherTypeIndex = OWLOBJECT_TYPEINDEX_PROVIDER.getTypeIndex(o);
         }
         int diff = thisTypeIndex - otherTypeIndex;
@@ -177,7 +186,7 @@ public abstract class OWLObjectImplWithEntityAndAnonCaching implements OWLObject
         }
         if (this instanceof OWLAxiom) {
             diff = compareLists(new ArrayList<>(((OWLAxiom) this).getAnnotations()), new ArrayList<>(((OWLAxiom) o)
-                    .getAnnotations()));
+                .getAnnotations()));
         }
         return diff;
     }
@@ -224,15 +233,13 @@ public abstract class OWLObjectImplWithEntityAndAnonCaching implements OWLObject
         SortedSet<? extends OWLObject> ss1;
         if (set1 instanceof SortedSet) {
             ss1 = (SortedSet<? extends OWLObject>) set1;
-        }
-        else {
+        } else {
             ss1 = new TreeSet<>(set1);
         }
         SortedSet<? extends OWLObject> ss2;
         if (set2 instanceof SortedSet) {
             ss2 = (SortedSet<? extends OWLObject>) set2;
-        }
-        else {
+        } else {
             ss2 = new TreeSet<>(set2);
         }
         int i = 0;
