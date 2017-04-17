@@ -49,7 +49,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version>
+            <version>${guava.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
