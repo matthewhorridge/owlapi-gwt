@@ -10,7 +10,7 @@
 
     <groupId>net.sourceforge.owlapi</groupId>
     <artifactId>owlapi-gwt-parent</artifactId>
-    <version>4.2.5-SNAPSHOT</version>
+    <version>4.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>owlapi-gwt-parent</name>
     <description>
@@ -115,7 +115,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.8.0</gwtVersion>
-        <owlapi.version>4.2.5</owlapi.version>
+        <owlapi.version>4.3.1</owlapi.version>
     </properties>
 
     <distributionManagement>

@@ -12,26 +12,47 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package uk.ac.manchester.cs.owl.owlapi;
 
-import com.google.common.base.Optional;
-import org.semanticweb.owlapi.model.*;
-import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
-import org.semanticweb.owlapi.vocab.OWL2Datatype;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Set;
-
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.Writer;
+import java.util.Set;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotationValueVisitor;
+import org.semanticweb.owlapi.model.OWLAnnotationValueVisitorEx;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLDataVisitor;
+import org.semanticweb.owlapi.model.OWLDataVisitorEx;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectVisitor;
+import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
+import org.semanticweb.owlapi.model.OWLRuntimeException;
+import org.semanticweb.owlapi.util.OWLObjectTypeIndexProvider;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
+
+import com.google.common.base.Optional;
+
 /**
- * Implementation of {@link OWLLiteral} that uses compression of strings. See
- * also {@link OWLLiteralImplNoCompression}
+ * Implementation of {@link OWLLiteral} that uses compression of strings. See also
+ * {@link OWLLiteralImplNoCompression}
  *
- * @author Matthew Horridge, The University Of Manchester, Bio-Health
- *         Informatics Group
+ * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
  * @since 2.0.0
  */
 public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching implements OWLLiteral {
@@ -39,16 +60,13 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     private static final long serialVersionUID = 40000L;
 
     private final LiteralWrapper literal;
-
     @Nonnull
-    private static final OWLDatatype RDF_PLAIN_LITERAL = new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
-
+    private static final OWLDatatype RDF_PLAIN_LITERAL =
+            new OWL2DatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL);
     @Nonnull
     private final OWLDatatype datatype;
-
     @Nonnull
     private final String language;
-
     private final int hashcode;
 
     @Override
@@ -57,34 +75,33 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     }
 
     /**
-     * @param literal  the lexical form
-     * @param lang     the language; can be null or an empty string, in which case
-     *                 datatype can be any datatype but not null
-     * @param datatype the datatype; if lang is null or the empty string, it can be null
-     *                 or it MUST be RDFPlainLiteral
+     * @param literal the lexical form
+     * @param lang the language; can be null or an empty string, in which case datatype can be any
+     *        datatype but not null
+     * @param datatype the datatype; if lang is null or the empty string, it can be null or it MUST
+     *        be RDFPlainLiteral
      */
-    public OWLLiteralImpl(@Nonnull String literal, @Nullable String lang, @Nullable OWLDatatype datatype) {
+    public OWLLiteralImpl(@Nonnull String literal, @Nullable String lang,
+                          @Nullable OWLDatatype datatype) {
         this.literal = new LiteralWrapper(checkNotNull(literal, "literal cannot be null"));
         if (lang == null || lang.isEmpty()) {
             language = "";
             if (datatype == null) {
                 this.datatype = RDF_PLAIN_LITERAL;
-            }
-            else {
+            } else {
                 this.datatype = datatype;
             }
-        }
-        else {
+        } else {
             if (datatype != null && !datatype.isRDFPlainLiteral()) {
                 // ERROR: attempting to build a literal with a language tag and
                 // type different from plain literal
-                throw new OWLRuntimeException("Error: cannot build a literal with type: " + datatype.getIRI()
-                        + " and language: " + lang);
+                throw new OWLRuntimeException("Error: cannot build a literal with type: "
+                                                      + datatype.getIRI() + " and language: " + lang);
             }
             language = lang;
             this.datatype = RDF_PLAIN_LITERAL;
         }
-        hashcode = getHashCode();
+        hashcode = getHashCode(literal);
     }
 
     @Override
@@ -93,8 +110,7 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     }
 
     @Override
-    public void addAnonymousIndividualsToSet(Set<OWLAnonymousIndividual> anons) {
-    }
+    public void addAnonymousIndividualsToSet(Set<OWLAnonymousIndividual> anons) {}
 
     @Override
     public String getLiteral() {
@@ -186,15 +202,27 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
         return hashcode;
     }
 
-    private final int getHashCode() {
+    private final int getHashCode(String lit) {
         int code = 277;
         code = code * 37 + getDatatype().hashCode();
         code *= 37;
-        if (literal.l != null) {
-            code += literal.l.hashCode();
-        }
-        else {
-            code += Arrays.hashCode(literal.bytes);
+        try {
+            if (isInteger()) {
+                code += parseInteger() * 65536;
+            } else if (isDouble()) {
+                code += (int) parseDouble() * 65536;
+            } else if (isFloat()) {
+                code += (int) parseFloat() * 65536;
+            } else if (isBoolean()) {
+                code += parseBoolean() ? 65536 : 0;
+            } else {
+                code += lit.hashCode() * 65536;
+            }
+        } catch (NumberFormatException e) {
+            // it is possible that a literal does not have a value that's valid
+            // for its datatype; not very useful for a consistent ontology but
+            // some W3C reasoner tests use them
+            code += getLiteral().hashCode() * 65536;
         }
         if (hasLang()) {
             code = code * 37 + getLang().hashCode();
@@ -214,8 +242,8 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
             return false;
         }
         OWLLiteral other = (OWLLiteral) obj;
-        return literal.get().equals(other.getLiteral()) && datatype.equals(other.getDatatype()) && language.equals(other
-                .getLang());
+        return literal.get().equals(other.getLiteral()) && datatype.equals(other.getDatatype())
+                && language.equals(other.getLang());
     }
 
     @Override
@@ -280,15 +308,10 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     // Literal Wrapper
     private static class LiteralWrapper implements Serializable {
 
-        private static final long serialVersionUID = 40000L;
-
         String l;
 
-        byte[] bytes;
-
         LiteralWrapper(String s) {
-            bytes = null;
-            l = s;
+                l = s;
         }
 
         @Nonnull
